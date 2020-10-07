@@ -3,6 +3,11 @@
 
 int main(int argc,char **argv)
 {
+    if(argc == 1 || argc > 2) {
+        printf("Usage: program image.bmp\n");
+        return 0;
+    }
+
     SDL_Window *window;
     SDL_Init(SDL_INIT_VIDEO);
 
@@ -17,10 +22,9 @@ int main(int argc,char **argv)
 
     //Display image in window
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
-    SDL_Surface *image = SDL_LoadBMP("image.bmp");
+    SDL_Surface *image = SDL_LoadBMP(argv[1]);
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, image);
 
-    SDL_Rect dstrect = {5, 5, 10, 10};
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
 
