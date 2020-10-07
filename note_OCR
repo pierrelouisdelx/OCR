@@ -1,0 +1,60 @@
+load the image -> color removal -> pre-posse it -> detect where the letter is
+-> identify the caracter -> reconstruct the text
+
+image splitting (differenciate line and letters):
+do it recursively
+
+Neural network :
+look up those : supervised machine learning,
+multi-layer perceptron,retroprogation,gradient optimization,AdaBoost
+http://neuralnetworksanddeeplearning.com/
+many kind of neural network but we need an MLP w/ 1 hidden layer
+look into softmax activation function (previous link)
+
+Pre-processing :
+enhance image quality -> deskew it manually and automatically
+(rotate it to a straight line) -> delete image grains,stains.... -> contrast it
+
+Constraints:
+-use c99
+-gcc or clang
+-no warning and compile usin -wall -wextra -std=c99
+-do a Makefile with at least all and clean
+-do a README (UNIX text)
+-do an AUTHORS (one ligne per login)
+-no more than 80 caracters
+-no useless white space
+
+Version Control and Submissions:
+ provide AUTHORS/README/source code/Makefile in the git
+
+Schedule and Deliverables:
+october 26 -> first defense -> progress check no introduction of the project
+DO NOT GIVE A LECTURE ON NEURAL NETWORK
+December 14 -> final defense -> presented the finished version
+
+provide:
+- a report of 25pages for the first and 40 pages for the final one
+- a plan for the defense
+
+1st defense:
+MANDATORY TO BE FINISHED:
+- image loading and color removal
+- blocks lines and char detection and splitting
+MUST HAVE BEEN STARTED:
+- pre processing (at least noise canceling and the contrast enhancement
+-save and load of neural network weights
+-set of pictures for learning
+-File manipulations for result saving
+
+Final defense:
+- all previous mandatory parts
+- pre processing
+- a complete and working neural network
+- entracted text and file saving
+- a user interface in order to use your program
+
+OPTIONNAL:
+- spell checker
+- extra : multi-columns, page layouts, images images embedded in text
+
