@@ -4,6 +4,7 @@
 #include "sdl.h"
 #include "pixel_operations.h"
 #include "grayscale.h"
+#include "blackwhite.h"
 
 int main(int argc,char **argv)
 {
@@ -15,6 +16,7 @@ int main(int argc,char **argv)
     init_sdl();
     SDL_Surface* image = load_image(argv[1]);
     image = grayscale(image);
+    image = blackwhite(image);
     display_image(image);
 
     return 0;
