@@ -1,7 +1,9 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "window.h"
+#include "sdl.h"
+#include "pixel_operations.h"
+#include "grayscale.h"
 
 int main(int argc,char **argv)
 {
@@ -9,6 +11,11 @@ int main(int argc,char **argv)
         printf("Usage: program image.bmp\n");
         return 0;
     }
-    open_window(argv[1]);
+
+    init_sdl();
+    SDL_Surface* image = load_image(argv[1]);
+    image = grayscale(image);
+    display_image(image);
+
     return 0;
 }
