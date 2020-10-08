@@ -13,6 +13,23 @@ SDL_Surface* load_image(char *file) {
 }
 
 
+void on_keypress()
+{
+    SDL_Event event;
+
+    // Wait for a key to be down.
+    do
+    {
+        SDL_PollEvent(&event);
+    } while(event.type != SDL_KEYDOWN);
+
+    // Wait for a key to be up.
+    do
+    {
+        SDL_PollEvent(&event);
+    } while(event.type != SDL_KEYUP);
+}
+
 void display_image(SDL_Surface* image) {
     SDL_Window *window;
 
@@ -31,7 +48,7 @@ void display_image(SDL_Surface* image) {
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
 
-    SDL_Delay(10000);
+    on_keypressed();
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(image);
     SDL_DestroyRenderer(renderer);
