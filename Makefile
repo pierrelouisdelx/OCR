@@ -1,4 +1,4 @@
-files = SDL/main.c SDL/sdl.c SDL/pixel_operations.c SDL/grayscale.c SDL/blackwhite.c
+files = SDL/main.c SDL/sdl.c SDL/pixel_operations.c SDL/grayscale.c SDL/blackwhite.c SDL/paragraph.c
 flags = -Wall -Wextra -std=c99
 
 all: $(files)
