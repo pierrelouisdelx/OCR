@@ -12,7 +12,6 @@ SDL_Surface* load_image(char *file) {
     return SDL_LoadBMP(file);
 }
 
-
 void on_keypress()
 {
     SDL_Event event;
@@ -48,7 +47,7 @@ void display_image(SDL_Surface* image) {
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
 
-    on_keypressed();
+    on_keypress();
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(image);
     SDL_DestroyRenderer(renderer);
