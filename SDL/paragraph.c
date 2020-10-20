@@ -12,7 +12,6 @@ SDL_Surface* paragraph_reco(SDL_Surface* image)
     int max_i = 0;
     int max_j = 0;
     int black = 0;
-    printf("h : %i,\n w: %i\n",h,w); //prints h and w
     for(int i = 0; i < h; i++)
     {
         for(int j = 0; j < w; j++)
