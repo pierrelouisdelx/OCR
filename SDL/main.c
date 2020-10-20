@@ -19,7 +19,7 @@ int main(int argc,char **argv)
     image = grayscale(image);
     image = blackwhite(image);
     //image = rotate(image, 2);
-    image = paragraph_reco(image);
+    image = lines_reco(image);
     display_image(image);
 
     return 0;

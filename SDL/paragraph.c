@@ -3,64 +3,117 @@
 #include <SDL2/SDL_image.h>
 #include "pixel_operations.h"
 
-SDL_Surface* paragraph_reco(SDL_Surface* image)
+int *mins_maxs(SDL_Surface* image)
 {
     int h = image->h;
     int w = image->w;
-    int min_i = h - 1;
-    int min_j = w - 1;
+    Uint32 pixel;
+    Uint8 r,g,b;
+    int min_i = w - 1;
+    int min_j = h - 1;
     int max_i = 0;
     int max_j = 0;
-    int black = 0;
-    for(int i = 0; i < h; i++)
+    int black;
+    int *four = malloc(sizeof(int)*4);
+    for (int i = 0; i < w; i++)
     {
-        for(int j = 0; j < w; j++)
+        for(int j = 0; j < h; j++)
         {
-            Uint32 pixel = get_pixel (image,i,j);
-            Uint8 r, g, b;
-            SDL_GetRGB(pixel, image->format, &r, &g, &b);
-            if (r == 0 && g == 0 && b == 0)
+            black = 0;
+            pixel = get_pixel(image,i,j);
+            SDL_GetRGB(pixel, image -> format, &r, &g, &b);
+            if (r == g && g == b && b == 0)
                 black = 1;
-            else
-                black = 0;
-            if (black && i < min_i && j < h)
+            if (black)
             {
-                min_i = i;
-            }
-            if (black && j < min_j && i < w)
-            {
-                min_j = j;
-            }
-            if (black && i > max_i && i < w)
-            {
-                max_i = i;
-            }
-            if (black && j > max_j && j < h)
-            {
-                max_j = j;
+                if (i < min_i)
+                    min_i = i;
+                if (j < min_j)
+                    min_j = j;
             }
         }
     }
-    printf("\nimax: %i, \njmax: %i, \n imin: %i, \n jmin: %i \n",max_i,max_j,min_i,min_j);
-    for(int i = min_i; i <= max_i; i++)
+    for (int i = w -1; i > -1; i--)
     {
-        Uint32 new_pixel = SDL_MapRGB(image->format, 255, 0, 0);
-        put_pixel(image,i,min_j,new_pixel);
-        put_pixel(image,i,max_j,new_pixel);
-    }
-    for(int j=min_j; j <= max_j; j++)
-    {
-        Uint32 new_pixel = SDL_MapRGB(image->format, 255, 0, 0);
-        put_pixel(image,min_i,j,new_pixel);
-        put_pixel(image,max_i,j,new_pixel);
-    }
+        for (int j = h-1; j > -1; j--)
+        {
+            black = 0;
+            pixel = get_pixel(image,i,j);
+            SDL_GetRGB(pixel, image -> format, &r, &g, &b);
+            if (r == g && g == b && b == 0)
+                black = 1;
+            if (black)
+            {
+                if (i > max_i)
+                    max_i = i;
+                if (j > max_j)
+                    max_j = j;
+            }
 
+        }
+    }
+    four[0] = min_i;
+    four[1] = min_j;
+    four[2] = max_i;
+    four[3] = max_j;
+    return four;
+
+}
+
+SDL_Surface* paragraph_reco(SDL_Surface* image)
+{
+    int * four = mins_maxs(image);
+    int min_i = four[0];
+    int min_j = four[1];
+    int max_i = four[2];
+    int max_j = four[3];
+    Uint32 pixel = SDL_MapRGB(image->format,255,0,0);
+
+    for (int i = min_i; i < max_i ; i++)
+    {
+        put_pixel(image, i, min_j, pixel);
+        put_pixel(image, i, max_j, pixel);
+    }
+    for (int j = min_j; j < max_j ; j++)
+    {
+        put_pixel(image, min_i, j, pixel);
+        put_pixel(image, max_i, j, pixel);
+    }
     return image;
 }
 
+SDL_Surface* lines_reco(SDL_Surface* image)
+{
+    image = paragraph_reco(image);
+    int * four = mins_maxs(image);
+    int min_i = four[0];
+    int min_j = four[1];
+    int max_i = four[2];
+    int max_j = four[3];
+    Uint32 pixel;
+    Uint8 r,g,b;
+    int color = 0;
 
+    for (int j = min_j; j <= max_j; j++)
+    {
+        for(int i = min_i; i <= max_i; i++)
+        {
+            pixel = get_pixel(image,i,j);
+            SDL_GetRGB(pixel, image -> format, &r, &g, &b);
+            if (i == max_i && g != 0)
+            {
+                i = min_i;
+                color = 1;
+            }
+            if (color)
+                put_pixel(image,i,j,(SDL_MapRGB(image->format,255,0,0)));
+            if (g == 0)
+                break;
 
-
-
+        }
+        color = 0;
+    }
+    return image;
+}
 
 
