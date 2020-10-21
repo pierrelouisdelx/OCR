@@ -67,7 +67,7 @@ SDL_Surface* paragraph_reco(SDL_Surface* image)
     int min_j = four[1];
     int max_i = four[2];
     int max_j = four[3];
-    Uint32 pixel = SDL_MapRGB(image->format,255,0,0);
+    /*Uint32 pixel = SDL_MapRGB(image->format,255,0,0);
 
     for (int i = min_i; i < max_i ; i++)
     {
@@ -78,31 +78,46 @@ SDL_Surface* paragraph_reco(SDL_Surface* image)
     {
         put_pixel(image, min_i, j, pixel);
         put_pixel(image, max_i, j, pixel);
+    }*/
+    int w = max_i - min_i;
+    int h = max_j - min_j;
+    Uint32 pixel2;
+    Uint8 r, g, b;
+    SDL_Surface* new_image = SDL_CreateRGBSurface(0,w,h,32,0,0,0,0);
+    for (int i = 0; i < w; i++)
+    {
+        for (int j = 0;j < h; j++)
+        {
+            pixel2 = get_pixel(image,i+min_i,j+min_j);
+            SDL_GetRGB(pixel2, image -> format, &r, &g, &b);
+            put_pixel(new_image, i, j, pixel2);
+        }
     }
-    return image;
+    return new_image;
 }
 
 SDL_Surface* lines_reco(SDL_Surface* image)
 {
     image = paragraph_reco(image);
-    int * four = mins_maxs(image);
+    /*int * four = mins_maxs(image);
     int min_i = four[0];
     int min_j = four[1];
     int max_i = four[2];
-    int max_j = four[3];
+    int max_j = four[3];*/
     Uint32 pixel;
     Uint8 r,g,b;
     int color = 0;
-
-    for (int j = min_j; j <= max_j; j++)
+    int h = image->h;
+    int w = image->w;
+    for (int j = 0; j < h; j++)
     {
-        for(int i = min_i; i <= max_i; i++)
+        for(int i = 0; i < w; i++)
         {
             pixel = get_pixel(image,i,j);
             SDL_GetRGB(pixel, image -> format, &r, &g, &b);
-            if (i == max_i && g != 0)
+            if (i == w-1 && g != 0)
             {
-                i = min_i;
+                i = 0;
                 color = 1;
             }
             if (color)
