@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "pixel_operations.h"
@@ -59,7 +59,7 @@ void display_image(SDL_Surface* image) {
     SDL_Quit();
 }
 
-SDL_Surface* rotate(SDL_Surface* image, int angle) {
+SDL_Surface* rotate(SDL_Surface* image, float angle) {
     int h = image->h;
     int w = image->w;
 
@@ -68,8 +68,8 @@ SDL_Surface* rotate(SDL_Surface* image, int angle) {
         for(int j=0; j<h; j++) 
         {
             Uint32 pixel = get_pixel(image,i,j);
-            int x = angle * i;
-            int y = angle * j;
+            int x = i*cos(angle) - j*sin(angle);
+            int y = i*sin(angle) + j*cos(angle);
             if(x < w && y < h) 
             {
                 put_pixel(image,x,y,pixel);
@@ -77,4 +77,9 @@ SDL_Surface* rotate(SDL_Surface* image, int angle) {
         }
     }
     return image;
+}
+
+int houghtransform() {
+    //Detect image rotation angle
+    return 0;
 }

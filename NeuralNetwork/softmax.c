@@ -1,15 +1,27 @@
 #include <stdlib.h>
 #include <math.h>
 
-void softmax_neuron(float* arr) {
-    int size = sizeof(arr);
+double softmax(double biais, double factor) 
+{
+    return exp(biais) / factor;
+}
+
+void neurons_softmax(double neurons[])
+{
     double sum = 0;
-    for(int i=0; i < size; i++) {
-        sum += exp(arr[i]);
+    size_t len = sizeof(neurons)/sizeof(neurons[0]);
+    for(int i=0; i < len; i++)
+    {
+        sum += exp(neurons[i]);
+    }
+
+    for(int j=0; j < n; j++)
+    {
+        neurons[i] = softmax(sum);
     }
 }
 
-double softmax(double factor) {
-    return exp() / factor;
+double init_weight()
+{
+    return ((double)rand()/((double)RAND_MAX);
 }
-
