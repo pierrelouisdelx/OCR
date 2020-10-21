@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "pixel_operations.h"
@@ -67,18 +69,6 @@ SDL_Surface* paragraph_reco(SDL_Surface* image)
     int min_j = four[1];
     int max_i = four[2];
     int max_j = four[3];
-    /*Uint32 pixel = SDL_MapRGB(image->format,255,0,0);
-
-    for (int i = min_i; i < max_i ; i++)
-    {
-        put_pixel(image, i, min_j, pixel);
-        put_pixel(image, i, max_j, pixel);
-    }
-    for (int j = min_j; j < max_j ; j++)
-    {
-        put_pixel(image, min_i, j, pixel);
-        put_pixel(image, max_i, j, pixel);
-    }*/
     int w = max_i - min_i;
     int h = max_j - min_j;
     Uint32 pixel;
@@ -129,46 +119,62 @@ SDL_Surface* lines_reco(SDL_Surface* image)
 void lines_storage(SDL_Surface* image)
 {
     int h = image->h;
-    int before;//1 if the line before was written
+    int w = image->w;
     Uint32 pixel;
     Uint8 r,g,b;
-    int red = 0;//if the current line is red
-    int new_h = 1;
+    int lines_counter = 0;
     int nb_bmp = 0;
     for (int j = 0; j < h; j++)
     {
 
-        pixel = get_pixel(image,0,j);
+        pixel = get_pixel(image,10,j);
         SDL_GetRGB(pixel, image -> format, &r, &g, &b);
-        if (r == 255)
-            red = 1;
-        if (before && !red)
+        if (lines_counter > 0 && g == r)
         {
-            new_h +=1;
+            lines_counter += 1;
         }
-        if (before && r)
+        if ((lines_counter > 0 && r != b) || j == h-1)
         {
-            before = 0;
+            printf("condition");
             //create a new bitmap (w,new_h) and storing it in /lines
-            Uint32 new_pixel;
+            Uint32 pixel;
             Uint8 r1, g1, b1;
-            SDL_Surface* new_image = SDL_CreateRGBSurface(0,w,new_h,32,0,0,0,0);
+            SDL_Surface* new_image = SDL_CreateRGBSurface(0,w,lines_counter,32,0,0,0,0);
             for (int i = 0; i < w; i++)
             {
-                for (int k = 0;k < new_h; k++)
+                int new_j = 0;
+                for (int k = j-lines_counter ;k < j; k++)
                 {
-                    new_pixel = get_pixel(image,i,k);
-                    SDL_GetRGB(new_pixel, image -> format, &r1, &g1, &b1);
-                    put_pixel(new_image, i, k, (SDL_MapRGB(new_image->format,r1
-                                    ,g1,b1)));
+                    pixel = get_pixel(image,i,k);
+                    SDL_GetRGB(pixel, image -> format, &r1, &g1, &b1);
+                    put_pixel(new_image, i, new_j, (SDL_MapRGB(new_image->format,r1,g1,b1)));
+                    new_j++;
                 }
             }
             //save
-            
+            if (nb_bmp < 10)
+            {
+                char file[] = "SDL/bmp/lines/bmpX";
+                file[17] = nb_bmp + '0';
+                SDL_SaveBMP(new_image,file);
+            }
+            if (nb_bmp > 9)
+            {
+                char file[] = "SDL/bmp/lines/bmpXX";
+                file[17] = nb_bmp/10 + '0';
+                file[18] = nb_bmp%10 + '0';
+                SDL_SaveBMP(new_image,file);
+            }
             nb_bmp += 1;
-            new_h = 1;
+            lines_counter = 0;
         }
-        red = 0;
+        if (g == r && lines_counter == 0)
+        {
+            lines_counter = 1;
+        }
+        if (r != b)
+            lines_counter = 0;
+        printf("%d %d %d %d\n",r,g,b,lines_counter);
     }
 }
 
