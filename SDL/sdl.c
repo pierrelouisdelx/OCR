@@ -59,7 +59,7 @@ void display_image(SDL_Surface* image) {
     SDL_Quit();
 }
 
-SDL_Surface* rotate(SDL_Surface* image, float angle) {
+/*SDL_Surface* rotate(SDL_Surface* image, float angle) {
     int h = image->h;
     int w = image->w;
 
@@ -82,4 +82,4 @@ SDL_Surface* rotate(SDL_Surface* image, float angle) {
 int houghtransform() {
     //Detect image rotation angle
     return 0;
-}
+}*/

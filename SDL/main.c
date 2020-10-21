@@ -20,6 +20,7 @@ int main(int argc,char **argv)
     image = blackwhite(image);
     //image = rotate(image, 2);
     image = lines_reco(image);
+    lines_storage(image);
     display_image(image);
 
     return 0;

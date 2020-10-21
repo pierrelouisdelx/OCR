@@ -81,16 +81,16 @@ SDL_Surface* paragraph_reco(SDL_Surface* image)
     }*/
     int w = max_i - min_i;
     int h = max_j - min_j;
-    Uint32 pixel2;
+    Uint32 pixel;
     Uint8 r, g, b;
     SDL_Surface* new_image = SDL_CreateRGBSurface(0,w,h,32,0,0,0,0);
     for (int i = 0; i < w; i++)
     {
         for (int j = 0;j < h; j++)
         {
-            pixel2 = get_pixel(image,i+min_i,j+min_j);
-            SDL_GetRGB(pixel2, image -> format, &r, &g, &b);
-            put_pixel(new_image, i, j, pixel2);
+            pixel = get_pixel(image,i+min_i,j+min_j);
+            SDL_GetRGB(pixel, image -> format, &r, &g, &b);
+            put_pixel(new_image, i, j, (SDL_MapRGB(image->format,r,g,b)));
         }
     }
     return new_image;
@@ -99,11 +99,6 @@ SDL_Surface* paragraph_reco(SDL_Surface* image)
 SDL_Surface* lines_reco(SDL_Surface* image)
 {
     image = paragraph_reco(image);
-    /*int * four = mins_maxs(image);
-    int min_i = four[0];
-    int min_j = four[1];
-    int max_i = four[2];
-    int max_j = four[3];*/
     Uint32 pixel;
     Uint8 r,g,b;
     int color = 0;
@@ -129,6 +124,52 @@ SDL_Surface* lines_reco(SDL_Surface* image)
         color = 0;
     }
     return image;
+}
+
+void lines_storage(SDL_Surface* image)
+{
+    int h = image->h;
+    int before;//1 if the line before was written
+    Uint32 pixel;
+    Uint8 r,g,b;
+    int red = 0;//if the current line is red
+    int new_h = 1;
+    int nb_bmp = 0;
+    for (int j = 0; j < h; j++)
+    {
+
+        pixel = get_pixel(image,0,j);
+        SDL_GetRGB(pixel, image -> format, &r, &g, &b);
+        if (r == 255)
+            red = 1;
+        if (before && !red)
+        {
+            new_h +=1;
+        }
+        if (before && r)
+        {
+            before = 0;
+            //create a new bitmap (w,new_h) and storing it in /lines
+            Uint32 new_pixel;
+            Uint8 r1, g1, b1;
+            SDL_Surface* new_image = SDL_CreateRGBSurface(0,w,new_h,32,0,0,0,0);
+            for (int i = 0; i < w; i++)
+            {
+                for (int k = 0;k < new_h; k++)
+                {
+                    new_pixel = get_pixel(image,i,k);
+                    SDL_GetRGB(new_pixel, image -> format, &r1, &g1, &b1);
+                    put_pixel(new_image, i, k, (SDL_MapRGB(new_image->format,r1
+                                    ,g1,b1)));
+                }
+            }
+            //save
+            
+            nb_bmp += 1;
+            new_h = 1;
+        }
+        red = 0;
+    }
 }
 
 
