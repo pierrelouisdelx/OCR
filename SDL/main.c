@@ -18,11 +18,8 @@ int main(int argc,char **argv)
     SDL_Surface* image = load_image(argv[1]);
     image = grayscale(image);
     image = blackwhite(image);
-    //image = rotate(image, 2);
-    //image = lines_reco(image);
-    image = char_reco(image);
-    //lines_storage(image);
-    char_storage(image,argv[1]);
+    image = lines_reco(image);
+    lines_storage(image);
     display_image(image);
     return 0;
 }

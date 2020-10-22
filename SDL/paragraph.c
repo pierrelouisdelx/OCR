@@ -6,6 +6,8 @@
 #include "pixel_operations.h"
 #include <sys/stat.h>
 #include <sys/types.h>
+#include "sdl.h"
+
 
 int *mins_maxs(SDL_Surface* image)
 {
@@ -149,15 +151,14 @@ SDL_Surface* char_reco(SDL_Surface* image)
 
 void char_storage(SDL_Surface* image, int line)
 {
-    //char* extention = "_char_";
-    //strcat(path,extention);
+
     int length;
     if (line < 10)
-        length = 7;
+        length = 6;
     else
-        length = 8;
-    char* this_line = "_line_";
-    char* path = "SDL/bmp/chars/char_";
+        length = 7;
+    char* this_line = "line_";
+    char* path = "SDL/bmp/chars/";
     int h = image->h;
     int w = image->w;
     Uint32 pixel;
@@ -169,14 +170,13 @@ void char_storage(SDL_Surface* image, int line)
         pixel = get_pixel(image,i,0);
         SDL_GetRGB(pixel, image -> format, &r, &g, &b);
         if (char_counter > 0 && g == r)
-        {
             char_counter += 1;
-        }
-        if ((char_counter > 0 && r != b) || i == w-1)
+        if ((char_counter > 0 && r != b))
         {
             Uint32 pixel;
             Uint8 r1, g1, b1;
-            SDL_Surface* new_image = SDL_CreateRGBSurface(0,char_counter,h,32,0,0,0,0);
+            SDL_Surface* new_image = SDL_CreateRGBSurface(0,char_counter,h,
+                    32,0,0,0,0);
             for (int j = 0; j < h; j++)
             {
                 int new_i = 0;
@@ -184,52 +184,53 @@ void char_storage(SDL_Surface* image, int line)
                 {
                     pixel = get_pixel(image,k,j);
                     SDL_GetRGB(pixel, image -> format, &r1, &g1, &b1);
-                    put_pixel(new_image, new_i, j, (SDL_MapRGB(new_image->format,r1,g1,b1)));
+                    put_pixel(new_image, new_i, j, (SDL_MapRGB(new_image->
+                                    format,r1,g1,b1)));
                     new_i++;
                 }
             }
-            //save
             char line_str[length];
-            if(length == 7)
-            {
-                line_str[6] = line + '0';
-            }
+            for (int p = 0; p < 6;p++)
+                line_str[p] = this_line[p];
+            if(length == 6)
+                line_str[5] = line + '0';
             else
             {
-                line_str[6] = line/10 + '0';
-                line_str[7] = line%10 + '0';
+                line_str[5] = line/10 + '0';
+                line_str[6] = line%10 + '0';
             }
 
             if (nb_char < 10)
             {
-                int len = strlen(path);
-                char file[len+1];
+                int len = strlen(path) + strlen(line_str) + 1;
+                char file[len];
                 for (int s = 0; s < len ; s++)
-                {
                     file[s] = path[s];
-                }
+                for (int s = strlen(path) ; s < len - 1;s++)
+                    file[s] = line_str[s-strlen(path)];
                 file[len] = nb_char +'0';
-                strcat(file,line_str);
+                printf("file : %s\n",file);
                 SDL_SaveBMP(new_image,file);
             }
             if (nb_char > 9)
             {
-                int len = strlen(path);
-                char file[len+1];
-                for (int s = 0; s < len -1; s++)
+                int len = strlen(path) + strlen(line_str) + 2;
+                char file[len];
+                for (int s = 0; s < len; s++)
                     file[s] = path[s];
+                for (int s = strlen(path) ; s < len - 1;s++)
+                    file[s] = line_str[s-strlen(path)];
+                file[len-2] = ':';
                 file[len-1] = nb_char/10 + '0';
                 file[len] = nb_char%10 + '0';
-                strcat(file,this_line);
+                printf("file : %s\n",file);
                 SDL_SaveBMP(new_image,file);
             }
             nb_char += 1;
             char_counter = 0;
         }
         if (g == r && char_counter == 0)
-        {
             char_counter = 1;
-        }
         if (r != b)
             char_counter = 0;
     }
@@ -255,10 +256,12 @@ void lines_storage(SDL_Surface* image)
         }
         if ((lines_counter > 0 && r != b) || j == h-1)
         {
-            //create a new bitmap (w,new_h) and storing it in /lines
             Uint32 pixel;
             Uint8 r1, g1, b1;
-            SDL_Surface* new_image = SDL_CreateRGBSurface(0,w,lines_counter,32,0,0,0,0);
+            if (j == h-1)
+                lines_counter -= 1;
+            SDL_Surface* new_image = SDL_CreateRGBSurface(0,w,lines_counter,
+                    32,0,0,0,0);
             for (int i = 0; i < w; i++)
             {
                 int new_j = 0;
@@ -266,24 +269,11 @@ void lines_storage(SDL_Surface* image)
                 {
                     pixel = get_pixel(image,i,k);
                     SDL_GetRGB(pixel, image -> format, &r1, &g1, &b1);
-                    put_pixel(new_image, i, new_j, (SDL_MapRGB(new_image->format,r1,g1,b1)));
+                    put_pixel(new_image, i, new_j, (SDL_MapRGB(new_image->
+                                    format,r1,g1,b1)));
                     new_j++;
                 }
             }
-            //save
-            /*if (nb_bmp < 10)
-            {
-                char file[] = "SDL/bmp/lines/lineX.bmp";
-                file[18] = nb_bmp + '0';
-                SDL_SaveBMP(new_image,file);
-            }
-            if (nb_bmp > 9)
-            {
-                char file[] = "SDL/bmp/lines/lineXX.bmp";
-                file[18] = nb_bmp/10 + '0';
-                file[19] = nb_bmp%10 + '0';
-                SDL_SaveBMP(new_image,file);
-            }*/
             SDL_Surface* new_new_image = char_reco(new_image);
             char_storage(new_new_image,nb_bmp);
             nb_bmp += 1;
