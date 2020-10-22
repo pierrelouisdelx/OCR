@@ -155,15 +155,15 @@ void lines_storage(SDL_Surface* image)
             //save
             if (nb_bmp < 10)
             {
-                char file[] = "SDL/bmp/lines/bmpX.bmp";
-                file[17] = nb_bmp + '0';
+                char file[] = "SDL/bmp/lines/lineX.bmp";
+                file[18] = nb_bmp + '0';
                 SDL_SaveBMP(new_image,file);
             }
             if (nb_bmp > 9)
             {
-                char file[] = "SDL/bmp/lines/bmpXX.bmp";
-                file[17] = nb_bmp/10 + '0';
-                file[18] = nb_bmp%10 + '0';
+                char file[] = "SDL/bmp/lines/lineXX.bmp";
+                file[18] = nb_bmp/10 + '0';
+                file[19] = nb_bmp%10 + '0';
                 SDL_SaveBMP(new_image,file);
             }
             nb_bmp += 1;
@@ -207,12 +207,11 @@ SDL_Surface* char_reco(SDL_Surface* image)
     return image;
 }
 
-void char_storage(SDL_Surface* image,char *path)
+void char_storage(SDL_Surface* image, char* path)
 {
-    printf("-1");
-    //path += "_d"
-    strcat(path,"_d");
-    mkdir(path,777);
+    char* extention = "_d";
+    strcat(path,extention);
+    mkdir(path,0004);
     int h = image->h;
     int w = image->w;
     Uint32 pixel;
@@ -221,7 +220,6 @@ void char_storage(SDL_Surface* image,char *path)
     int nb_bmp = 0;
     for (int i = 0; i < w; i++)
     {
-        printf("0");
         pixel = get_pixel(image,i,0);
         SDL_GetRGB(pixel, image -> format, &r, &g, &b);
         if (lines_counter > 0 && g == r)
@@ -230,18 +228,20 @@ void char_storage(SDL_Surface* image,char *path)
         }
         if ((lines_counter > 0 && r != b) || i == w-1)
         {
-            printf("1");
             Uint32 pixel;
             Uint8 r1, g1, b1;
-            SDL_Surface* new_image = SDL_CreateRGBSurface(h,0,lines_counter,32,0,0,0,0);
+            SDL_Surface* new_image = SDL_CreateRGBSurface(0,lines_counter,h,32,0,0,0,0);
             for (int j = 0; j < h; j++)
             {
                 int new_i = 0;
                 for (int k = i-lines_counter ;k < i; k++)
                 {
-                    pixel = get_pixel(image,k,i);
+                    pixel = get_pixel(image,k,j);
+                    printf("0\n");
                     SDL_GetRGB(pixel, image -> format, &r1, &g1, &b1);
-                    put_pixel(new_image, j, new_i, (SDL_MapRGB(new_image->format,r1,g1,b1)));
+                    printf("0\n");
+                    put_pixel(new_image, new_i, j, (SDL_MapRGB(new_image->format,r1,g1,b1)));
+                    printf("1\n");
                     new_i++;
                 }
             }
