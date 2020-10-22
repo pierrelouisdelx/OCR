@@ -8,12 +8,6 @@
 #define nHidden 2
 #define nOutput 1
 
-double Random()
-{
-    srand(time(NULL));
-    return (double)rand()/(double)RAND_MAX;
-}
-
 double sigmoid(double x)
 {
     return 1 / (1 + exp(-x));
@@ -22,60 +16,6 @@ double sigmoid(double x)
 double dsigmoid(double x)
 {
     return x*(1-x);
-}
-
-double sigmoid_matrix(double m[][nInputs])
-{
-    for(int i=0; i<nInputs; i++)
-    {
-        for(int j=0; j<nInputs; j++)
-        {
-            m[i][j] = sigmoid(m[i][j]);
-        }
-    }
-}
-
-double dsigmoid_matrix(double m[][nInputs])
-{
-    for(int i=0; i<nInputs; i++)
-    {
-        for(int j=0; j<nInputs; j++)
-        {
-            m[i][j] = dsigmoid(m[i][j]);
-        }
-    }
-}
-
-double init_matrix(double matrix[][nInputs])
-{
-    for(int i=0; i<nInputs; i++)
-    {
-        for(int j=0; j<nInputs; j++)
-        {
-            matrix[i][j] = Random();
-        }
-    }
-}
-
-void print_array(double *array)
-{
-    int len = sizeof(array)/sizeof(array[0]);
-    printf("Len : %d\n",len);
-    for(int i=0; i<len; i++)
-        printf("%f\n",array[i]);
-}
-
-void print_matrix(double matrix[][nInputs]) 
-{
-    for(int i=0; i<nInputs; i++)
-    {
-        for(int j=0; j<nInputs; j++)
-        {
-            printf("%f ", matrix[i][j]);
-            if(j == nInputs-1)
-                printf("\n");
-        }
-    }
 }
 
 int xor(int inputs[1][nInputs])
@@ -107,7 +47,7 @@ double feedForward(int inputs[1][nInputs], double weights_ih[][nInputs], double 
             output += sigmoid(weights_oh[i][j] * hidden[i][j] +  bias_o[i][j]);
         }
     }
-    return output-2;
+    return output;
 }
 
 void backPropagation(int inputs[][nInputs], double weights_oh[][nInputs], double weights_ih[][nInputs],
@@ -132,7 +72,7 @@ void backPropagation(int inputs[][nInputs], double weights_oh[][nInputs], double
         add_matrix(weights_oh, d_weight_oh, weights_oh);
         add_matrix(bias_o, d_bias_o, bias_o);
 
-        gradient_hidden = lr * (error_hidden * dsigmoid_matrix(hidden));
+        gradient_hidden = lr * (error_hidden * function_matrix(dsigmoid(hidden)));
         factor_matrix(transpose_matrix(inputs), gradient_hidden, d_weight_ih);
 
         add_matrix(weights_ih, d_weight_ih, weights_ih);

@@ -1,5 +1,14 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #define N 4
+#define nInputs 4
+
+double Random()
+{
+    srand(time(NULL));
+    return (double)rand()/(double)RAND_MAX;
+}
 
 void print_matrix(double mat[][N], int l , int c)
 {
@@ -12,6 +21,17 @@ void print_matrix(double mat[][N], int l , int c)
                 printf("\n");
         }
 
+    }
+}
+
+double init_matrix(double matrix[][nInputs])
+{
+    for(int i=0; i<nInputs; i++)
+    {
+        for(int j=0; j<nInputs; j++)
+        {
+            matrix[i][j] = Random();
+        }
     }
 }
 
@@ -61,6 +81,17 @@ void factor_matrix(double mat[][N], double factor, double res[][N], int l, int c
         for(int j=0; j<c; j++)
         {
             res[i][j] = factor*mat[i][j];
+        }
+    }
+}
+
+void function_matrix(double (*f)(double), double m[][N])
+{
+    for(int i=0; i<nInputs; i++)
+    {
+        for(int j=0; j<nInputs; j++)
+        {
+            m[i][j] = (*f)(m[i][j]);
         }
     }
 }
