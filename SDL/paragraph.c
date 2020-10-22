@@ -4,6 +4,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "pixel_operations.h"
+#include <sys/stat.h>
+#include <sys/types.h>
 
 int *mins_maxs(SDL_Surface* image)
 {
@@ -127,7 +129,7 @@ void lines_storage(SDL_Surface* image)
     for (int j = 0; j < h; j++)
     {
 
-        pixel = get_pixel(image,10,j);
+        pixel = get_pixel(image,0,j);
         SDL_GetRGB(pixel, image -> format, &r, &g, &b);
         if (lines_counter > 0 && g == r)
         {
@@ -135,7 +137,6 @@ void lines_storage(SDL_Surface* image)
         }
         if ((lines_counter > 0 && r != b) || j == h-1)
         {
-            printf("condition");
             //create a new bitmap (w,new_h) and storing it in /lines
             Uint32 pixel;
             Uint8 r1, g1, b1;
@@ -154,13 +155,13 @@ void lines_storage(SDL_Surface* image)
             //save
             if (nb_bmp < 10)
             {
-                char file[] = "SDL/bmp/lines/bmpX";
+                char file[] = "SDL/bmp/lines/bmpX.bmp";
                 file[17] = nb_bmp + '0';
                 SDL_SaveBMP(new_image,file);
             }
             if (nb_bmp > 9)
             {
-                char file[] = "SDL/bmp/lines/bmpXX";
+                char file[] = "SDL/bmp/lines/bmpXX.bmp";
                 file[17] = nb_bmp/10 + '0';
                 file[18] = nb_bmp%10 + '0';
                 SDL_SaveBMP(new_image,file);
@@ -184,9 +185,9 @@ SDL_Surface* char_reco(SDL_Surface* image)
     int color = 0;
     int h = image->h;
     int w = image->w;
-    for (int i = 0; i <= w; i++)
+    for (int i = 0; i < w; i++)
     {
-        for(int j = 0; j <= h; j++)
+        for(int j = 0; j < h; j++)
         {
             pixel = get_pixel(image,i,j);
             SDL_GetRGB(pixel, image -> format, &r, &g, &b);
@@ -204,6 +205,79 @@ SDL_Surface* char_reco(SDL_Surface* image)
         color = 0;
     }
     return image;
+}
+
+void char_storage(SDL_Surface* image,char *path)
+{
+    printf("-1");
+    //path += "_d"
+    strcat(path,"_d");
+    mkdir(path,777);
+    int h = image->h;
+    int w = image->w;
+    Uint32 pixel;
+    Uint8 r,g,b;
+    int lines_counter = 0;
+    int nb_bmp = 0;
+    for (int i = 0; i < w; i++)
+    {
+        printf("0");
+        pixel = get_pixel(image,i,0);
+        SDL_GetRGB(pixel, image -> format, &r, &g, &b);
+        if (lines_counter > 0 && g == r)
+        {
+            lines_counter += 1;
+        }
+        if ((lines_counter > 0 && r != b) || i == w-1)
+        {
+            printf("1");
+            Uint32 pixel;
+            Uint8 r1, g1, b1;
+            SDL_Surface* new_image = SDL_CreateRGBSurface(h,0,lines_counter,32,0,0,0,0);
+            for (int j = 0; j < h; j++)
+            {
+                int new_i = 0;
+                for (int k = i-lines_counter ;k < i; k++)
+                {
+                    pixel = get_pixel(image,k,i);
+                    SDL_GetRGB(pixel, image -> format, &r1, &g1, &b1);
+                    put_pixel(new_image, j, new_i, (SDL_MapRGB(new_image->format,r1,g1,b1)));
+                    new_i++;
+                }
+            }
+            //save
+            if (nb_bmp < 10)
+            {
+                strcat(path,"/X");
+                int len = strlen(path);
+                char file[len];
+                for (int s = 0; s < len - 1; s++)
+                    file[s] = path[s];
+                file[len-1] = nb_bmp + '0';
+                SDL_SaveBMP(new_image,file);
+            }
+            if (nb_bmp > 9)
+            {
+                strcat(path,"/XX");
+                int len = strlen(path);
+                char file[len];
+                for (int s = 0; s < len -2; s++)
+                    file[s] = path[s];
+                file[len-2] = nb_bmp/10 + '0';
+                file[len-1] = nb_bmp%10 + '0';
+                SDL_SaveBMP(new_image,file);
+            }
+            nb_bmp += 1;
+            lines_counter = 0;
+        }
+        if (g == r && lines_counter == 0)
+        {
+            lines_counter = 1;
+        }
+        if (r != b)
+            lines_counter = 0;
+    }
+
 
 }
 
