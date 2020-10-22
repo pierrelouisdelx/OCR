@@ -5,8 +5,14 @@
 #include "matrix.h"
 
 #define nInputs 2
-#define nHidden 2
-#define nOutput 1
+
+struct Neurones {
+    int inputs;
+    int hidden;
+    int weights;
+    int bias;
+    int outputs;
+};
 
 double sigmoid(double x)
 {
@@ -82,7 +88,14 @@ void backPropagation(int inputs[][nInputs], double weights_oh[][nInputs], double
 
 int main()
 {
-    int inputs[1][nInputs];
+    struct Neurones Neurone;
+    Neurone.inputs = 2;
+    Neurone.hidden = 2;
+    Neurone.weights = 4;
+    Neurone.bias = 4;
+    Neurone.outputs = 1;
+
+    int inputs[1][Neurone.inputs];
     double weights_ih[nInputs][nInputs];
     double weights_oh[nInputs][nInputs];
     double bias_h[nInputs][nInputs];
@@ -94,7 +107,7 @@ int main()
     init_matrix(weights_oh);
     init_matrix(bias_h);
     init_matrix(bias_o);
-    print_matrix(weights_ih);
+    print_matrix(weights_ih, 2, 4);
 
     result = feedForward(inputs, weights_ih, weights_oh, bias_h, bias_o, hidden);
     printf("Feed forward : %lf\n", result);

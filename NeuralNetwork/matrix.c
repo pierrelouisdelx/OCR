@@ -96,7 +96,7 @@ void function_matrix(double (*f)(double), double m[][N])
     }
 }
 
-int main()
+/*int main()
 {
     double res[2][N] = {0};
     double m1[2][4] = {
@@ -117,4 +117,4 @@ int main()
 
 
     return 0;
-}
+}*/
