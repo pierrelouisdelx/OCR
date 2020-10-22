@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 #define nInputs 2
 #define nHidden 2
@@ -8,18 +9,40 @@
 
 double Random()
 {
+    srand(time(NULL));
     return (double)rand()/(double)RAND_MAX;
 }
 
-double activation(double x)
+double sigmoid(double x)
 {
     return 1 / (1 + exp(-x));
 }
 
-double init_weights(double weights[])
+double dsigmoid(double x)
 {
-    for(int i=0; i<nInputs*2; i++)
-        weights[i] = Random();
+    return x*(1-x);
+}
+
+double sigmoid_matrix(double m[][nInputs])
+{
+    for(int i=0; i<nInputs; i++)
+    {
+        for(int j=0; j<nInputs; j++)
+        {
+            m[i][j] = sigmoid(m[i][j]);
+        }
+    }
+}
+
+double init_weights(double weights[][nInputs])
+{
+    for(int i=0; i<nInputs; i++)
+    {
+        for(int j=0; j<nInputs; j++)
+        {
+            weights[i][j] = Random();
+        }
+    }
 }
 
 void print_array(double *array)
@@ -30,44 +53,72 @@ void print_array(double *array)
         printf("%f\n",array[i]);
 }
 
-int main()
+void print_matrix(double matrix[][nInputs]) 
 {
-    int inputs[nInputs];
-    double bias;
-    bias = Random();
-    double weights[nInputs*2];
-
-    init_weights(weights);
-    print_array(weights);
-
-    double hidden = 0;
-    double output;
-
     for(int i=0; i<nInputs; i++)
     {
-        hidden += inputs[i] * weights[i];
+        for(int j=0; j<nInputs; j++)
+        {
+            printf("%f ", matrix[i][j]);
+            if(j == nInputs-1)
+                printf("\n");
+        }
     }
+}
 
-    hidden += bias;
+int xor(int inputs[1][nInputs])
+{
+    int x = inputs[1][0];
+    int y = inputs[1][1];
+    if(x == y) 
+        return 0;
+    return 1;
+}
 
-    for(int j=0; j<nHidden; j++)
+double feedForward(int inputs[1][nInputs], double weights[][nInputs], double bias[][nInputs])
+{
+    double hidden[nInputs][nInputs];
+    
+    for(int i=0; i<nInputs; i++)
     {
-        hidden += activation(hidden);
+        for(int j=0; j<nInputs; j++)
+        {
+            
+            hidden[i][j] = sigmoid(weights[i][j] * inputs[i][0] + bias[i][j]);
+        }
     }
 
-    for(int k=0; k<nInputs; k++)
+    double output;
+    for(int i=0; i<nInputs; i++)
     {
-        output += hidden * weights[k];
+        for(int j=0; j<nInputs; j++)
+        {
+            output += sigmoid(weights[i][j] * hidden[i][j] +  bias[i][j]);
+        }
     }
+    return output-2;
+}
 
-    output += bias;
+void backPropagation(int *inputs, double weights[][nInputs], double bias[][nInputs], int target)
+{
+     
+}
 
-    for(int j=0; j<nHidden; j++)
-    {
-        output += activation(output);
-    }
+int main()
+{
+    int inputs[1][nInputs];
+    double weights[nInputs][nInputs];
+    double bias[nInputs][nInputs];
+    double result;
 
-    printf("Output : %f\n", output);
+    init_weights(weights);
+    print_matrix(weights);
+
+
+    result = feedForward(inputs, weights, bias);
+    printf("Feed forward : %lf\n", result);
+    printf("Expected value : %d\n", xor(inputs));
+
     return 0;
 }
 
