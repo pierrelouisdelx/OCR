@@ -1,27 +1,22 @@
 #include <stdio.h>
 #define N 4
 
-void print_matrix(double mat[][N])
+void print_matrix(double mat[][N], int l , int c)
 {
-    int l = sizeof(mat)/sizeof(mat[0]);
-    int c = sizeof(mat[0])/sizeof(mat[0][0]);
-    for(int i=0; i < 4; i++)
+    for(int i=0; i < l; i++)
     {
-        for(int j=0; j < 4; j++)
-            printf("%d\n",mat[i][j]);
-            if(j == 3)
+        for(int j=0; j < c; j++)
+        {
+            printf("%f ",mat[i][j]);
+            if(j == c-1)
                 printf("\n");
+        }
+
     }
 }
 
-void add_matrix(double mat1[][N], double mat2[][N], double res[][N])
+void add_matrix(double mat1[][N], double mat2[][N], double res[][N], int l1, int c1, int l2, int c2)
 {
-    int l1 = sizeof(mat1)/sizeof(mat1[0]);
-    int c1 = sizeof(mat1[0])/sizeof(mat1[0][0]);
-
-    int l2 = sizeof(mat2)/sizeof(mat2[0]);
-    int c2 = sizeof(mat2[0])/sizeof(mat2[0][0]);
-
     for(int i=0; i<l1; i++)
     {
         for(int j=0; j<c2; j++)
@@ -31,14 +26,8 @@ void add_matrix(double mat1[][N], double mat2[][N], double res[][N])
     }
 }
 
-void mult_matrix(double mat1[][N], double mat2[][N], double res[][N])
+void mult_matrix(double mat1[][N], double mat2[][N], double res[][N], int l1, int c1, int l2, int c2)
 {
-    int l1 = sizeof(mat1)/sizeof(mat1[0]);
-    int c1 = sizeof(mat1[0])/sizeof(mat1[0][0]);
-
-    int l2 = sizeof(mat2)/sizeof(mat2[0]);
-    int c2 = sizeof(mat2[0])/sizeof(mat2[0][0]);
-
     if(c1 == l2)
     {
         for(int i=0; i<l1; i++)
@@ -54,11 +43,8 @@ void mult_matrix(double mat1[][N], double mat2[][N], double res[][N])
     }
 }
 
-void transpose_matrix(double mat[][N], double res[][N])
+void transpose_matrix(double mat[][N], double res[][N], int l, int c)
 {
-    int l = sizeof(mat)/sizeof(mat[0]);
-    int c = sizeof(mat[0])/sizeof(mat[0][0]);
-
     for(int i=0; i<l; i++)
     {
         for(int j=0; j<c; j++)
@@ -68,11 +54,8 @@ void transpose_matrix(double mat[][N], double res[][N])
     }
 }
 
-void factor_matrix(double mat[][N], double factor, double res[][N])
+void factor_matrix(double mat[][N], double factor, double res[][N], int l, int c)
 {
-    int l = sizeof(mat)/sizeof(mat[0]);
-    int c = sizeof(mat[0])/sizeof(mat[0][0]);
-
     for(int i=0; i<l; i++)
     {
         for(int j=0; j<c; j++)
@@ -82,4 +65,17 @@ void factor_matrix(double mat[][N], double factor, double res[][N])
     }
 }
 
+int main()
+{
+    double res[2][N] = {0};
+    double m[2][4] = {
+        {10, 11, 12, 13},
+        {14, 15, 16, 17}
+    };
 
+    add_matrix(m,m,res,2,4,2,4);
+    print_matrix(res, 2, 4);
+
+
+    return 0;
+}
