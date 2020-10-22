@@ -9,6 +9,8 @@ void print_matrix(double mat[][N])
     {
         for(int j=0; j < 4; j++)
             printf("%d\n",mat[i][j]);
+            if(j == 3)
+                printf("\n");
     }
 }
 
