@@ -63,8 +63,23 @@ void transpose_matrix(double mat[][N], double res[][N])
     {
         for(int j=0; j<c; j++)
         {
-            res[j][i] += mat[i][j];
+            mat[j][i] += mat[i][j];
         }
     }
 }
+
+void factor_matrix(double mat[][N], double factor, double res[][N])
+{
+    int l = sizeof(mat)/sizeof(mat[0]);
+    int c = sizeof(mat[0])/sizeof(mat[0][0]);
+
+    for(int i=0; i<l; i++)
+    {
+        for(int j=0; j<c; j++)
+        {
+            mat[i][j] = factor*mat[i][j];
+        }
+    }
+}
+
 
