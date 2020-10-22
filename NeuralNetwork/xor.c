@@ -20,7 +20,7 @@ double sigmoid(double x)
 
 double dsigmoid(double x)
 {
-    return (1/(1+exp(-x)))*(1-(1/(1+exp(-x))));
+    return x*(1-x);
 }
 
 double sigmoid_matrix(double m[][nInputs])
@@ -101,7 +101,7 @@ double feedForward(int inputs[1][nInputs], double weights[][nInputs], double bia
 
 void backPropagation(int *inputs, double weights[][nInputs], double bias[][nInputs], int target)
 {
-    
+     
 }
 
 int main()
