@@ -174,8 +174,38 @@ void lines_storage(SDL_Surface* image)
         }
         if (r != b)
             lines_counter = 0;
-        printf("%d %d %d %d\n",r,g,b,lines_counter);
     }
 }
+
+SDL_Surface* char_reco(SDL_Surface* image)
+{
+    Uint32 pixel;
+    Uint8 r,g,b;
+    int color = 0;
+    int h = image->h;
+    int w = image->w;
+    for (int i = 0; i <= w; i++)
+    {
+        for(int j = 0; j <= h; j++)
+        {
+            pixel = get_pixel(image,i,j);
+            SDL_GetRGB(pixel, image -> format, &r, &g, &b);
+            if (j == h-1 && g != 0)
+            {
+                j = 0;
+                color = 1;
+            }
+            if (color)
+                put_pixel(image,i,j,(SDL_MapRGB(image->format,255,0,0)));
+            if (g == 0)
+                break;
+
+        }
+        color = 0;
+    }
+    return image;
+
+}
+
 
 
