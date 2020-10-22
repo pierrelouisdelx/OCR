@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include "matrix.h"
 
 #define nInputs 2
 #define nHidden 2
