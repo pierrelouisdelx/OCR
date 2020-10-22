@@ -209,9 +209,8 @@ SDL_Surface* char_reco(SDL_Surface* image)
 
 void char_storage(SDL_Surface* image, char* path)
 {
-    char* extention = "_d";
+    char* extention = "_char_";
     strcat(path,extention);
-    mkdir(path,0004);
     int h = image->h;
     int w = image->w;
     Uint32 pixel;
@@ -237,34 +236,33 @@ void char_storage(SDL_Surface* image, char* path)
                 for (int k = i-lines_counter ;k < i; k++)
                 {
                     pixel = get_pixel(image,k,j);
-                    printf("0\n");
                     SDL_GetRGB(pixel, image -> format, &r1, &g1, &b1);
-                    printf("0\n");
                     put_pixel(new_image, new_i, j, (SDL_MapRGB(new_image->format,r1,g1,b1)));
-                    printf("1\n");
                     new_i++;
                 }
             }
             //save
             if (nb_bmp < 10)
             {
-                strcat(path,"/X");
+                printf("before :%s ,after :",path);
                 int len = strlen(path);
-                char file[len];
-                for (int s = 0; s < len - 1; s++)
+                char file[len+1];
+                for (int s = 0; s < len ; s++)
+                {
                     file[s] = path[s];
-                file[len-1] = nb_bmp + '0';
+                }
+                file[len] = nb_bmp +'0';
+                printf("%s\n",file);
                 SDL_SaveBMP(new_image,file);
             }
             if (nb_bmp > 9)
             {
-                strcat(path,"/XX");
                 int len = strlen(path);
-                char file[len];
-                for (int s = 0; s < len -2; s++)
+                char file[len+1];
+                for (int s = 0; s < len -1; s++)
                     file[s] = path[s];
-                file[len-2] = nb_bmp/10 + '0';
-                file[len-1] = nb_bmp%10 + '0';
+                file[len-1] = nb_bmp/10 + '0';
+                file[len] = nb_bmp%10 + '0';
                 SDL_SaveBMP(new_image,file);
             }
             nb_bmp += 1;
