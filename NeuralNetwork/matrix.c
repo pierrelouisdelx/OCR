@@ -26,7 +26,7 @@ void add_matrix(double mat1[][N], double mat2[][N], double res[][N], int l1, int
     }
 }
 
-void mult_matrix(double mat1[][N], double mat2[][N], double res[][N], int l1, int c1, int l2, int c2)
+void mult_matrix(double mat1[][N], double mat2[N][2], double res[][N], int l1, int c1, int l2, int c2)
 {
     if(c1 == l2)
     {
@@ -49,7 +49,7 @@ void transpose_matrix(double mat[][N], double res[][N], int l, int c)
     {
         for(int j=0; j<c; j++)
         {
-            mat[j][i] += mat[i][j];
+            res[j][i] += mat[i][j];
         }
     }
 }
@@ -60,7 +60,7 @@ void factor_matrix(double mat[][N], double factor, double res[][N], int l, int c
     {
         for(int j=0; j<c; j++)
         {
-            mat[i][j] = factor*mat[i][j];
+            res[i][j] = factor*mat[i][j];
         }
     }
 }
@@ -68,12 +68,20 @@ void factor_matrix(double mat[][N], double factor, double res[][N], int l, int c
 int main()
 {
     double res[2][N] = {0};
-    double m[2][4] = {
+    double m1[2][4] = {
         {10, 11, 12, 13},
         {14, 15, 16, 17}
     };
 
-    add_matrix(m,m,res,2,4,2,4);
+    double m2[4][2] = {
+        {10,11},
+        {12,13},
+        {14,15},
+        {16,17}
+    };
+
+
+    transpose_matrix(m1,res,2,4);
     print_matrix(res, 2, 4);
 
 
