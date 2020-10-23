@@ -46,7 +46,7 @@ void add_matrix(struct Neurones N, double mat1[][N.inputs], double mat2[][N.inpu
     }
 }
 
-void mult_matrix(double mat1[][2], double mat2[2][2], double res[][2], int l1, int c1, int l2, int c2)
+void mult_matrix(double mat1[][2], double mat2[][2], double res[][2], int l1, int c1, int l2, int c2)
 {
     if(c1 == l2)
     {

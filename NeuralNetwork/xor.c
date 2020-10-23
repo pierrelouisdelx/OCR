@@ -15,7 +15,7 @@ double dsigmoid(double x)
     return x*(1-x);
 }
 
-int xor(struct Neurones N, int inputs[1][N.inputs])
+int xor(struct Neurones N, double inputs[][N.inputs])
 {
     int x = inputs[1][0];
     int y = inputs[1][1];
@@ -24,7 +24,7 @@ int xor(struct Neurones N, int inputs[1][N.inputs])
     return 1;
 }
 
-void feedForward(struct Neurones N, int inputs[1][N.inputs], 
+void feedForward(struct Neurones N, double inputs[][N.inputs], 
         double weights_ih[][N.inputs], double weights_oh[][N.inputs],
         double bias_i[][N.inputs], double bias_o[][N.inputs], 
         double hidden[][N.inputs], double output[][N.inputs])
@@ -46,7 +46,7 @@ void feedForward(struct Neurones N, int inputs[1][N.inputs],
     print_matrix(output,2,2);
 
     function_matrix(sigmoid, output);
-    print_matrix(output,2,2);
+    print_matrix(output,1,1);
 }
 
 /*void backPropagation(struct Neurones N, int inputs[][N.inputs], double weights_oh[][N.inputs], double weights_ih[][N.inputs],
@@ -84,28 +84,28 @@ int main()
     struct Neurones N;
     N.inputs = 2;
     N.hidden = 2;
-    N.outputs = 1;
+    N.output = 1;
 
     srand(time(NULL));
 
-    int inputs[1][N.inputs];
+    double inputs[1][N.inputs];
     double weights_ih[N.hidden][N.hidden];
     double weights_oh[N.hidden][N.hidden];
     double bias_h[N.hidden][N.hidden];
     double bias_o[N.hidden][N.hidden];
     double hidden[N.hidden][N.hidden];
-    double output[N.hidden][N.hidden];
+    double output[N.output][N.output];
     double result;
 
     init_matrix(weights_ih);
     init_matrix(weights_oh);
     init_matrix(bias_h);
     init_matrix(bias_o);
-    print_matrix(weights_ih, 2, 4);
+    //print_matrix(weights_ih, 2, 4);
 
     feedForward(N, inputs, weights_ih, weights_oh, bias_h, bias_o, 
             hidden, output);
-    printf("Feed forward : %lf\n", result);
+    printf("Feed forward : %lf\n", output[0][0]);
     printf("Expected value : %d\n", xor(N,inputs));
 
     return 0;
