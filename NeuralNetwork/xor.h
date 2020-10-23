@@ -15,5 +15,9 @@ void feedForward(struct Neurones N, double inputs[][N.inputs],
         double bias_i[][N.inputs], double bias_o[][N.inputs],
         double hidden[][N.inputs], double output[][N.inputs]);
 
+void backPropagation(struct Neurones N, double inputs[][N.inputs], 
+        double weights_oh[][N.inputs], double weights_ih[][N.inputs],
+        double bias_i[][N.inputs], double bias_o[][N.inputs], 
+        double hidden[][N.inputs], double output[][N.inputs],int epochs);
 
 #endif

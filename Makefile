@@ -7,9 +7,12 @@ all: $(files)
 sdl: $(files)
 	gcc $(files) -o sdl -lSDL2 $(flags)
 
+xor: 
+	gcc -lm NeuralNetwork/*.c -o xor
+
 gtk: $(files)
 	gcc `pkg-config --cflags --libs gtk+-3.0` 
 	`pkg-config --cflags --libs gtk+-3.0` $(flags) GTK/$(files)
 
 clean:
-	rm ocr sdl
+	rm ocr sdl xor
