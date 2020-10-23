@@ -19,7 +19,7 @@ int main(int argc,char **argv)
     image = grayscale(image);
     image = blackwhite(image);
     image = lines_reco(image);
-    lines_storage(image);
+    lines_and_char_storage(image);
     display_image(image);
     return 0;
 }

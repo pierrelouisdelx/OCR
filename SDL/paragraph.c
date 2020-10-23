@@ -152,13 +152,13 @@ SDL_Surface* char_reco(SDL_Surface* image)
 void char_storage(SDL_Surface* image, int line)
 {
 
+    char* path = "SDL/bmp/chars/";
     int length;
     if (line < 10)
         length = 6;
     else
         length = 7;
     char* this_line = "line_";
-    char* path = "SDL/bmp/chars/";
     int h = image->h;
     int w = image->w;
     Uint32 pixel;
@@ -202,29 +202,35 @@ void char_storage(SDL_Surface* image, int line)
 
             if (nb_char < 10)
             {
-                int len = strlen(path) + strlen(line_str) + 1;
+                int len = strlen(path) + length + 2;
                 char file[len];
                 for (int s = 0; s < len ; s++)
                     file[s] = path[s];
-                for (int s = strlen(path) ; s < len - 1;s++)
+                for (int s = strlen(path); s < len - 2;s++)
                     file[s] = line_str[s-strlen(path)];
-                file[len] = nb_char +'0';
-                printf("file : %s\n",file);
+                file[len-2] = ':';
+                file[len-1] = nb_char +'0';
                 SDL_SaveBMP(new_image,file);
             }
             if (nb_char > 9)
             {
-                int len = strlen(path) + strlen(line_str) + 2;
+                int len = strlen(path) + length + 3;
                 char file[len];
                 for (int s = 0; s < len; s++)
                     file[s] = path[s];
-                for (int s = strlen(path) ; s < len - 1;s++)
+                for (int s = strlen(path); s < len;s++)
                     file[s] = line_str[s-strlen(path)];
-                file[len-2] = ':';
-                file[len-1] = nb_char/10 + '0';
-                file[len] = nb_char%10 + '0';
-                printf("file : %s\n",file);
+
+                char last1 = (nb_char/10 + '0');
+                char last2 = (nb_char%10 + '0');
+                char last11[1];
+                last11[0] = last1;
+                char last22[1];
+                last22[0] = last2;
+                strcat(file,":");
+                strcat(file,last11);
                 SDL_SaveBMP(new_image,file);
+                strcat(file,last22);
             }
             nb_char += 1;
             char_counter = 0;
@@ -237,7 +243,7 @@ void char_storage(SDL_Surface* image, int line)
 }
 
 
-void lines_storage(SDL_Surface* image)
+void lines_and_char_storage(SDL_Surface* image)
 {
     int h = image->h;
     int w = image->w;
