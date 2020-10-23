@@ -94,26 +94,3 @@ void function_matrix(double (*f)(double), double m[][2])
         }
     }
 }
-
-/*int main()
-{
-    double res[2][N] = {0};
-    double m1[2][4] = {
-        {10, 11, 12, 13},
-        {14, 15, 16, 17}
-    };
-
-    double m2[4][2] = {
-        {10,11},
-        {12,13},
-        {14,15},
-        {16,17}
-    };
-
-
-    transpose_matrix(m1,res,2,4);
-    print_matrix(res, 2, 4);
-
-
-    return 0;
-}*/

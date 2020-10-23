@@ -62,11 +62,14 @@ void backPropagation(struct Neurones N, double inputs[][N.inputs],
     for(int i=0; i < epochs; i++)
     {
         feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
+        
+        //Calculate error
         error_output = target - output[0][0];
         transpose_matrix(weights_oh, weights_oh, 2, 2);
         factor_matrix(weights_oh, error_output, weights_oh,2,2);
         error_output = weights_oh[0][0];
 
+        //Calculate deltas
         function_matrix(dsigmoid, output);
         factor_matrix(output, error_output, output, 2, 2);
         factor_matrix(output, lr, output, 2, 2);
@@ -75,9 +78,11 @@ void backPropagation(struct Neurones N, double inputs[][N.inputs],
         transpose_matrix(hidden, hidden, 2, 2);
         factor_matrix(hidden, output[0][0], d_weight_oh, 2, 2);
 
+        //Adjust weights and bias
         add_matrix(N, weights_oh, d_weight_oh, weights_oh);
         add_matrix(N, bias_o, d_bias_o, bias_o);
 
+        //Calculate deltas
         function_matrix(dsigmoid, hidden);
         factor_matrix(hidden, error_hidden, hidden, 2, 2);
         factor_matrix(hidden, lr, hidden, 2, 2);
@@ -85,6 +90,7 @@ void backPropagation(struct Neurones N, double inputs[][N.inputs],
         transpose_matrix(inputs, inputs, 2, 1);
         factor_matrix(inputs, hidden[0][0], d_weight_ih, 2, 2);
 
+        //Adjust weights and bias
         add_matrix(N, weights_ih, d_weight_ih, weights_ih);
         add_matrix(N, bias_i, d_bias_h, bias_i);
 
