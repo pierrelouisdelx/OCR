@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#define N 4
-#define nInputs 4
+#include "xor.h"
+
+#define nInputs 2
 
 double Random()
 {
-    srand(time(NULL));
     return (double)rand()/(double)RAND_MAX;
 }
 
-void print_matrix(double mat[][N], int l , int c)
+void print_matrix(double mat[][2], int l , int c)
 {
     for(int i=0; i < l; i++)
     {
@@ -20,8 +20,8 @@ void print_matrix(double mat[][N], int l , int c)
             if(j == c-1)
                 printf("\n");
         }
-
     }
+    printf("\n");
 }
 
 double init_matrix(double matrix[][nInputs])
@@ -35,18 +35,18 @@ double init_matrix(double matrix[][nInputs])
     }
 }
 
-void add_matrix(double mat1[][N], double mat2[][N], double res[][N], int l1, int c1, int l2, int c2)
+void add_matrix(struct Neurones N, double mat1[][N.inputs], double mat2[][N.inputs], double res[][N.inputs])
 {
-    for(int i=0; i<l1; i++)
+    for(int i=0; i<N.inputs; i++)
     {
-        for(int j=0; j<c2; j++)
+        for(int j=0; j<N.inputs; j++)
         {
             res[i][j] += mat1[i][j] + mat2[i][j];
         }
     }
 }
 
-void mult_matrix(double mat1[][N], double mat2[N][2], double res[][N], int l1, int c1, int l2, int c2)
+void mult_matrix(double mat1[][2], double mat2[2][2], double res[][2], int l1, int c1, int l2, int c2)
 {
     if(c1 == l2)
     {
@@ -63,7 +63,7 @@ void mult_matrix(double mat1[][N], double mat2[N][2], double res[][N], int l1, i
     }
 }
 
-void transpose_matrix(double mat[][N], double res[][N], int l, int c)
+void transpose_matrix(double mat[][2], double res[][2], int l, int c)
 {
     for(int i=0; i<l; i++)
     {
@@ -74,7 +74,7 @@ void transpose_matrix(double mat[][N], double res[][N], int l, int c)
     }
 }
 
-void factor_matrix(double mat[][N], double factor, double res[][N], int l, int c)
+void factor_matrix(double mat[][2], double factor, double res[][2], int l, int c)
 {
     for(int i=0; i<l; i++)
     {
@@ -85,7 +85,7 @@ void factor_matrix(double mat[][N], double factor, double res[][N], int l, int c
     }
 }
 
-void function_matrix(double (*f)(double), double m[][N])
+void function_matrix(double (*f)(double), double m[][2])
 {
     for(int i=0; i<nInputs; i++)
     {
