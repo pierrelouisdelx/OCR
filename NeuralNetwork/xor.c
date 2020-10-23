@@ -15,9 +15,9 @@ double dsigmoid(double x)
 
 int xor(struct Neurones N, double inputs[][N.inputs])
 {
-    int x = inputs[1][0];
-    int y = inputs[1][1];
-    if(x == y) 
+    int x = inputs[0][0];
+    int y = inputs[0][1];
+    if(x == y)
         return 0;
     return 1;
 }
@@ -30,10 +30,10 @@ void feedForward(struct Neurones N, double inputs[][N.inputs],
 
     mult_matrix(weights_ih, inputs, hidden, N.inputs, N.inputs, N.inputs, N.inputs);
     //print_matrix(hidden,2,2);
-    
+
     add_matrix(N, hidden, bias_i, hidden);
     //print_matrix(hidden,2,2);
-    
+
     function_matrix(sigmoid, hidden);
     //print_matrix(hidden,2,2);
 

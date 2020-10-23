@@ -5,7 +5,7 @@
 #include "xor.h"
 #include "matrix.h"
 
-int main()
+int main(int argc, char *argv[])
 {
     struct Neurones N;
     N.inputs = 2;
@@ -14,7 +14,7 @@ int main()
 
     srand(time(NULL));
 
-    double inputs[1][N.inputs];
+    double inputs[2][1] = {{0},{1}};
     double weights_ih[N.hidden][N.hidden];
     double weights_oh[N.hidden][N.hidden];
     double bias_h[N.hidden][N.hidden];
@@ -28,10 +28,10 @@ int main()
     init_matrix(bias_h);
     init_matrix(bias_o);
 
-    feedForward(N, inputs, weights_ih, weights_oh, bias_h, bias_o,
+    /*feedForward(N, inputs, weights_ih, weights_oh, bias_h, bias_o,
             hidden, output);
     printf("Feed forward : %lf\n", output[0][0]);
-    printf("Expected value : %d\n", xor(N,inputs));
+    printf("Expected value : %d\n", xor(N,inputs));*/
 
     backPropagation(N, inputs, weights_ih, weights_oh, bias_h, bias_o,
             hidden, output, 10);
