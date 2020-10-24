@@ -2,122 +2,129 @@
 #include <stdlib.h>
 #include "xor.h"
 
-#define nInputs 2
-
 double Random()
 {
     return (double)rand()/(double)RAND_MAX;
 }
 
-void print_matrix(struct Neurones N, double mat[][2])
+void print_matrix(int w, int h, double mat[w][h])
 {
-    for(int i=0; i < N.inputs; i++)
+    for(int i=0; i < w; i++)
     {
-        for(int j=0; j < N.inputs; j++)
+        for(int j=0; j < h; j++)
         {
             printf("%f ",mat[i][j]);
-            if(j == N.inputs-1)
+            if(j == h-1)
                 printf("\n");
         }
     }
     printf("\n");
 }
 
-void init_matrix(double matrix[][nInputs])
+void init_matrix(int w, int h, double matrix[w][h])
 {
-    for(int i=0; i<nInputs; i++)
+    for(int i=0; i<w; i++)
     {
-        for(int j=0; j<nInputs; j++)
+        for(int j=0; j<h; j++)
         {
             matrix[i][j] = Random();
         }
     }
 }
 
-void add_matrix(struct Neurones N, double mat1[][N.inputs], double mat2[][N.inputs], double res[][N.inputs])
+void add_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w][h])
 {
-    for(int i=0; i<N.inputs; i++)
+    for(int i=0; i<w; i++)
     {
-        for(int j=0; j<N.inputs; j++)
+        for(int j=0; j<h; j++)
         {
             res[i][j] += mat1[i][j] + mat2[i][j];
         }
     }
 }
 
-void sub_matrix(struct Neurones N, double mat1[][N.inputs], double mat2[][N.inputs], double res[][N.inputs])
+void sub_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w][h])
 {
-    for(int i=0; i<N.inputs; i++)
+    for(int i=0; i<w; i++)
     {
-        for(int j=0; j<N.inputs; j++)
+        for(int j=0; j<h; j++)
         {
-            res[i][j] += mat1[i][j] - mat2[i][j];
+            res[i][j] = mat1[i][j] - mat2[i][j];
         }
     }
 }
 
-void multeach_matrix(struct Neurones N, double mat1[][N.inputs], double mat2[][N.inputs], double res[][N.inputs])
+void multeach_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w][h])
 {
-    for(int i=0; i<N.inputs; i++)
+    for(int i=0; i<w; i++)
     {
-        for(int j=0; j<N.inputs; j++)
+        for(int j=0; j<h; j++)
         {
-            res[i][j] += mat1[i][j] * mat2[i][j];
+            res[i][j] = mat1[i][j] * mat2[i][j];
         }
     }
 }
 
-void mult_matrix(double mat1[][2], double mat2[][2], double res[][2], int l1, int c1, int l2, int c2)
+void mult_matrix(int w1, int h1, int w2, int h2, double mat1[w1][h1], double mat2[w2][h2], double res[w1][h1])
 {
-    if(c1 == l2)
+    if(h1 == w2)
     {
-        for(int i=0; i<l1; i++)
+        for(int i=0; i<w1; i++)
         {
-            for(int j=0; j<c2; j++)
+            for(int j=0; j<h2; j++)
             {
-                for(int k=0; k<l2; k++)
+                for(int k=0; k<w2; k++)
                 {
-                    res[i][j] += mat1[i][k] * mat2[k][j];
+                    res[i][j] = mat1[i][k] * mat2[k][j];
                 }
             }
         }
     }
 }
 
-void transpose_matrix(struct Neurones N, double mat[][2], double res[][2])
+void transpose_matrix(int w, int h, double mat[w][h], double res[w][h])
 {
-    for(int i=0; i<N.inputs; i++)
+    for(int i=0; i<w; i++)
     {
-        for(int j=0; j<N.inputs; j++)
+        for(int j=0; j<h; j++)
         {
-            res[j][i] += mat[i][j];
+            res[j][i] = mat[i][j];
         }
     }
 }
 
-void factor_matrix(struct Neurones N, double mat[][2], double factor, double res[][2])
+void factor_matrix(int w, int h, double mat[w][h], double factor, double res[w][h])
 {
-    for(int i=0; i<N.inputs; i++)
+    for(int i=0; i<w; i++)
     {
-        for(int j=0; j<N.inputs; j++)
+        for(int j=0; j<h; j++)
         {
             res[i][j] = factor*mat[i][j];
         }
     }
 }
 
-void function_matrix(double (*f)(double), double m[][2])
+void function_matrix(int w, int h, double (*f)(double), double m[w][h])
 {
-    for(int i=0; i<nInputs; i++)
+    for(int i=0; i<w; i++)
     {
-        for(int j=0; j<nInputs; j++)
+        for(int j=0; j<h; j++)
         {
             m[i][j] = (*f)(m[i][j]);
         }
     }
 }
 
+void copy_matrix(int w, int h, double mat1[w][h], double mat2[w][h])
+{
+    for(int i=0; i<w; i++)
+    {
+        for(int j=0; j<h; j++)
+            mat2[i][j] = mat1[i][j];
+    }
+}
 
+/*
 void SaveData(double matrix,long path) //path must be absolute
 {
   FILE* file = fopen(path, "w"); //w allows us to write in the file
@@ -165,14 +172,4 @@ double LoadData(long path)
 
   fclose(file);
   return matrix;
-}
-
-
-void copy_matrix(struct Neurones N, double mat1[][N.inputs], double mat2[][N.inputs])
-{
-    for(int i=0; i<N.inputs; i++)
-    {
-        for(int j=0; j<N.inputs; j++)
-            mat2[i][j] = mat1[i][j];
-    }
-}
+}*/

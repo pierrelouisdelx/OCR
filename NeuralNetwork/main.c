@@ -14,8 +14,8 @@ int main(int argc, char *argv[])
     
     srand(time(NULL));
 
-    double inputs[2][1] = {{1},{1}};
-    double output[2][2];
+    double inputs[2][1] = {{0},{1}};
+    double output[1][1];
 
     train(N, inputs, output);
 

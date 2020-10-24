@@ -10,16 +10,17 @@ struct Neurones {
 double sigmoid(double x);
 double dsigmoid(double x);
 int xor(struct Neurones N, double inputs[][N.inputs]);
-void feedForward(struct Neurones N, double inputs[][N.inputs],
-        double weights_ih[][N.inputs], double weights_oh[][N.inputs],
-        double bias_i[][N.inputs], double bias_o[][N.inputs],
-        double hidden[][N.inputs], double output[][N.inputs]);
 
-void backPropagation(struct Neurones N, double inputs[][N.inputs], 
-        double weights_oh[][N.inputs], double weights_ih[][N.inputs],
-        double bias_i[][N.inputs], double bias_o[][N.inputs], 
-        double hidden[][N.inputs], double output[][N.inputs],int epochs);
+void feedForward(struct Neurones N, double inputs[N.inputs][1],
+        double weights_ih[N.hidden][N.inputs], double weights_oh[N.output][N.inputs],
+        double bias_i[N.hidden][1], double bias_o[N.output][1],
+        double hidden[N.hidden][1], double output[N.output][1]);
 
-void train(struct Neurones N, double inputs[N.inputs][1], double output[N.output][2]);
+void backPropagation(struct Neurones N, double inputs[N.inputs][1],
+        double weights_oh[N.output][N.hidden], double weights_ih[N.hidden][N.inputs],
+        double bias_i[N.hidden][1], double bias_o[N.output][1],
+        double hidden[N.hidden][1], double output[N.output][1], int epochs);
+
+void train(struct Neurones N, double inputs[N.inputs][1], double output[N.output][1]);
 
 #endif
