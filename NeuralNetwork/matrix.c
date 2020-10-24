@@ -38,7 +38,7 @@ void add_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w
     {
         for(int j=0; j<h; j++)
         {
-            res[i][j] += mat1[i][j] + mat2[i][j];
+            res[i][j] = mat1[i][j] + mat2[i][j];
         }
     }
 }
