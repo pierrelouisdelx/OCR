@@ -16,4 +16,5 @@ void copy_matrix(int w, int h, double mat1[w][h], double mat2[w][h]);
 void swap(int w, int h, double m[w][h], int i, int j);
 void shuffle_matrix(int w, int h, double m[w][h], int n);
 
+void save_matrix(int w, int h, double mat[w][h], const char *path);
 #endif

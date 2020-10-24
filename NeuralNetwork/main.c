@@ -36,6 +36,8 @@ int main(int argc, char *argv[])
     init_matrix(N.hidden, 1, bias_i);
     init_matrix(N.output, 1, bias_o);
 
+    save_matrix(N.inputs, 1, inputs, "weights_oh.txt");
+
     train(N, inputs, output, weights_ih, weights_oh, bias_i, weights_oh, hidden, epochs);
 
     printf("Back Propagation : %lf\n", output[0][0]);

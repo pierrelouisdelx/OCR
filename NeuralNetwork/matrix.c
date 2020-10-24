@@ -140,30 +140,24 @@ void shuffle_matrix(int w, int h, double m[w][h], int n)
 	}
 }
 
-/*
-void SaveData(double matrix,long path) //path must be absolute
+void save_matrix(int w, int h, double mat[w][h], const char *path) 
 {
-  FILE* file = fopen(path, "w"); //w allows us to write in the file
-  if(file == NULL)
-  {
-    printf("matrix.c : SaveData, no such file exists");
-    exit(1);
-  }
-  fprintf(file, "%f\n", line)
-  fprintf(file, "%f\n", column) 
-  for(int i = 0; i < 2; ++i) //writes each bits of data in the file
-  {
-    for(int h = 0; h < 2; ++h)
+    FILE *f;
+    if(f=fopen(path,"wb"))
     {
-      fprintf(file, "%f\n", matrix[i][h]);
+        for(int i=0; i<w; i++)
+        {
+            for(int j=0; j<h; j++)
+            {
+                fprintf(f, "%f", mat[i][j]);
+            }
+            fprintf(f, "\n");
+        }
     }
-  }
-  fclose(file);
-  //in the for loop the 2 represents the number of input and hidden layers
+    fclose(f);
 }
-//the first two lines are the dimension of the matrix, the following lines are just
-//the values stored inside of it
 
+/*
 double LoadData(long path)
 {
   FILE* file = fopen(path, 'r');
