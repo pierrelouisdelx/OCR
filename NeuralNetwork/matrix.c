@@ -124,6 +124,22 @@ void copy_matrix(int w, int h, double mat1[w][h], double mat2[w][h])
     }
 }
 
+void swap(int w, int h, double m[w][h], int i, int j) 
+{
+	int tmp = m[i][h];
+	m[i][h] = m[j][h];
+	m[j][h] = tmp;
+}
+
+void shuffle_matrix(int w, int h, double m[w][h], int n)
+{
+	for (int i = n - 1; i >= 1; i--)
+	{
+		int j = rand() % (i + 1);
+		swap(w, h, m, i, j);
+	}
+}
+
 /*
 void SaveData(double matrix,long path) //path must be absolute
 {
