@@ -9,14 +9,14 @@ double Random()
     return (double)rand()/(double)RAND_MAX;
 }
 
-void print_matrix(double mat[][2], int l , int c)
+void print_matrix(struct Neurones N, double mat[][2])
 {
-    for(int i=0; i < l; i++)
+    for(int i=0; i < N.inputs; i++)
     {
-        for(int j=0; j < c; j++)
+        for(int j=0; j < N.inputs; j++)
         {
             printf("%f ",mat[i][j]);
-            if(j == c-1)
+            if(j == N.inputs-1)
                 printf("\n");
         }
     }
@@ -62,22 +62,22 @@ void mult_matrix(double mat1[][2], double mat2[][2], double res[][2], int l1, in
     }
 }
 
-void transpose_matrix(double mat[][2], double res[][2], int l, int c)
+void transpose_matrix(struct Neurones N, double mat[][2], double res[][2])
 {
-    for(int i=0; i<l; i++)
+    for(int i=0; i<N.inputs; i++)
     {
-        for(int j=0; j<c; j++)
+        for(int j=0; j<N.inputs; j++)
         {
             res[j][i] += mat[i][j];
         }
     }
 }
 
-void factor_matrix(double mat[][2], double factor, double res[][2], int l, int c)
+void factor_matrix(struct Neurones N, double mat[][2], double factor, double res[][2])
 {
-    for(int i=0; i<l; i++)
+    for(int i=0; i<N.inputs; i++)
     {
-        for(int j=0; j<c; j++)
+        for(int j=0; j<N.inputs; j++)
         {
             res[i][j] = factor*mat[i][j];
         }
@@ -92,5 +92,14 @@ void function_matrix(double (*f)(double), double m[][2])
         {
             m[i][j] = (*f)(m[i][j]);
         }
+    }
+}
+
+void copy_matrix(struct Neurones N, double mat1[][N.inputs], double mat2[][N.inputs])
+{
+    for(int i=0; i<N.inputs; i++)
+    {
+        for(int j=0; j<N.inputs; j++)
+            mat2[i][j] = mat1[i][j];
     }
 }

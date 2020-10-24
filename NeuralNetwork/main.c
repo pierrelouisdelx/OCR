@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 
     srand(time(NULL));
 
-    double inputs[2][1] = {{0},{1}};
+    double inputs[2][1] = {{1},{1}};
     double weights_ih[N.hidden][N.hidden];
     double weights_oh[N.hidden][N.hidden];
     double bias_h[N.hidden][N.hidden];
