@@ -23,7 +23,7 @@ void print_matrix(struct Neurones N, double mat[][2])
     printf("\n");
 }
 
-double init_matrix(double matrix[][nInputs])
+void init_matrix(double matrix[][nInputs])
 {
     for(int i=0; i<nInputs; i++)
     {
@@ -41,6 +41,28 @@ void add_matrix(struct Neurones N, double mat1[][N.inputs], double mat2[][N.inpu
         for(int j=0; j<N.inputs; j++)
         {
             res[i][j] += mat1[i][j] + mat2[i][j];
+        }
+    }
+}
+
+void sub_matrix(struct Neurones N, double mat1[][N.inputs], double mat2[][N.inputs], double res[][N.inputs])
+{
+    for(int i=0; i<N.inputs; i++)
+    {
+        for(int j=0; j<N.inputs; j++)
+        {
+            res[i][j] += mat1[i][j] - mat2[i][j];
+        }
+    }
+}
+
+void multeach_matrix(struct Neurones N, double mat1[][N.inputs], double mat2[][N.inputs], double res[][N.inputs])
+{
+    for(int i=0; i<N.inputs; i++)
+    {
+        for(int j=0; j<N.inputs; j++)
+        {
+            res[i][j] += mat1[i][j] * mat2[i][j];
         }
     }
 }
