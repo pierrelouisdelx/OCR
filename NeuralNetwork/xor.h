@@ -20,4 +20,6 @@ void backPropagation(struct Neurones N, double inputs[][N.inputs],
         double bias_i[][N.inputs], double bias_o[][N.inputs], 
         double hidden[][N.inputs], double output[][N.inputs],int epochs);
 
+void train(struct Neurones N, double inputs[N.inputs][1], double output[N.output][2]);
+
 #endif
