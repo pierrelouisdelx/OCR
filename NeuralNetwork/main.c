@@ -8,19 +8,11 @@
 int main(int argc, char *argv[])
 {
     struct Neurones N;
-    N.inputs = 8;
+    N.inputs = 2;
     N.hidden = 2;
     N.output = 1;
 
     srand(time(NULL));
-
-    double inputs[8][1] =
-    {
-        {1}, {0},
-        {0}, {1},
-        {1}, {0},
-        {1}, {1},
-    };
 
     double output[1][1];
 
@@ -37,13 +29,13 @@ int main(int argc, char *argv[])
     init_matrix(N.output, 1, bias_o);
 
     //save_matrix(N.inputs, 1, inputs, "weights_oh.txt");
-    LoadData("weights_oh.txt", N.inputs, 1, inputs);
-    print_matrix(8,1,inputs);
+    //LoadData("weights_oh.txt", N.inputs, 1, inputs);
+    //print_matrix(8,1,inputs);
 
-    train(N, inputs, output, weights_ih, weights_oh, bias_i, weights_oh, hidden, epochs);
+    train(N, output, weights_ih, weights_oh, bias_i, weights_oh, hidden, epochs);
 
     printf("Back Propagation : %lf\n", output[0][0]);
-    printf("Expected value : %d\n", xor(N,inputs));
+    //printf("Expected value : %d\n", xor(N,inputs));
 
     return 0;
 }

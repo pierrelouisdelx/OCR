@@ -27,7 +27,7 @@ void backPropagation(struct Neurones N, double inputs[N.inputs][1],
         double target[N.output][1], double transpose_hidden[N.hidden][N.output], 
         double transpose_input[1][N.inputs], float lr);
 
-void train(struct Neurones N, double inputs[N.inputs][1], double output[N.output][1], 
+void train(struct Neurones N, double output[N.output][1], 
         double weights_ih[N.hidden][N.inputs], double weights_oh[N.output][N.hidden],
         double bias_i[N.hidden][1], double bias_o[N.output][1], double hidden[N.hidden][1], int epochs);
 

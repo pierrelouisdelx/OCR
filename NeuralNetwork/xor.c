@@ -49,7 +49,7 @@ void backPropagation(struct Neurones N, double inputs[N.inputs][1],
 {
 
 	feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
-	printf("%f\n",output[0][0]);
+	//printf("%f\n",output[0][0]);
 
 	//Calculate error
 	sub_matrix(N.output, 1, target, output, error_output);
@@ -89,7 +89,7 @@ void backPropagation(struct Neurones N, double inputs[N.inputs][1],
 	add_matrix(N.inputs, N.inputs, bias_i, d_bias_h, bias_i);
 }
 
-void train(struct Neurones N, double inputs[N.inputs][1], double output[N.output][1], 
+void train(struct Neurones N, double output[N.output][1], 
         double weights_ih[N.hidden][N.inputs], double weights_oh[N.output][N.hidden],
         double bias_i[N.hidden][1], double bias_o[N.output][1], double hidden[N.hidden][1], int epochs)
 {
@@ -99,16 +99,30 @@ void train(struct Neurones N, double inputs[N.inputs][1], double output[N.output
     double target[N.output][1], transpose_hidden[N.hidden][N.output], transpose_input[1][N.inputs];
 
     float lr = 0.1;
-    target[0][0] = xor(N, inputs);
-    
+    double inputs[4][2] =
+    {
+        {1,0},
+        {0,1},
+        {1,0},
+        {1,1},
+    };
+
+    double input_arr[N.inputs][1];
+
     for(int i=0; i<epochs; i++)
     {
-        shuffle_matrix(N.inputs, 0, inputs, N.inputs);
-        for(int j=0; j<N.inputs; j++) 
+        shuffle(4, 2, inputs);
+        for(int j=0; j<4; j++) 
         {
-            backPropagation(N, inputs, weights_oh, weights_ih, bias_i, bias_o, hidden, output,
+            input_arr[0][0] = inputs[j][0];
+            input_arr[1][0] = inputs[j][1];
+
+            target[0][0] = xor(N, input_arr);
+            printf("%f %f\n", input_arr[0][0], input_arr[1][0]);
+            backPropagation(N, input_arr, weights_oh, weights_ih, bias_i, bias_o, hidden, output,
                 error_output, error_hidden, gradient_output, d_weight_oh, d_bias_o, gradient_hidden, 
                 d_weight_ih, d_bias_h, target, transpose_hidden, transpose_input, lr);
         }
+        printf("\n");
     }
 }

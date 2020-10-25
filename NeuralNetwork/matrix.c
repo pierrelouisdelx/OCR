@@ -124,20 +124,22 @@ void copy_matrix(int w, int h, double mat1[w][h], double mat2[w][h])
     }
 }
 
-void swap(int w, int h, double m[w][h], int i, int j) 
+void shuffle(size_t h, size_t w, double array[h][w])
 {
-	int tmp = m[i][h];
-	m[i][h] = m[j][h];
-	m[j][h] = tmp;
-}
-
-void shuffle_matrix(int w, int h, double m[w][h], int n)
-{
-	for (int i = n - 1; i >= 1; i--)
-	{
-		int j = rand() % (i + 1);
-		swap(w, h, m, i, j);
-	}
+    if (h > 1)
+    {
+        size_t i;
+        for (i = 0; i < h - 1; i++)
+        {
+          size_t j = i + rand() / (RAND_MAX / (h - i) + 1);
+          double tmp1 = array[j][0];
+          double tmp2 = array[j][1];
+          array[j][0] = array[i][0];
+          array[j][1] = array[i][1];
+          array[i][0] = tmp1;
+          array[i][1] = tmp2;
+        }
+    }
 }
 
 void save_matrix(int w, int h, double mat[w][h], const char *path) 
