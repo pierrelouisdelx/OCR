@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 
     srand(time(NULL));
 
-    double inputs[8][1] = 
+    double inputs[8][1] =
     {
         {1}, {0},
         {0}, {1},
@@ -36,7 +36,9 @@ int main(int argc, char *argv[])
     init_matrix(N.hidden, 1, bias_i);
     init_matrix(N.output, 1, bias_o);
 
-    save_matrix(N.inputs, 1, inputs, "weights_oh.txt");
+    //save_matrix(N.inputs, 1, inputs, "weights_oh.txt");
+    LoadData("weights_oh.txt", N.inputs, 1, inputs);
+    print_matrix(8,1,inputs);
 
     train(N, inputs, output, weights_ih, weights_oh, bias_i, weights_oh, hidden, epochs);
 

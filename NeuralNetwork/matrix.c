@@ -157,32 +157,7 @@ void save_matrix(int w, int h, double mat[w][h], const char *path)
     fclose(f);
 }
 
-/*
-void LoadData(const char * path, int line, int column,  int mat[i][h])
-{
-  FILE* file = fopen(path, "wb");
-  int SizeLineMax = 15;//this should be changed later on
-  char  *line = calloc(15, sizeof(char)); //this should be changed later as the needs changes
-
-  if(file == NULL)
-  {
-    printf("matrix.c : LoadData, no such file exists");
-    exit(1);
-  }
-  for(int i = 0; i < line; ++i)
-  {
-    for(int h = 0; i < column; ++h)
-    {
-      fgets(line, SizeLineMax, file);
-      strok(line, "\n");
-      mat[i][h] = atof(line);
-    }
-  }
-
-  fclose(file);
-}*/
-
-void LoadData(const char * path, int line, int column,  int mat[line][column])
+void LoadData(const char * path, int line, int column, double mat[line][column])
 {
   FILE* file = fopen(path, "r");
 
