@@ -158,28 +158,50 @@ void save_matrix(int w, int h, double mat[w][h], const char *path)
 }
 
 /*
-double LoadData(long path)
+void LoadData(const char * path, int line, int column,  int mat[i][h])
 {
-  FILE* file = fopen(path, 'r');
+  FILE* file = fopen(path, "wb");
   int SizeLineMax = 15;//this should be changed later on
   char  *line = calloc(15, sizeof(char)); //this should be changed later as the needs changes
-  double matrix[2][2];
 
   if(file == NULL)
   {
     printf("matrix.c : LoadData, no such file exists");
     exit(1);
   }
-  for(int i = 0; i < 2; ++i)
+  for(int i = 0; i < line; ++i)
   {
-    for(int h = 0; i < 2; ++h)
+    for(int h = 0; i < column; ++h)
     {
       fgets(line, SizeLineMax, file);
       strok(line, "\n");
-      matrix[i][h] = atof(line);
+      mat[i][h] = atof(line);
     }
   }
 
   fclose(file);
-  return matrix;
 }*/
+
+void LoadData(const char * path, int line, int column,  int mat[line][column])
+{
+  FILE* file = fopen(path, "r");
+
+  char save[line + column];
+  if(file == NULL)
+  {
+    printf("matrix.c : LoadData, no such file exists");
+    exit(1);
+  }
+    int c=0; //index of letter in save
+    fgets(save, sizeof(save), file);
+    for (int i = 0; i < line ; i++)
+    {
+      for(int n=0; n < column; n++)
+      {
+        mat[i][n] = save[c];
+      }
+    }
+
+  fclose(file);
+}
+
