@@ -193,22 +193,13 @@ int LoadData(struct Neurones N,
 
     char str[1000];
 
-
     for (int i = 0; i < N.hidden; ++i)
     {
-<<<<<<< HEAD
         for (int j = 0; j < N.inputs; ++j)
         {
             fgets(str, 1000, fp);
             weights_ih[i][j] = (double) atof(str);
         }
-=======
-      for(int n=0; n < column; n++)
-      {
-        mat[i][n] = save[c];
-	c++;
-      }
->>>>>>> 5fff8f0c1dfae65590bc8b92c49313bb663d7201
     }
 
     for (int i = 0; i < N.output; ++i)
@@ -231,7 +222,6 @@ int LoadData(struct Neurones N,
         fgets(str, 1000, fp);
         bias_o[i][0] = (double) atof(str);
     }
-   
 
     fclose(fp);
     return 0;
