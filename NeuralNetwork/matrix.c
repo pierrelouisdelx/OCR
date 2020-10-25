@@ -65,24 +65,27 @@ void multeach_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double 
     }
 }
 
-void mult_matrix(int w1, int h1, int w2, int h2, double mat1[w1][h1], double mat2[w2][h2], double res[w1][h1])
+void mult_matrix(int w1, int h1, int w2, int h2, double mat1[w1][h1], double mat2[w2][h2], double res[w1][h2])
 {
     if(h1 == w2)
     {
+        float tmp;
         for(int i=0; i<w1; i++)
         {
             for(int j=0; j<h2; j++)
             {
-                for(int k=0; k<w2; k++)
+                tmp = 0;
+                for(int k=0; k<h1; k++)
                 {
-                    res[i][j] = mat1[i][k] * mat2[k][j];
+                    tmp += mat1[i][k] * mat2[k][j];
                 }
+                res[i][j] = tmp;
             }
         }
     }
 }
 
-void transpose_matrix(int w, int h, double mat[w][h], double res[w][h])
+void transpose_matrix(int w, int h, double mat[w][h], double res[h][w])
 {
     for(int i=0; i<w; i++)
     {
@@ -124,62 +127,105 @@ void copy_matrix(int w, int h, double mat1[w][h], double mat2[w][h])
     }
 }
 
-void swap(int w, int h, double m[w][h], int i, int j) 
+void shuffle(size_t h, size_t w, double array[h][w])
 {
-	int tmp = m[i][h];
-	m[i][h] = m[j][h];
-	m[j][h] = tmp;
-}
-
-void shuffle_matrix(int w, int h, double m[w][h], int n)
-{
-	for (int i = n - 1; i >= 1; i--)
-	{
-		int j = rand() % (i + 1);
-		swap(w, h, m, i, j);
-	}
-}
-
-void save_matrix(int w, int h, double mat[w][h], const char *path) 
-{
-    FILE *f;
-    if(f=fopen(path,"wb"))
+    if (h > 1)
     {
-        for(int i=0; i<w; i++)
+        size_t i;
+        for (i = 0; i < h - 1; i++)
         {
-            for(int j=0; j<h; j++)
-            {
-                fprintf(f, "%f", mat[i][j]);
-            }
-            fprintf(f, "\n");
+          size_t j = i + rand() / (RAND_MAX / (h - i) + 1);
+          double tmp1 = array[j][0];
+          double tmp2 = array[j][1];
+          array[j][0] = array[i][0];
+          array[j][1] = array[i][1];
+          array[i][0] = tmp1;
+          array[i][1] = tmp2;
         }
     }
-    fclose(f);
 }
 
-/*
-double LoadData(long path)
+int SaveData(struct Neurones N,
+    double weights_ih [N.hidden][N.inputs],
+    double weights_ho [N.output][N.hidden],
+    double bias_h [N.hidden][1],
+    double bias_o [N.output][1])
 {
-  FILE* file = fopen(path, 'r');
-  int SizeLineMax = 15;//this should be changed later on
-  char  *line = calloc(15, sizeof(char)); //this should be changed later as the needs changes
-  double matrix[2][2];
+    FILE * fp;
+    fp = fopen ("data.txt","w");
 
-  if(file == NULL)
-  {
-    printf("matrix.c : LoadData, no such file exists");
-    exit(1);
-  }
-  for(int i = 0; i < 2; ++i)
-  {
-    for(int h = 0; i < 2; ++h)
+    for (int i = 0; i < N.hidden; ++i)
     {
-      fgets(line, SizeLineMax, file);
-      strok(line, "\n");
-      matrix[i][h] = atof(line);
+        for (int j = 0; j < N.inputs; ++j)
+        {
+            fprintf(fp, "%f\n", weights_ih[i][j] );
+        }
     }
-  }
 
-  fclose(file);
-  return matrix;
-}*/
+    for (int i = 0; i < N.output; ++i)
+    {
+        for (int j = 0; j < N.hidden; ++j)
+        {
+            fprintf(fp, "%f\n", weights_ho[i][j] );
+        }
+    }
+
+    for (int i = 0; i < N.hidden; ++i)
+    {
+        fprintf(fp, "%f\n", bias_h[i][0] );
+    }
+
+    for (int i = 0; i < N.output; ++i)
+    {
+        fprintf(fp, "%f\n", bias_o[i][0] );
+    }
+   
+
+    fclose(fp);
+    return 0;
+}
+
+int LoadData(struct Neurones N,
+    double weights_ih [N.hidden][N.inputs],
+    double weights_ho [N.output][N.hidden],
+    double bias_h [N.hidden][1],
+    double bias_o [N.output][1])
+{
+    FILE * fp;
+    fp = fopen ("data.txt","r");
+
+    char str[1000];
+
+    for (int i = 0; i < N.hidden; ++i)
+    {
+        for (int j = 0; j < N.inputs; ++j)
+        {
+            fgets(str, 1000, fp);
+            weights_ih[i][j] = (double) atof(str);
+        }
+    }
+
+    for (int i = 0; i < N.output; ++i)
+    {
+        for (int j = 0; j < N.hidden; ++j)
+        {
+            fgets(str, 1000, fp);
+            weights_ho[i][j] = (double) atof(str);
+        }
+    }
+
+    for (int i = 0; i < N.hidden; ++i)
+    {
+        fgets(str, 1000, fp);
+        bias_h[i][0] = (double) atof(str);
+    }
+
+    for (int i = 0; i < N.output; ++i)
+    {
+        fgets(str, 1000, fp);
+        bias_o[i][0] = (double) atof(str);
+    }
+
+    fclose(fp);
+    return 0;
+}
