@@ -176,6 +176,7 @@ void LoadData(const char * path, int line, int column, double mat[line][column])
       for(int n=0; n < column; n++)
       {
         mat[i][n] = save[c];
+	c++;
       }
     }
 
