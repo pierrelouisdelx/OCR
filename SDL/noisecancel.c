@@ -7,8 +7,8 @@ SDL_Surface* noisecancel(SDL_Surface* image)
 {
     int h = image->h;
     int w = image->w;
-    for(int i=0; i < w; i++) {
-        for(int j=0; j < h; j++) {
+    for(int i=1; i < w-1; i++) {
+        for(int j=1; j < h-1; j++) {
             Uint32 pixel = get_pixel(image,i,j);
             Uint8 r, g, b;
             SDL_GetRGB(pixel, image->format, &r, &g, &b);
