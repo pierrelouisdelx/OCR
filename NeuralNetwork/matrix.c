@@ -82,7 +82,7 @@ void mult_matrix(int w1, int h1, int w2, int h2, double mat1[w1][h1], double mat
     }
 }
 
-void transpose_matrix(int w, int h, double mat[w][h], double res[w][h])
+void transpose_matrix(int w, int h, double mat[w][h], double res[h][w])
 {
     for(int i=0; i<w; i++)
     {
@@ -142,43 +142,89 @@ void shuffle(size_t h, size_t w, double array[h][w])
     }
 }
 
-void save_matrix(int w, int h, double mat[w][h], const char *path) 
+int SaveData(struct Neurones N,
+    double weights_ih [N.hidden][N.inputs],
+    double weights_ho [N.output][N.hidden],
+    double bias_h [N.hidden][1],
+    double bias_o [N.output][1])
 {
-    FILE *f;
-    if(f=fopen(path,"wb"))
+    FILE * fp;
+    fp = fopen ("data.txt","w");
+
+    for (int i = 0; i < N.hidden; ++i)
     {
-        for(int i=0; i<w; i++)
+        for (int j = 0; j < N.inputs; ++j)
         {
-            for(int j=0; j<h; j++)
-            {
-                fprintf(f, "%f", mat[i][j]);
-            }
-            fprintf(f, "\n");
+            fprintf(fp, "%f\n", weights_ih[i][j] );
         }
     }
-    fclose(f);
-}
 
-void LoadData(const char * path, int line, int column, double mat[line][column])
-{
-  FILE* file = fopen(path, "r");
-
-  char save[line + column];
-  if(file == NULL)
-  {
-    printf("matrix.c : LoadData, no such file exists");
-    exit(1);
-  }
-    int c=0; //index of letter in save
-    fgets(save, sizeof(save), file);
-    for (int i = 0; i < line ; i++)
+    for (int i = 0; i < N.output; ++i)
     {
-      for(int n=0; n < column; n++)
-      {
-        mat[i][n] = save[c];
-      }
+        for (int j = 0; j < N.hidden; ++j)
+        {
+            fprintf(fp, "%f\n", weights_ho[i][j] );
+        }
     }
 
-  fclose(file);
+    for (int i = 0; i < N.hidden; ++i)
+    {
+        fprintf(fp, "%f\n", bias_h[i][0] );
+    }
+
+    for (int i = 0; i < N.output; ++i)
+    {
+        fprintf(fp, "%f\n", bias_o[i][0] );
+    }
+   
+
+    fclose(fp);
+    return 0;
 }
 
+int LoadData(struct Neurones N,
+    double weights_ih [N.hidden][N.inputs],
+    double weights_ho [N.output][N.hidden],
+    double bias_h [N.hidden][1],
+    double bias_o [N.output][1])
+{
+    FILE * fp;
+    fp = fopen ("data.txt","r");
+
+    char str[1000];
+
+
+    for (int i = 0; i < N.hidden; ++i)
+    {
+        for (int j = 0; j < N.inputs; ++j)
+        {
+            fgets(str, 1000, fp);
+            weights_ih[i][j] = (double) atof(str);
+        }
+    }
+
+    for (int i = 0; i < N.output; ++i)
+    {
+        for (int j = 0; j < N.hidden; ++j)
+        {
+            fgets(str, 1000, fp);
+            weights_ho[i][j] = (double) atof(str);
+        }
+    }
+
+    for (int i = 0; i < N.hidden; ++i)
+    {
+        fgets(str, 1000, fp);
+        bias_h[i][0] = (double) atof(str);
+    }
+
+    for (int i = 0; i < N.output; ++i)
+    {
+        fgets(str, 1000, fp);
+        bias_o[i][0] = (double) atof(str);
+    }
+   
+
+    fclose(fp);
+    return 0;
+}

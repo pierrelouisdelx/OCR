@@ -13,10 +13,10 @@ double dsigmoid(double x)
     return x*(1-x);
 }
 
-int xor(struct Neurones N, double inputs[1][N.inputs])
+double xor(struct Neurones N, double inputs[1][N.inputs])
 {
-    int x = inputs[0][0];
-    int y = inputs[0][1];
+    double x = inputs[0][0];
+    double y = inputs[0][1];
     if(x == y)
         return 0;
     return 1;
@@ -34,6 +34,8 @@ void feedForward(struct Neurones N, double inputs[N.inputs][1],
     mult_matrix(N.output, N.inputs, N.hidden, 1, weights_oh, hidden, output);
     add_matrix(N.output, 1, output, bias_o, output);
     function_matrix(N.output, 1, sigmoid, output);
+
+    printf("%f\n",output[0][0]);
 }
 
 void backPropagation(struct Neurones N, double inputs[N.inputs][1], 
@@ -41,19 +43,18 @@ void backPropagation(struct Neurones N, double inputs[N.inputs][1],
         double bias_i[N.hidden][1], double bias_o[N.output][1], 
         double hidden[N.hidden][1], double output[N.output][1],
     	double error_output[N.output][1], double error_hidden[N.hidden][1],
-        double gradient_output[N.output][1], double d_weight_oh[N.inputs][N.inputs], 
+        double gradient_output[N.output][1], double d_weight_oh[N.output][N.hidden], 
         double d_bias_o[N.inputs][N.inputs], double gradient_hidden[N.hidden][1], 
-        double d_weight_ih[N.inputs][N.inputs], double d_bias_h[N.inputs][N.inputs], 
+        double d_weight_ih[N.hidden][N.inputs], double d_bias_h[N.inputs][N.inputs], 
         double target[N.output][1], double transpose_hidden[N.hidden][N.output], 
         double transpose_input[1][N.inputs], float lr)
 {
 
 	feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
-	//printf("%f\n",output[0][0]);
 
 	//Calculate error
 	sub_matrix(N.output, 1, target, output, error_output);
-	transpose_matrix(N.hidden, N.output, weights_oh, transpose_hidden);
+	transpose_matrix(N.output, N.hidden, weights_oh, transpose_hidden);
 	mult_matrix(N.hidden, N.output, N.output, 1, transpose_hidden, error_output, error_hidden);
 
 	//Calculate deltas
@@ -85,8 +86,11 @@ void backPropagation(struct Neurones N, double inputs[N.inputs][1],
 	copy_matrix(N.hidden, 1, gradient_hidden, d_bias_h);
 
 	//Adjust weights and bias
-	add_matrix(N.inputs, N.inputs, weights_ih, d_weight_ih, weights_ih);
-	add_matrix(N.inputs, N.inputs, bias_i, d_bias_h, bias_i);
+	add_matrix(N.hidden, N.inputs, weights_ih, d_weight_ih, weights_ih);
+	add_matrix(N.hidden, 1, bias_i, d_bias_h, bias_i);
+
+    //print_matrix(2,2,weights_ih);
+    //print_matrix(2,2,weights_oh);
 }
 
 void train(struct Neurones N, double output[N.output][1], 
@@ -103,7 +107,7 @@ void train(struct Neurones N, double output[N.output][1],
     {
         {1,0},
         {0,1},
-        {1,0},
+        {0,0},
         {1,1},
     };
 
@@ -118,11 +122,9 @@ void train(struct Neurones N, double output[N.output][1],
             input_arr[1][0] = inputs[j][1];
 
             target[0][0] = xor(N, input_arr);
-            printf("%f %f\n", input_arr[0][0], input_arr[1][0]);
             backPropagation(N, input_arr, weights_oh, weights_ih, bias_i, bias_o, hidden, output,
                 error_output, error_hidden, gradient_output, d_weight_oh, d_bias_o, gradient_hidden, 
                 d_weight_ih, d_bias_h, target, transpose_hidden, transpose_input, lr);
         }
-        printf("\n");
     }
 }

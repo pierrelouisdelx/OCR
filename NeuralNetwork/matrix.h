@@ -16,6 +16,16 @@ void copy_matrix(int w, int h, double mat1[w][h], double mat2[w][h]);
 
 void shuffle(size_t h, size_t w, double array[h][w]);
 
-void save_matrix(int w, int h, double mat[w][h], const char *path);
-void LoadData(const char * path, int line, int column, double mat[line][column]);
+int SaveData(struct Neurones N,
+    double weights_ih [N.hidden][N.inputs],
+    double weights_ho [N.output][N.hidden],
+    double bias_h [N.hidden][1],
+    double bias_o [N.output][1]);
+
+int LoadData(struct Neurones N,
+    double weights_ih [N.hidden][N.inputs],
+    double weights_ho [N.output][N.hidden],
+    double bias_h [N.hidden][1],
+    double bias_o [N.output][1]);
+
 #endif
