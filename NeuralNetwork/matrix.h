@@ -3,16 +3,17 @@
 #include "xor.h"
 
 double Random();
-void print_matrix(int w, int h, double mat[w][h]);
-void init_matrix(int w, int h, double matrix[w][h]);
-void add_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w][h]);
-void sub_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w][h]);
-void multeach_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w][h]);
-void mult_matrix(int w1, int h1, int w2, int h2, double mat1[w1][h1], double mat2[w2][h2], double res[w1][h1]);
-void transpose_matrix(int w, int h, double mat[w][h], double res[w][h]);
-void factor_matrix(int w, int h, double mat[w][h], double factor, double res[w][h]);
-void function_matrix(int w, int h, double (*f)(double), double m[w][h]);
-void copy_matrix(int w, int h, double mat1[w][h], double mat2[w][h]);
+void print_matrix(int h, int w, double mat[h][w]);
+void init_matrix(int h, int w, double matrix[h][w]);
+void zero_matrix(int h, int w, double matrix[h][w]);
+void add_matrix(int h, int w, double mat1[h][w], double mat2[h][w], double res[h][w]);
+void sub_matrix(int h, int w, double mat1[h][w], double mat2[h][w], double res[h][w]);
+void multeach_matrix(int h, int w, double mat1[h][w], double mat2[h][w], double res[h][w]);
+void mult_matrix(int h1, int w1, int h2, int w2, double mat1[h1][w1], double mat2[h2][w2], double res[h1][w1]);
+void transpose_matrix(int h, int w, double mat[h][w], double res[h][w]);
+void factor_matrix(int h, int w, double mat[h][w], double factor, double res[h][w]);
+void function_matrix(int h, int w, double (*f)(double), double m[h][w]);
+void copy_matrix(int h, int w, double mat1[h][w], double mat2[h][w]);
 
 void shuffle(size_t h, size_t w, double array[h][w]);
 

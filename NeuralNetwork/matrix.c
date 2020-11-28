@@ -7,11 +7,11 @@ double Random()
     return (double)rand()/(double)RAND_MAX;
 }
 
-void print_matrix(int w, int h, double mat[w][h])
+void print_matrix(int h, int w, double mat[h][w])
 {
-    for(int i=0; i < w; i++)
+    for(int i=0; i < h; i++)
     {
-        for(int j=0; j < h; j++)
+        for(int j=0; j < w; j++)
         {
             printf("%f ",mat[i][j]);
             if(j == h-1)
@@ -21,61 +21,72 @@ void print_matrix(int w, int h, double mat[w][h])
     printf("\n");
 }
 
-void init_matrix(int w, int h, double matrix[w][h])
+void init_matrix(int h, int w, double matrix[h][w])
 {
-    for(int i=0; i<w; i++)
+    for(int i=0; i<h; i++)
     {
-        for(int j=0; j<h; j++)
+        for(int j=0; j<w; j++)
         {
             matrix[i][j] = Random();
         }
     }
 }
 
-void add_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w][h])
+void zero_matrix(int h, int w, double mat[h][w])
 {
-    for(int i=0; i<w; i++)
+    for(int i=0; i<h; i++)
     {
-        for(int j=0; j<h; j++)
+        for(int j=0; j<w; j++)
+        {
+            mat[i][j] = 0;
+        }
+    }
+}
+
+void add_matrix(int h, int w, double mat1[h][w], double mat2[h][w], double res[h][w])
+{
+    for(int i=0; i<h; i++)
+    {
+        for(int j=0; j<w; j++)
         {
             res[i][j] = mat1[i][j] + mat2[i][j];
         }
     }
 }
 
-void sub_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w][h])
+void sub_matrix(int h, int w, double mat1[h][w], double mat2[h][w], double res[h][w])
 {
-    for(int i=0; i<w; i++)
+    for(int i=0; i<h; i++)
     {
-        for(int j=0; j<h; j++)
+        for(int j=0; j<w; j++)
         {
             res[i][j] = mat1[i][j] - mat2[i][j];
         }
     }
 }
 
-void multeach_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w][h])
+void multeach_matrix(int h, int w, double mat1[h][w], double mat2[h][w], double res[h][w])
 {
-    for(int i=0; i<w; i++)
+    for(int i=0; i<h; i++)
     {
-        for(int j=0; j<h; j++)
+        for(int j=0; j<w; j++)
         {
             res[i][j] = mat1[i][j] * mat2[i][j];
         }
     }
 }
 
-void mult_matrix(int w1, int h1, int w2, int h2, double mat1[w1][h1], double mat2[w2][h2], double res[w1][h2])
+void mult_matrix(int h1, int w1, int h2, int w2, double mat1[h1][w1], double mat2[h2][w2], double res[h1][w2])
 {
-    if(h1 == w2)
+    if(w1 == h2)
     {
         float tmp;
-        for(int i=0; i<w1; i++)
+        for(int i=0; i<h1; i++)
         {
-            for(int j=0; j<h2; j++)
+            for(int j=0; j<w2; j++)
             {
                 tmp = 0;
-                for(int k=0; k<h1; k++)
+                for(int k=0; k<w1; k++)
                 {
                     tmp += mat1[i][k] * mat2[k][j];
                 }
@@ -85,44 +96,44 @@ void mult_matrix(int w1, int h1, int w2, int h2, double mat1[w1][h1], double mat
     }
 }
 
-void transpose_matrix(int w, int h, double mat[w][h], double res[h][w])
+void transpose_matrix(int h, int w, double mat[h][w], double res[w][h])
 {
-    for(int i=0; i<w; i++)
+    for(int i=0; i<h; i++)
     {
-        for(int j=0; j<h; j++)
+        for(int j=0; j<w; j++)
         {
             res[j][i] = mat[i][j];
         }
     }
 }
 
-void factor_matrix(int w, int h, double mat[w][h], double factor, double res[w][h])
+void factor_matrix(int h, int w, double mat[h][w], double factor, double res[h][w])
 {
-    for(int i=0; i<w; i++)
+    for(int i=0; i<h; i++)
     {
-        for(int j=0; j<h; j++)
+        for(int j=0; j<w; j++)
         {
             res[i][j] = factor*mat[i][j];
         }
     }
 }
 
-void function_matrix(int w, int h, double (*f)(double), double m[w][h])
+void function_matrix(int h, int w, double (*f)(double), double m[h][w])
 {
-    for(int i=0; i<w; i++)
+    for(int i=0; i<h; i++)
     {
-        for(int j=0; j<h; j++)
+        for(int j=0; j<w; j++)
         {
             m[i][j] = (*f)(m[i][j]);
         }
     }
 }
 
-void copy_matrix(int w, int h, double mat1[w][h], double mat2[w][h])
+void copy_matrix(int h, int w, double mat1[h][w], double mat2[h][w])
 {
-    for(int i=0; i<w; i++)
+    for(int i=0; i<h; i++)
     {
-        for(int j=0; j<h; j++)
+        for(int j=0; j<w; j++)
             mat2[i][j] = mat1[i][j];
     }
 }

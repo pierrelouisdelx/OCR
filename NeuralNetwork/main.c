@@ -32,14 +32,37 @@ int main()
  
     double inputs[N.inputs][1];
 
-    printf("Please enter 2 values : ");
-    scanf("%lf %lf",&inputs[0][0], &inputs[1][0]);
+    //printf("Please enter 2 values : ");
+    //scanf("%lf %lf",&inputs[0][0], &inputs[1][0]);
 
-    SaveData(N,weights_ih,weights_oh,bias_i,bias_o);
-    //LoadData(N,weights_ih,weights_oh,bias_i,bias_o);
-
+    printf("Test for 0 0 : ");
+    inputs[0][0] = 0;
+    inputs[1][0] = 0;
     feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
     printf("%f\n", output[0][0]);
+
+    printf("Test for 0 1 : ");
+    inputs[0][0] = 0;
+    inputs[1][0] = 1;
+    feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
+    printf("%f\n", output[0][0]);
+    
+    printf("Test for 1 0 : ");
+    inputs[0][0] = 1;
+    inputs[1][0] = 0;
+    feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
+    printf("%f\n", output[0][0]);
+    
+    printf("Test for 1 1 : ");
+    inputs[0][0] = 1;
+    inputs[1][0] = 1;
+    feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
+    printf("%f\n", output[0][0]);
+
+
+    //SaveData(N,weights_ih,weights_oh,bias_i,bias_o);
+    //LoadData(N,weights_ih,weights_oh,bias_i,bias_o);
+
     
     return 0;
 }

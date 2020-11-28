@@ -39,7 +39,7 @@ void feedForward(struct Neurones N,
     add_matrix(N.output, 1, output, bias_o, output);
     function_matrix(N.output, 1, sigmoid, output);
 
-    printf("%f\n",output[0][0]);
+    //printf("%f\n",output[0][0]);
 }
 
 void backPropagation(struct Neurones N, 
@@ -63,7 +63,7 @@ void backPropagation(struct Neurones N,
     double d_bias_h[N.hidden][1];
     double transpose_hidden[N.hidden][N.output];
     double transpose_input[1][N.inputs]; 
-    float lr = 0.1;
+    float lr = 0.3;
 
 	feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
 
@@ -118,10 +118,10 @@ void train(struct Neurones N,
 
     double inputs[4][2] =
     {
+        {1,1},
         {1,0},
         {0,1},
         {0,0},
-        {1,1},
     };
 
     double input_arr[N.inputs][1];
