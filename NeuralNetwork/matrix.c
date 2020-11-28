@@ -18,9 +18,9 @@ void print_matrix(struct Matrix matrix)
 {
     for(int i = 0; i < matrix.rows; i++)
     {
-        for(int j = 0; j < matrix.columns; j++)
+        for(int j = 0; j < matrix.cols; j++)
         {
-            printf("%f", *(matrix.mat + i * matrix.cols + j));
+            printf(" %f |", *(matrix.mat + i * matrix.cols + j));
         }
         printf("\n");
     }
@@ -39,6 +39,19 @@ struct Matrix create_matrix(int rows, int cols)
     return matrix;
 }
 
+void putValue_matrix(struct Matrix matrix, int rows, int cols, double value)
+{
+    if(safeCoord_matrix(matrix, rows, cols))
+    {
+        *(matrix.mat + rows * matrix.cols + cols) = value;
+    }
+    else
+    {
+        printf("error in coordinates \n");
+    }
+}
+
+
 //fills the matrix with random values
 void init_matrix(struct Matrix matrix)
 {
@@ -51,110 +64,146 @@ void init_matrix(struct Matrix matrix)
     }
 }
 
-void putValue_matrix(struct Matrix matrix, int rows, int cols, double value)
+//Adds two matrixes, creates the resulting matrix, exit with code error 0 if the matrixes aren't of same dimension
+struct Matrix add_matrix(struct Matrix mat1, struct Matrix mat2)
 {
-    if(safeCoord_matrix(matrix, rows, cols) == 1)
+    if(mat1.cols!=mat2.cols || mat1.cols!=mat2.cols)
     {
-        *(matrix.mat + x * matrix.cols + y) = value;
+        printf("matrix.c : add_matrix : the two matrixes must be of same dimension");
+        exit(0);
     }
-    else
+    struct Matrix matRES = create_matrix(mat1.cols, mat1.rows);
+    for(int i=0; i<mat1.rows; i++)
     {
-        printf("error in coordinates \n");
-    }
-}
-
-void add_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w][h])
-{
-    for(int i=0; i<w; i++)
-    {
-        for(int j=0; j<h; j++)
+       for(int j=0; j<mat1.cols; j++)
         {
-            res[i][j] = mat1[i][j] + mat2[i][j];
+            double value = *(mat1.mat + i * mat1.cols + j) + *(mat2.mat + i * mat2.cols + j);
+            putValue_matrix(matRES, i, j, value);
         }
     }
+    return matRES;
 }
 
-void sub_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w][h])
+struct Matrix sub_matrix(struct Matrix mat1, struct Matrix mat2)
 {
-    for(int i=0; i<w; i++)
+    if(mat1.cols!=mat2.cols || mat1.cols!=mat2.cols)
     {
-        for(int j=0; j<h; j++)
+        printf("matrix.c : sub_matrix : the two matrixes must be of same dimension");
+        exit(0);
+    }
+    struct Matrix matRES = create_matrix(mat1.cols, mat1.rows);
+    for(int i=0; i<mat1.rows; i++)
+    {
+       for(int j=0; j<mat1.cols; j++)
         {
-            res[i][j] = mat1[i][j] - mat2[i][j];
+            double value = *(mat1.mat + i * mat1.cols + j) - *(mat2.mat + i * mat2.cols + j);
+            putValue_matrix(matRES, i, j, value);
         }
     }
+    return matRES; 
 }
 
-void multeach_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w][h])
+//multiply mat1[x][y] with mat2[x][y]
+struct Matrix multeach_matrix(struct Matrix mat1, struct Matrix mat2)
 {
-    for(int i=0; i<w; i++)
+    if(mat1.cols!=mat2.cols || mat1.cols!=mat2.cols)
     {
-        for(int j=0; j<h; j++)
+        printf("matrix.c : multeach_matrix : the two matrixes must be of same dimension");
+        exit(0);
+    }
+    struct Matrix matRES = create_matrix(mat1.cols, mat1.rows);
+    for(int i=0; i<mat1.rows; i++)
+    {
+       for(int j=0; j<mat1.cols; j++)
         {
-            res[i][j] = mat1[i][j] * mat2[i][j];
+            double value = *(mat1.mat + i * mat1.cols + j) * *(mat2.mat + i * mat2.cols + j);
+            putValue_matrix(matRES, i, j, value);
         }
     }
+    return matRES;
 }
 
-void mult_matrix(int w1, int h1, int w2, int h2, double mat1[w1][h1], double mat2[w2][h2], double res[w1][h2])
+//classic matrix multiplication mat1*mat2
+struct Matrix mult_matrix(struct Matrix mat1, struct Matrix mat2)
 {
-    if(h1 == w2)
+    if(mat1.rows!=mat2.cols)
     {
-        float tmp;
-        for(int i=0; i<w1; i++)
+        printf("matrix.c : mult_matrix : the two matrixes must be compatible");
+        exit(0);
+    }
+    struct Matrix matRES = create_matrix(mat1.rows, mat2.cols);
+    for(int a=0; a < matRES.rows; a++)
+    {
+        for(int b=0; b < matRES.cols; b++)
         {
-            for(int j=0; j<h2; j++)
+            putValue_matrix(matRES, a, b, 0);
+        }
+    }
+    for(int i=0; i<mat1.rows; i++)
+    {
+       for(int j=0; j<mat2.cols; j++)
+        {
+            for(int k=0; k<mat2.rows;k++)
             {
-                tmp = 0;
-                for(int k=0; k<h1; k++)
-                {
-                    tmp += mat1[i][k] * mat2[k][j];
-                }
-                res[i][j] = tmp;
+                printf("%f, %f \n", *(mat1.mat + i * mat1.cols + k), *(mat2.mat + k * mat2.cols + j));
+                double value = *(mat1.mat + i * mat1.cols + k) * *(mat2.mat + k * mat2.cols + j);
+                *(matRES.mat + i * matRES.cols + j) += value;
             }
         }
     }
+    return matRES;
 }
 
-void transpose_matrix(int w, int h, double mat[w][h], double res[h][w])
+
+struct Matrix transpose_matrix(struct Matrix mat)
 {
-    for(int i=0; i<w; i++)
+    struct Matrix matRES = create_matrix(mat.cols, mat.rows);
+    for(int i=0; i<mat.rows; i++)
     {
-        for(int j=0; j<h; j++)
+        for(int j=0; j<mat.cols; j++)
         {
-            res[j][i] = mat[i][j];
+             putValue_matrix(matRES, j, i, *(mat.mat + i * mat.cols + j));
         }
     }
+    return matRES;
 }
 
-void factor_matrix(int w, int h, double mat[w][h], double factor, double res[w][h])
+struct Matrix factor_matrix(struct Matrix matrix, double factor)
 {
-    for(int i=0; i<w; i++)
+    struct Matrix matRES = create_matrix(matrix.rows, matrix.cols);
+    for(int i=0; i<matrix.rows; i++)
     {
-        for(int j=0; j<h; j++)
+        for(int j=0; j<matrix.cols; j++)
         {
-            res[i][j] = factor*mat[i][j];
+            putValue_matrix(matRES, i, j, factor*(matrix + i * matrix.cols + j);
         }
     }
+    return matRES;
 }
 
-void function_matrix(int w, int h, double (*f)(double), double m[w][h])
+struct Matrix function_matrix(struct Matrix matrix, double (*f)(double))
 {
-    for(int i=0; i<w; i++)
+
+    struct Matrix matRES = create_matrix(matrix.rows, matrix.cols);
+    for(int i=0; i<matrix.rows; i++)
     {
-        for(int j=0; j<h; j++)
+        for(int j=0; j<matrix.cols; j++)
         {
-            m[i][j] = (*f)(m[i][j]);
+            putValue_matrix(matRES, i, j, (*f)*(matrix + i * matrix.cols + j);
         }
     }
+    return matRES;
 }
 
-void copy_matrix(int w, int h, double mat1[w][h], double mat2[w][h])
+struct Matrix copy_matrix(struct Matrix matrix)
 {
-    for(int i=0; i<w; i++)
+    struct Matrix matRES = create_matrix(matrix.rows, matrix.cols);
+    for(int i=0; i<matrix.rows; i++)
     {
-        for(int j=0; j<h; j++)
-            mat2[i][j] = mat1[i][j];
+        for(int j=0; j<matrix.cols; j++)
+        {
+            putValue_matrix(matRES, i, j,*(matrix + i * matrix.cols + j);
+        }
     }
 }
 
@@ -199,7 +248,7 @@ int SaveData(struct Neurones N,
         {
             fprintf(fp, "%f\n", weights_ho[i][j] );
         }
-    }
+    } 
 
     for (int i = 0; i < N.hidden; ++i)
     {
