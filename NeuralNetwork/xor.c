@@ -57,10 +57,8 @@ void backPropagation(struct Neurones N,
     double error_hidden[N.hidden][1];
     double gradient_output[N.output][1];
     double d_weight_oh[N.output][N.hidden];
-    double d_bias_o[N.output][1];
     double gradient_hidden[N.hidden][1];
     double d_weight_ih[N.hidden][N.inputs];
-    double d_bias_h[N.hidden][1];
     double transpose_hidden[N.hidden][N.output];
     double transpose_input[1][N.inputs]; 
     float lr = 0.3;
@@ -82,11 +80,11 @@ void backPropagation(struct Neurones N,
 	mult_matrix(N.output, 1, 1, N.hidden, gradient_output, transpose_hidden, d_weight_oh);
 
 	//Delta bias_o
-	copy_matrix(N.output, 1, gradient_output, d_bias_o);
+	//copy_matrix(N.output, 1, gradient_output, d_bias_o);
 
 	//Adjust weights and bias
 	add_matrix(N.output, N.hidden, weights_oh, d_weight_oh, weights_oh);
-	add_matrix(N.output, 1, bias_o, d_bias_o, bias_o);
+	add_matrix(N.output, 1, bias_o, gradient_output, bias_o);
 
 	//Calculate deltas
 	function_matrix(N.hidden, 1, dsigmoid, hidden);
@@ -98,11 +96,11 @@ void backPropagation(struct Neurones N,
 	mult_matrix(N.hidden, 1, 1, N.inputs, gradient_hidden, transpose_input, d_weight_ih);
 
 	//Delta bias_h
-	copy_matrix(N.hidden, 1, gradient_hidden, d_bias_h);
+	//copy_matrix(N.hidden, 1, gradient_hidden, d_bias_h);
 
 	//Adjust weights and bias
 	add_matrix(N.hidden, N.inputs, weights_ih, d_weight_ih, weights_ih);
-	add_matrix(N.hidden, 1, bias_i, d_bias_h, bias_i);
+	add_matrix(N.hidden, 1, bias_i, gradient_hidden, bias_i);
 }
 
 void train(struct Neurones N, 

@@ -13,7 +13,6 @@ void mult_matrix(int h1, int w1, int h2, int w2, double mat1[h1][w1], double mat
 void transpose_matrix(int h, int w, double mat[h][w], double res[h][w]);
 void factor_matrix(int h, int w, double mat[h][w], double factor, double res[h][w]);
 void function_matrix(int h, int w, double (*f)(double), double m[h][w]);
-void copy_matrix(int h, int w, double mat1[h][w], double mat2[h][w]);
 
 void shuffle(size_t h, size_t w, double array[h][w]);
 

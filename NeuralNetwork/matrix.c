@@ -129,15 +129,6 @@ void function_matrix(int h, int w, double (*f)(double), double m[h][w])
     }
 }
 
-void copy_matrix(int h, int w, double mat1[h][w], double mat2[h][w])
-{
-    for(int i=0; i<h; i++)
-    {
-        for(int j=0; j<w; j++)
-            mat2[i][j] = mat1[i][j];
-    }
-}
-
 void shuffle(size_t h, size_t w, double array[h][w])
 {
     if (h > 1)
