@@ -1,34 +1,65 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "xor.h"
+#include "matrix.h"
 
 double Random()
 {
-    return (double)rand()/(double)RAND_MAX;
+    return (double)rand()/((double)RAND_MAX/2) - 1;
 }
 
-void print_matrix(int w, int h, double mat[w][h])
+//return 0 if the coords are impossible, 1 otherwise
+int safeCoord_matrix(struct Matrix matrix, int i, int j)
 {
-    for(int i=0; i < w; i++)
+    return(i < matrix.rows && j < matrix.cols);
+}
+
+void print_matrix(struct Matrix matrix)
+{
+    for(int i = 0; i < matrix.rows; i++)
     {
-        for(int j=0; j < h; j++)
+        for(int j = 0; j < matrix.columns; j++)
         {
-            printf("%f ",mat[i][j]);
-            if(j == h-1)
-                printf("\n");
+            printf("%f", *(matrix.mat + i * matrix.cols + j));
+        }
+        printf("\n");
+    }
+}
+
+//create an empty matrix
+struct Matrix create_matrix(int rows, int cols)
+{
+    struct Matrix matrix;
+
+    matrix.rows = rows;
+    matrix.cols = cols;
+
+    matrix.mat = malloc(sizeof(double)*cols*rows);
+
+    return matrix;
+}
+
+//fills the matrix with random values
+void init_matrix(struct Matrix matrix)
+{
+    for(int i = 0; i < matrix.rows;i++)
+    {
+        for(int j=0; j< matrix.cols; j++)
+        {
+            putValue_matrix(matrix, i, j, Random())
         }
     }
-    printf("\n");
 }
 
-void init_matrix(int w, int h, double matrix[w][h])
+void putValue_matrix(struct Matrix matrix, int rows, int cols, double value)
 {
-    for(int i=0; i<w; i++)
+    if(safeCoord_matrix(matrix, rows, cols) == 1)
     {
-        for(int j=0; j<h; j++)
-        {
-            matrix[i][j] = Random();
-        }
+        *(matrix.mat + x * matrix.cols + y) = value;
+    }
+    else
+    {
+        printf("error in coordinates \n");
     }
 }
 

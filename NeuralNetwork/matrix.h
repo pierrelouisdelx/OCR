@@ -2,8 +2,18 @@
 #define MATRIX_H
 #include "xor.h"
 
+struct Matrix
+{
+    //the obvious : the size
+    int rows; //w
+    int cols; //h
+
+    //the obvious yet again, a pointer to the matrix in itself
+    double *mat;
+};
+
 double Random();
-void print_matrix(int w, int h, double mat[w][h]);
+void print_matrix(struct Matrix matrix);
 void init_matrix(int w, int h, double matrix[w][h]);
 void add_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w][h]);
 void sub_matrix(int w, int h, double mat1[w][h], double mat2[w][h], double res[w][h]);
