@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "xor.h"
+#include "o_xor.h"
 
 double Random()
 {

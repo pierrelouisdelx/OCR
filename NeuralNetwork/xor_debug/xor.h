@@ -37,10 +37,12 @@ void train(struct Neurones N,
         double bias_o[N.output][1], 
         int epochs);
 
-void test(struct Neurones N,
+void test(struct Neurones N, 
         double output[N.output][1], 
         double weights_ih[N.hidden][N.inputs], 
         double weights_oh[N.output][N.hidden],
         double bias_i[N.hidden][1], 
         double bias_o[N.output][1]);
+
 #endif
+

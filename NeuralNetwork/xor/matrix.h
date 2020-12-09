@@ -1,7 +1,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include "xor.h"
+#include "o_xor.h"
 
 double Random();
 void print_matrix(int h, int w, double mat[h][w]);

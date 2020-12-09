@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-#include "xor.h"
+#include "o_xor.h"
 #include "matrix.h"
 
 int main()

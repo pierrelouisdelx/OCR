@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "matrix.h"
-#include "xor.h"
+#include "o_xor.h"
 
 double sigmoid(double x)
 {
@@ -132,19 +132,9 @@ void train(struct Neurones N,
             backPropagation(N, input_arr, weights_oh, weights_ih, bias_i, bias_o, output, target);
         }
     }
-    test(N, output, weights_ih, weights_oh, bias_i, bias_o);
-}
 
-void test(struct Neurones N, 
-        double output[N.output][1], 
-        double weights_ih[N.hidden][N.inputs], 
-        double weights_oh[N.output][N.hidden],
-        double bias_i[N.hidden][1], 
-        double bias_o[N.output][1])
-{
-    double hidden[N.hidden][1];
     double inputs[N.inputs][1];
-    
+
     printf("Test for 0 0 : ");
     inputs[0][0] = 0;
     inputs[1][0] = 0;
@@ -171,5 +161,6 @@ void test(struct Neurones N,
 
     //SaveData(N,weights_ih,weights_oh,bias_i,bias_o);
     //LoadData(N,weights_ih,weights_oh,bias_i,bias_o);
+
 }
 
