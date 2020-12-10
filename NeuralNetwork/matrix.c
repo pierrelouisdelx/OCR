@@ -28,7 +28,7 @@ void init_matrix(int h, int w, double matrix[h][w])
 	{
 		for(int j = 0; j < w; j++)
 		{
-			matrix[i][j] = (rand()%200)/(float)100-(float)1;
+			matrix[i][j] = Random(); //(rand()%200)/(float)100-(float)1;
 		}
 	}
 }
