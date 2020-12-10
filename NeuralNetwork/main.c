@@ -28,7 +28,9 @@ int main()
     init(N.output, 1, bias_o);
 
     train(N, output, weights_ih, weights_oh, bias_i, bias_o, epochs);
-   
+  
+    //SaveData(N,weights_ih,weights_oh,bias_i,bias_o);
+    //LoadData(N,weights_ih,weights_oh,bias_i,bias_o);
     return 0;
 }
 

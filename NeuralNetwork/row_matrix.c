@@ -113,3 +113,89 @@ void function(int rows, int cols, double (*f)(double), double m[])
         }
     }
 }
+
+int SaveData(struct Neurones N,
+    double weights_ih [N.hidden * N.inputs],
+    double weights_ho [N.output * N.hidden],
+    double bias_h [N.hidden * 1],
+    double bias_o [N.output * 1])
+{
+    FILE * fp;
+    fp = fopen ("data.txt","w");
+
+    for (int i = 0; i < N.hidden; ++i)
+    {
+        for (int j = 0; j < N.inputs; ++j)
+        {
+            fprintf(fp, "%f\n", weights_ih[i*N.inputs + j]);
+        }
+    }
+
+    for (int i = 0; i < N.output; ++i)
+    {
+        for (int j = 0; j < N.hidden; ++j)
+        {
+            fprintf(fp, "%f\n", weights_ho[i * N.hidden + j]);
+        }
+    }
+
+    for (int i = 0; i < N.hidden; ++i)
+    {
+        fprintf(fp, "%f\n", bias_h[i * N.hidden]);
+    }
+
+    for (int i = 0; i < N.output; ++i)
+    {
+        fprintf(fp, "%f\n", bias_o[i * N.hidden]);
+    }
+
+
+    fclose(fp);
+    return 0;
+}
+
+int LoadData(struct Neurones N,
+    double weights_ih [N.hidden * N.inputs],
+    double weights_ho [N.output * N.hidden],
+    double bias_h [N.hidden * 1],
+    double bias_o [N.output * 1])
+{
+    FILE * fp;
+    fp = fopen ("data.txt","r");
+
+    char str[1000];
+
+    for (int i = 0; i < N.hidden; ++i)
+    {
+        for (int j = 0; j < N.inputs; ++j)
+        {
+            fgets(str, 1000, fp);
+            weights_ih[i * N.inputs + j] = (double) atof(str);
+        }
+    }
+
+    for (int i = 0; i < N.output; ++i)
+    {
+        for (int j = 0; j < N.hidden; ++j)
+        {
+            fgets(str, 1000, fp);
+            weights_ho[i * N.hidden + j] = (double) atof(str);
+        }
+    }
+
+    for (int i = 0; i < N.hidden; ++i)
+    {
+        fgets(str, 1000, fp);
+        bias_h[i * N.hidden] = (double) atof(str);
+    }
+
+    for (int i = 0; i < N.output; ++i)
+    {
+        fgets(str, 1000, fp);
+        bias_o[i * N.output] = (double) atof(str);
+    }
+
+    fclose(fp);
+    return 0;
+}
+
