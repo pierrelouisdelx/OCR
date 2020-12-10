@@ -122,6 +122,7 @@ SDL_Surface* lines_reco(SDL_Surface* image)
 
 SDL_Surface* char_reco(SDL_Surface* image)
 {
+    image = paragraph_reco(image);
     Uint32 pixel;
     Uint8 r,g,b;
     int color = 0;
@@ -142,7 +143,6 @@ SDL_Surface* char_reco(SDL_Surface* image)
                 put_pixel(image,i,j,(SDL_MapRGB(image->format,255,0,0)));
             if (g == 0)
                 break;
-
         }
         color = 0;
     }
@@ -164,17 +164,107 @@ void char_storage(SDL_Surface* image, int line)
     Uint32 pixel;
     Uint8 r,g,b;
     int char_counter = 0;
+    int nb_of_red = 0;
     int nb_char = 0;
+    int old_white_space = 0;
+    for (int j = 0; j < h; j++)
+    {
+        put_pixel(image,w-1,j,(SDL_MapRGB(image->format,255,0,0)));
+    }
     for (int i = 0; i < w; i++)
     {
         pixel = get_pixel(image,i,0);
         SDL_GetRGB(pixel, image -> format, &r, &g, &b);
+        char line_str[length];
+        for (int p = 0; p < 6;p++)
+            line_str[p] = this_line[p];
+        if(length == 6)
+            line_str[5] = line + '0';
+        else
+        {
+            line_str[5] = line/10 + '0';
+            line_str[6] = line%10 + '0';
+        }
         if (char_counter > 0 && g == r)
             char_counter += 1;
         if ((char_counter > 0 && r != b))
         {
             Uint32 pixel;
             Uint8 r1, g1, b1;
+            if (nb_of_red > old_white_space * 2)
+            {
+                SDL_Surface* space_image = SDL_CreateRGBSurface(0,nb_of_red,h,
+                    32,0,0,0,0);
+                for (int j = 0; j < h; j++)
+                {
+                    int new_i = 0;
+                    for (int k = i-char_counter -nb_of_red ;k < i -
+                            char_counter; k++)
+                    {
+                        pixel = get_pixel(image,k,j);
+                        SDL_GetRGB(pixel, image -> format, &r1, &g1, &b1);
+                        put_pixel(space_image, new_i, j, (SDL_MapRGB(
+                                        space_image->format,r1,g1,b1)));
+                        new_i++;
+                    }
+                }
+                //save the white space between 2 char
+                if (nb_char < 10)
+                {
+                    int len = strlen(path) + length + 2;
+                    char file_space[len];
+                    for (int s = 0; s < len ; s++)
+                        file_space[s] = path[s];
+                    for (int s = strlen(path); s < len - 2;s++)
+                        file_space[s] = line_str[s-strlen(path)];
+                    file_space[len-2] = ':';
+                    file_space[len-1] = nb_char +'0';
+                    SDL_SaveBMP(space_image,file_space);
+                }
+                else if (nb_char > 9 && nb_char < 100)
+                {
+                    int len = strlen(path) + length + 3;
+                    char file_space[len];
+                    for (int s = 0; s < len; s++)
+                        file_space[s] = path[s];
+                    for (int s = strlen(path); s < len;s++)
+                        file_space[s] = line_str[s-strlen(path)];
+
+                    char last1 = (nb_char/10 + '0');
+                    char last2 = (nb_char%10 + '0');
+                    char last11[1];
+                    last11[0] = last1;
+                    char last22[1];
+                    last22[0] = last2;
+                    strcat(file_space,":");
+                    strcat(file_space,last11);
+                    SDL_SaveBMP(space_image,file_space);
+                    strcat(file_space,last22);
+                }
+                else
+                {
+                    int len = strlen(path) + length + 3;
+                    char file_space[len];
+                    for (int s = 0; s < len; s++)
+                        file_space[s] = path[s];
+                    for (int s = strlen(path); s < len;s++)
+                        file_space[s] = line_str[s-strlen(path)];
+                    char last1 = ((nb_char/10)%10 + '0');
+                    char last2 = (nb_char%10 + '0');
+
+                    char last11[1];
+                    last11[0] = last1;
+                    char last22[1];
+                    last22[0] = last2;
+                    strcat(file_space,":");
+                    strcat(file_space,"1");
+                    strcat(file_space,last11);
+                    SDL_SaveBMP(space_image,file_space);
+                    strcat(file_space,last22);
+                }
+                nb_char += 1;
+            }
+            //Uint8 r1, g1, b1;
             SDL_Surface* new_image = SDL_CreateRGBSurface(0,char_counter,h,
                     32,0,0,0,0);
             for (int j = 0; j < h; j++)
@@ -189,16 +279,7 @@ void char_storage(SDL_Surface* image, int line)
                     new_i++;
                 }
             }
-            char line_str[length];
-            for (int p = 0; p < 6;p++)
-                line_str[p] = this_line[p];
-            if(length == 6)
-                line_str[5] = line + '0';
-            else
-            {
-                line_str[5] = line/10 + '0';
-                line_str[6] = line%10 + '0';
-            }
+            //save the character
 
             if (nb_char < 10)
             {
@@ -212,7 +293,7 @@ void char_storage(SDL_Surface* image, int line)
                 file[len-1] = nb_char +'0';
                 SDL_SaveBMP(new_image,file);
             }
-            if (nb_char > 9)
+            else if (nb_char > 9 && nb_char < 100)
             {
                 int len = strlen(path) + length + 3;
                 char file[len];
@@ -232,16 +313,46 @@ void char_storage(SDL_Surface* image, int line)
                 SDL_SaveBMP(new_image,file);
                 strcat(file,last22);
             }
+            else
+            {
+
+                int len = strlen(path) + length + 3;
+                char file[len];
+                for (int s = 0; s < len; s++)
+                    file[s] = path[s];
+                for (int s = strlen(path); s < len;s++)
+                    file[s] = line_str[s-strlen(path)];
+
+                char last1 = ((nb_char/10)%10 + '0');
+                char last2 = (nb_char%10 + '0');
+
+                char last11[1];
+                last11[0] = last1;
+                char last22[1];
+                last22[0] = last2;
+                strcat(file,":");
+                strcat(file,"1");
+                strcat(file,last11);
+                SDL_SaveBMP(new_image,file);
+                strcat(file,last22);
+
+            }
             nb_char += 1;
             char_counter = 0;
+            old_white_space = nb_of_red;
+            nb_of_red = 0;
         }
         if (g == r && char_counter == 0)
+        {
             char_counter = 1;
+        }
         if (r != b)
+        {
             char_counter = 0;
+            nb_of_red +=1;
+        }
     }
 }
-
 
 void lines_and_char_storage(SDL_Surface* image)
 {
@@ -290,12 +401,8 @@ void lines_and_char_storage(SDL_Surface* image)
             lines_counter = 1;
         }
         if (r != b)
+        {
             lines_counter = 0;
+        }
     }
 }
-
-
-
-
-
-
