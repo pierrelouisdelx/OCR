@@ -114,13 +114,31 @@ void function(int rows, int cols, double (*f)(double), double m[])
     }
 }
 
+void shuffle(int rows, int cols, double m[])
+{
+    if (rows > 1) 
+    {
+        int i;
+        for (i = 0; i < rows - 1; i++) 
+        {
+          int j = i + rand() / (RAND_MAX / (rows - i) + 1);
+          int t1 = m[j * cols];
+          int t2 = m[j * cols + 1];
+          m[j * cols] = m[i * cols];
+          m[j * cols + 1] = m[i * cols + 1];
+          m[i * cols] = t1;
+          m[i * cols + 1] = t2;
+        }
+    }
+}
+
 int SaveData(struct Neurones N,
     double weights_ih [N.hidden * N.inputs],
     double weights_ho [N.output * N.hidden],
     double bias_h [N.hidden * 1],
     double bias_o [N.output * 1])
 {
-    FILE * fp;
+    FILE *fp;
     fp = fopen ("data.txt","w");
 
     for (int i = 0; i < N.hidden; ++i)

@@ -116,7 +116,7 @@ void train(struct Neurones N,
 
     for(int i=0; i<epochs; i++)
     {
-        //shuffle(4, 2, input);
+        shuffle(4,2, input);
         for(int j=0; j<4; j++) 
         {
             input_arr[0] = input[j * N.inputs];
