@@ -1,0 +1,20 @@
+/*button 
+{
+    background-color: blue;
+}*/
+
+#quit
+{
+    font-weight: bold;
+    background-color: red;
+    /*border: 3px solid #255784;
+    border-radius: 20px;*/
+}
+
+
+/*#quit:hover
+{
+    color: #255784;
+    background-color: #03e9f4;
+    box-shadow: 0 0 10px #2196f3, 0 0 40px #2196f3, 0 0 80px #2196f3;
+}*/
