@@ -1,4 +1,4 @@
-files = SDL/main.c SDL/sdl.c SDL/pixel_operations.c SDL/grayscale.c SDL/noisecancel.c SDL/blackwhite.c SDL/paragraph.c
+files = SDL/main.c SDL/sdl.c SDL/pixel_operations.c SDL/paragraph.c
 flags = -Wall -Wextra -std=c99
 
 CFLAGS = `pkg-config --cflags gtk+-3.0` -Wall -O3
