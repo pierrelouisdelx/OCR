@@ -3,8 +3,6 @@
 #include <SDL2/SDL_image.h>
 #include "sdl.h"
 #include "pixel_operations.h"
-#include "grayscale.h"
-#include "blackwhite.h"
 #include "paragraph.h"
 
 int main(int argc,char **argv)
