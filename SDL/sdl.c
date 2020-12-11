@@ -189,3 +189,101 @@ int houghtransform() {
     //Detect image rotation angle
     return 0;
 }*/
+
+SDL_Surface* rotate(SDL_Surface* image, double angle) //Fonction de eloi mais elle marche pas encore
+{
+    int h = image->h;
+    int w = image->w;
+    int maxi;
+    if (h >= w)
+        maxi = h * (1.5);
+    else
+        maxi = w * (1.5);
+    angle = 9.8695664208*angle; //from degree to rad
+    double sina = sin(angle);
+    double cosa = cos(angle);
+    //printf("max = %d\n",maxi);
+    SDL_Surface* new_image = SDL_CreateRGBSurface(0,maxi,maxi,32,0,0,0,0);
+    for (int i = 0; i < maxi;i++)
+    {
+        for (int j = 0; j < maxi;j++)
+        {
+            put_pixel(new_image,i,j,(SDL_MapRGB(image->format,255,255,255))); //Set all the pixel white
+        }
+    }
+    for(int i=0; i<w; i++)
+    {
+        for(int j=0; j<h; j++) 
+        {
+            Uint32 pixel = get_pixel(image,i,j);
+            int x = i*cosa - j*sina;
+            int y = i*sina + j*cosa;
+            //x = x % maxi;
+            //y = y % maxi;
+            if (x < 0)
+                x = x + maxi;
+            if (y < 0)
+                y = y + maxi;
+            //printf("x :%d, y :%d\n",x,y);
+            put_pixel(new_image,x,y,pixel);
+        }
+    }
+    //printf("here");
+    return new_image;
+}
+
+SDL_Surface* resize(SDL_Surface* image)
+{
+    int h = image->h;
+    int w = image->w;
+    int x;
+    int y;
+    Uint32 pixel;
+    SDL_Surface* new_image = SDL_CreateRGBSurface(0, 28, 28, 32, 0, 0, 0, 0);
+    int array [28][28];
+    int nb_per_cell [28][28];
+    for(int i = 0; i < 28 ; i++)
+    {
+        for(int j = 0; j < 28 ; j++)
+        {
+
+            put_pixel(new_image, i, j, (SDL_MapRGB(image->format,255,255,255)));
+            array [i][j] = 0;
+            nb_per_cell [i][j] = 0;
+
+        }
+    }
+    for (int i = 0; i < w; i++)
+    {
+        for (int j = 0; j < h; j++)
+        {
+            x = i * (28 / w);
+            y = j * (28 / h);
+            pixel = get_pixel(image, i, j);
+            Uint8 r, g, b;
+            SDL_GetRGB(pixel, image -> format, &r, &g, &b);
+            if (r != 255)
+            {
+                array[x][y] += 1;
+            }
+            nb_per_cell[x][y] += 1;
+        }
+    }
+
+    for (int i = 0; i < 28; i++)
+    {
+        for (int j = 0; j < 28; j++)
+        {
+            int average;
+            if (nb_per_cell[i][j] > 0)
+                average = array[i][j]/nb_per_cell[i][j];
+            else
+                average = 0;
+            if (average == 1)
+                put_pixel(new_image, i, j, (SDL_MapRGB(image->format,0,0,0)));
+            else
+                put_pixel(new_image, i, j, (SDL_MapRGB(image->format,255,255,255)));
+        } 
+    }
+    return new_image;
+}
