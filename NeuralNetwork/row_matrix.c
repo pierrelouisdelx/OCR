@@ -14,7 +14,7 @@ void print_matrix(int rows, int cols, double m[])
     {
         for(int j=0; j<cols; j++)
         {
-            printf("%lf", m[i*cols+j]);
+            printf("%f", m[i*cols+j]);
         }
         printf("\n");
     }
