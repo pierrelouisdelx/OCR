@@ -180,7 +180,7 @@ int getoutput(struct Neurones N, double output[N.output])
     int pos = 0;
     for(int i=0; i<N.output; i++)
     {
-        printf("%i %lf\n",i,output[i]);
+        //printf("%i %lf\n",i,output[i]);
         if(max < output[i])
         {
             max = output[i];

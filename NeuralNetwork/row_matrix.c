@@ -14,7 +14,7 @@ void print_matrix(int rows, int cols, double m[])
     {
         for(int j=0; j<cols; j++)
         {
-            printf("%i", (int)m[i*cols+j]);
+            printf("%lf", m[i*cols+j]);
         }
         printf("\n");
     }
@@ -26,7 +26,7 @@ void init(int rows, int cols, double m[])
     {
         for(int j=0; j<cols; j++)
         {
-           m[i*cols+j] = Random(); 
+            m[i*cols+j] = Random();
         }
     }
 }
