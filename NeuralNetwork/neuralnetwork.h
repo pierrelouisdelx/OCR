@@ -9,7 +9,6 @@ struct Neurones {
 
 double sigmoid(double x);
 double dsigmoid(double x);
-double xor(struct Neurones N, double inputs[1 * N.inputs]);
 
 void feedForward(struct Neurones N, 
         double inputs[N.inputs * 1], 

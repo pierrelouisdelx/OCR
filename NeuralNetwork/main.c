@@ -2,24 +2,24 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-#include "xor.h"
+#include "neuralnetwork.h"
 #include "row_matrix.h"
 
 int main()
 {
     struct Neurones N;
-    N.inputs = 2;
-    N.hidden = 3;
-    N.output = 1;
+    N.inputs = 784;
+    N.hidden = 400;
+    N.output = 256;
 
     srand(time(NULL));
 
-    double output[N.output * 1];
+    double output[N.output];
 
     double weights_oh[N.output * N.hidden];
     double weights_ih[N.hidden * N.inputs];
-    double bias_i[N.hidden * 1];
-    double bias_o[N.output * 1];
+    double bias_i[N.hidden];
+    double bias_o[N.output];
     int epochs = 10000;
 
     init(N.hidden, N.inputs, weights_ih);

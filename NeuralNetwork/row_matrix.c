@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "xor.h"
+#include "neuralnetwork.h"
 
 double Random()
 {
@@ -114,7 +114,7 @@ void function(int rows, int cols, double (*f)(double), double m[])
     }
 }
 
-void shuffle(int rows, int cols, double m[])
+void shuffle(int rows, int cols, char m[])
 {
     if (rows > 1) 
     {

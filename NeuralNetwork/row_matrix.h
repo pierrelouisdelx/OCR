@@ -1,6 +1,6 @@
 #ifndef MATRIX_H
 #define MATRIX_H
-#include "xor.h"
+#include "neuralnetwork.h"
 
 double Random();
 void print_matrix(int rows, int cols, double m[]);
@@ -13,7 +13,7 @@ void transpose(int rows, int cols, double m[], double r[]);
 void factor(int rows, int cols, double m[], double factor, double r[]);
 void function(int rows, int cols, double (*f)(double), double m[]);
 
-void shuffle(int rows, int cols, double m[]);
+void shuffle(int rows, int cols, char m[]);
 
 int SaveData(struct Neurones N,
     double weights_ih [N.hidden * N.inputs],
