@@ -14,6 +14,22 @@ SDL_Surface* load_image(char *file) {
     return SDL_LoadBMP(file);
 }
 
+void image_to_matrix(char *path, double matrix[])
+{
+    SDL_Surface *image = SDL_LoadBMP(path);
+    int h = image->h;
+    int w = image->w;
+    for(int i=0; i < w; i++) {
+        for(int j=0; j < h; j++) {
+            Uint32 pixel = get_pixel(image,i,j);
+            Uint8 r, g, b;
+            SDL_GetRGB(pixel, image->format, &r, &g, &b);
+            if(r == 0 && g == 0 && b == 0)
+                matrix[i * 28 + j] = 1;
+        }
+    }
+}
+
 void on_keypress()
 {
     SDL_Event event;
@@ -144,52 +160,6 @@ SDL_Surface* noisecancel(SDL_Surface* image)
     return image;
 }
 
-/*SDL_Surface* resize(SDL_Surface *Surface, Uint16 Width, Uint16 Height)
-{
-    if(!Surface || !Width || !Height)
-        return 0;
-     
-    SDL_Surface *_ret = SDL_CreateRGBSurface(Surface->flags, Width, Height, Surface->format->BitsPerPixel,
-        Surface->format->Rmask, Surface->format->Gmask, Surface->format->Bmask, Surface->format->Amask);
- 
-    double  _stretch_factor_x = ((double)Width  / (double)Surface->w);
-    double  _stretch_factor_y = ((double)Height / (double)Surface->h);
- 
-    for(Sint32 y = 0; y < Surface->h; y++)
-        for(Sint32 x = 0; x < Surface->w; x++)
-            for(Sint32 o_y = 0; o_y < _stretch_factor_y; ++o_y)
-                for(Sint32 o_x = 0; o_x < _stretch_factor_x; ++o_x)
-                    DrawPixel(_ret, static_cast<Sint32>(_stretch_factor_x * x) + o_x, 
-                        static_cast<Sint32>(_stretch_factor_y * y) + o_y, ReadPixel(Surface, x, y));
- 
-    return _ret;
-}
-
- *SDL_Surface* rotate(SDL_Surface* image, float angle) {
-    int h = image->h;
-    int w = image->w;
-
-    for(int i=0; i<w; i++) 
-    {
-        for(int j=0; j<h; j++) 
-        {
-            Uint32 pixel = get_pixel(image,i,j);
-            int x = i*cos(angle) - j*sin(angle);
-            int y = i*sin(angle) + j*cos(angle);
-            if(x < w && y < h) 
-            {
-                put_pixel(image,x,y,pixel);
-            }
-        }
-    }
-    return image;
-}
-
-int houghtransform() {
-    //Detect image rotation angle
-    return 0;
-}*/
-
 SDL_Surface* rotate(SDL_Surface* image, double angle) //Fonction de eloi mais elle marche pas encore
 {
     int h = image->h;
@@ -287,3 +257,10 @@ SDL_Surface* resize(SDL_Surface* image)
     }
     return new_image;
 }
+
+/*
+int houghtransform() {
+    //Detect image rotation angle
+    return 0;
+}*/
+
