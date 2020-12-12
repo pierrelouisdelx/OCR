@@ -67,14 +67,20 @@ void multeach(int rows, int cols, double m1[], double m2[], double r[])
 void mult(int r1, int c1, int r2, int c2, double m1[], double m2[], double r[])
 {
     if(c1 == r2)
-    {
+    {   int val = 0;
         for(int i=0; i<r1; i++)
         {
             for(int j=0; j<c2; j++)
             {
-                r[i*c2+j] = 0;
+                val = 0;
                 for(int k=0; k<c1; k++)
-                    r[i*c2+j] += m1[i*c1+k] * m2[k*c2+j];
+                {
+                    val += m1[i*c1+k] * m2[k*c2+j];
+                    if(val > 0)
+                        printf("Val : %f x %f = %f\n",m1[i * c1 + k],m2[k * c2 + j],val);
+                }
+                r[i*c2+j] = val;
+
             }
         }
     }

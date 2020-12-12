@@ -10,7 +10,7 @@ int main()
 {
     struct Neurones N;
     N.inputs = 784;
-    N.hidden = 400;
+    N.hidden = 200;
     N.output = 256;
 
     srand(time(NULL));

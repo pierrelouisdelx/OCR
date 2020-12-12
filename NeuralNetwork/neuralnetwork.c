@@ -113,10 +113,10 @@ void backPropagation(struct Neurones N,
 	add(N.hidden, 1, bias_i, gradient_hidden, bias_i);
 }
 
-void set_target(double target[], char dir)
+void set_target(struct Neurones N,double target[], char dir)
 {
     int c = dir;
-    for(int i=0; i<256; i++)
+    for(int i=0; i<N.output; i++)
     {
         if(i == c)
             target[i] = 1;
@@ -134,10 +134,10 @@ void train(struct Neurones N,
         int epochs)
 { 
     char dir_p[12] = "training/ /"; //training/letter
-    char *img_p = dir_p; //training/letter/image
 
     char *dirs = malloc(4 * sizeof(char)); //For testing only with a b c d
     get_folders(dirs);
+    printf("dirs : %s\n",dirs);
 
     double input[N.inputs]; //28x28 pixels/bmp
 
@@ -147,7 +147,7 @@ void train(struct Neurones N,
     for(int i=0; i<1; i++)  //epochs
     {
         shuffle(3,1,dirs);  //Shuffle letters order
-        for(int j=0; j<2; j++)  //dirs
+        for(int j=0; j<1; j++)  //dirs
         {
             dir_p[9] = dirs[j]; //Get each directory in training/ directories
             
@@ -161,17 +161,18 @@ void train(struct Neurones N,
                     strcpy(img, dir_p);
                     strcat(img,de->d_name);
 
+                    printf("dir : %c image : %s\n",dirs[j],img);
                     image_to_matrix(img, input);//Matrix from image
 
                     double target[N.output];
-                    set_target(target, dirs[j]); //Set 1 on letter
+                    set_target(N,target, dirs[j]); //Set 1 on letter
                     backPropagation(N, input, weights_oh, weights_ih, bias_i, bias_o, output, target);
                 }
             }
             closedir(d);
         }
     }
-    print_matrix(28,28,output);
+    //print_matrix(28,28,input);
     test(N, output, weights_ih, weights_oh, bias_i, bias_o);
 }
 
@@ -181,7 +182,7 @@ int getoutput(struct Neurones N, double output[N.output])
     int pos = 0;
     for(int i=0; i<N.output; i++)
     {
-        printf("%i %f\n",i,output[i]);
+        //printf("%i %f\n",i,output[i]);
         if(max < output[i])
         {
             max = output[i];
