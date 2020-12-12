@@ -204,7 +204,7 @@ void char_storage(SDL_Surface* image, int line)
                         pixel = get_pixel(image,k,j);
                         SDL_GetRGB(pixel, image -> format, &r1, &g1, &b1);
                         put_pixel(space_image, new_i, j, (SDL_MapRGB(
-                                        space_image->format,r1,g1,b1)));
+                                        space_image->format,255,255,255)));
                         new_i++;
                     }
                 }
@@ -219,6 +219,7 @@ void char_storage(SDL_Surface* image, int line)
                         file_space[s] = line_str[s-strlen(path)];
                     file_space[len-2] = ':';
                     file_space[len-1] = nb_char +'0';
+                    space_image = resize(space_image);
                     SDL_SaveBMP(space_image,file_space);
                 }
                 else if (nb_char > 9 && nb_char < 100)
@@ -238,6 +239,7 @@ void char_storage(SDL_Surface* image, int line)
                     last22[0] = last2;
                     strcat(file_space,":");
                     strcat(file_space,last11);
+                    space_image = resize(space_image);
                     SDL_SaveBMP(space_image,file_space);
                     strcat(file_space,last22);
                 }
@@ -258,7 +260,8 @@ void char_storage(SDL_Surface* image, int line)
                     last22[0] = last2;
                     strcat(file_space,":");
                     strcat(file_space,"1");
-                    strcat(file_space,last11);
+                    strcat(file_space,last11);                    
+                    space_image = resize(space_image);
                     SDL_SaveBMP(space_image,file_space);
                     strcat(file_space,last22);
                 }
@@ -291,6 +294,7 @@ void char_storage(SDL_Surface* image, int line)
                     file[s] = line_str[s-strlen(path)];
                 file[len-2] = ':';
                 file[len-1] = nb_char +'0';
+                new_image = resize(new_image);
                 SDL_SaveBMP(new_image,file);
             }
             else if (nb_char > 9 && nb_char < 100)
@@ -310,6 +314,7 @@ void char_storage(SDL_Surface* image, int line)
                 last22[0] = last2;
                 strcat(file,":");
                 strcat(file,last11);
+                new_image = resize(new_image);
                 SDL_SaveBMP(new_image,file);
                 strcat(file,last22);
             }
@@ -333,6 +338,7 @@ void char_storage(SDL_Surface* image, int line)
                 strcat(file,":");
                 strcat(file,"1");
                 strcat(file,last11);
+                new_image = resize(new_image);
                 SDL_SaveBMP(new_image,file);
                 strcat(file,last22);
 
