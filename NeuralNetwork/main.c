@@ -4,6 +4,7 @@
 #include <time.h>
 #include "neuralnetwork.h"
 #include "row_matrix.h"
+#include <string.h>
 
 int main()
 {
@@ -14,7 +15,8 @@ int main()
 
     srand(time(NULL));
 
-    double output[N.output];
+    double output[N.output * 1];
+    memset(output,0,N.output*sizeof(double));
 
     double weights_oh[N.output * N.hidden];
     double weights_ih[N.hidden * N.inputs];

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "neuralnetwork.h"
+#include <time.h>
 
 double Random()
 {
@@ -13,7 +14,7 @@ void print_matrix(int rows, int cols, double m[])
     {
         for(int j=0; j<cols; j++)
         {
-            printf("%4g", m[i*cols+j]);
+            printf("%i", (int)m[i*cols+j]);
         }
         printf("\n");
     }
