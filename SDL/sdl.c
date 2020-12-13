@@ -131,7 +131,7 @@ SDL_Surface* noisecancel(SDL_Surface* image)
             Uint32 pixel = get_pixel(image,i,j);
             Uint8 r, g, b;
             SDL_GetRGB(pixel, image->format, &r, &g, &b);
-            if (r == 255)
+            if (r == 0)
             {
                 int meanf = 0;
                 int flag = 0;
@@ -142,7 +142,7 @@ SDL_Surface* noisecancel(SDL_Surface* image)
                         Uint32 pixelcheck = get_pixel(image,k,l);
                         Uint8 rr, gg, bb;
                         SDL_GetRGB(pixelcheck, image->format, &rr, &gg, &bb);
-                        if (rr == 255)
+                        if (rr == 0)
                         {
                             flag += 1;
                         }
