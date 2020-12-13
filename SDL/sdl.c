@@ -19,15 +19,17 @@ void image_to_matrix(char *path, double matrix[])
     SDL_Surface *image = SDL_LoadBMP(path);
     int h = image->h;
     int w = image->w;
-    for(int i=0; i < w; i++) 
+    for(int i=0; i < h; i++) 
     {
-        for(int j=0; j < h; j++) 
+        for(int j=0; j < w; j++) 
         {
-            Uint32 pixel = get_pixel(image,i,j);
+            Uint32 pixel = get_pixel(image,j,i);
             Uint8 r, g, b;
             SDL_GetRGB(pixel, image->format, &r, &g, &b);
             if(r == 0 && g == 0 && b == 0)
                 matrix[i * 28 + j] = 1;
+            else
+                matrix[i * 28 + j] = 0;
         }
     }
 }

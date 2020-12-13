@@ -29,12 +29,10 @@ void get_folders(char *dirs)
             if(strcmp(de->d_name,".") && strcmp(de->d_name,".."))
             {
                 dirs[i] = *(de->d_name);
-                //printf("%s\n",dirs);
                 i++;
             }
         }
         closedir(d);
-        free(de);
     }
 }
 
@@ -115,10 +113,10 @@ void backPropagation(struct Neurones N,
 	add(N.hidden, 1, bias_i, gradient_hidden, bias_i);
 }
 
-void set_target(double target[], char dir)
+void set_target(struct Neurones N,double target[], char dir)
 {
     int c = dir;
-    for(int i=0; i<256; i++)
+    for(int i=0; i<N.output; i++)
     {
         if(i == c)
             target[i] = 1;
@@ -136,12 +134,12 @@ void train(struct Neurones N,
         int epochs)
 { 
     char dir_p[12] = "training/ /"; //training/letter
-    char *img_p = dir_p; //training/letter/image
 
     char *dirs = malloc(4 * sizeof(char)); //For testing only with a b c d
     get_folders(dirs);
+    printf("dirs : %s\n",dirs);
 
-    double input[784] = {0}; //28x28 pixels/bmp
+    double input[N.inputs]; //28x28 pixels/bmp
 
     struct dirent *de;
     DIR *d;
@@ -149,10 +147,9 @@ void train(struct Neurones N,
     for(int i=0; i<1; i++)  //epochs
     {
         shuffle(3,1,dirs);  //Shuffle letters order
-        for(int j=0; j<4; j++)  //dirs
+        for(int j=0; j<1; j++)  //dirs
         {
             dir_p[9] = dirs[j]; //Get each directory in training/ directories
-            printf("dir : %s\n",dir_p);
             
             d = opendir(dir_p);
             while((de = readdir(d)) != NULL)
@@ -163,38 +160,37 @@ void train(struct Neurones N,
                     char *img = malloc(strlen(dir_p) + strlen(de->d_name));
                     strcpy(img, dir_p);
                     strcat(img,de->d_name);
-                    printf("%s\n",img);
 
+                    printf("dir : %c image : %s\n",dirs[j],img);
                     image_to_matrix(img, input);//Matrix from image
-                    printf("dirs[%i] %c\n\n",j,dirs[j]);
 
                     double target[N.output];
-                    set_target(target, dirs[j]); //Set 1 on letter
+                    set_target(N,target, dirs[j]); //Set 1 on letter
                     backPropagation(N, input, weights_oh, weights_ih, bias_i, bias_o, output, target);
                 }
             }
             closedir(d);
         }
-        printf("\n");
     }
-    print_matrix(1,256,output);
-
-    print_matrix(1,784,input);
+    //print_matrix(28,28,input);
     test(N, output, weights_ih, weights_oh, bias_i, bias_o);
 }
 
-char getoutput(struct Neurones N, double output[N.output])
+int getoutput(struct Neurones N, double output[N.output])
 {
     double max = 0;
-    char pos = 0;
+    int pos = 0;
     for(int i=0; i<N.output; i++)
     {
+        //printf("%i %f\n",i,output[i]);
         if(max < output[i])
         {
             max = output[i];
             pos = i;
         }
     }
+    printf("pos : %i\n",pos);
+    printf("char : %c\n",(char)pos);
     return pos;
 }
 
@@ -207,14 +203,13 @@ void test(struct Neurones N,
 {
     double hidden[N.hidden];
     double inputs[N.inputs];
+    memset(inputs, 0, N.inputs*sizeof(double));
 
-    print_matrix(256,1,output);
-
-    image_to_matrix("training/a/line_0:12", inputs);//Matrix from image
+    image_to_matrix("training/a/1", inputs); //Matrix from image
     feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
 
-    char letter = getoutput(N,output);
-    printf("letter : %i\n\n", letter);
+    int letter = getoutput(N,output);
+    printf("letter : %i %c\n\n",letter, letter);
 
     //SaveData(N,weights_ih,weights_oh,bias_i,bias_o);
     //LoadData(N,weights_ih,weights_oh,bias_i,bias_o);
