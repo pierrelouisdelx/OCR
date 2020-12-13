@@ -194,6 +194,14 @@ int getoutput(struct Neurones N, double output[N.output])
     return pos;
 }
 
+void save_output(char c)
+{
+    FILE *fp;
+    fp = fopen("text.txt","w");
+    fprintf(fp,"%c\n",c);
+    fclose(fp);
+}
+
 void test(struct Neurones N,
         double output[N.output],
         double weights_ih[N.hidden * N.inputs],
@@ -208,7 +216,8 @@ void test(struct Neurones N,
     image_to_matrix("training/c/line_1:6", inputs); //Matrix from image
     feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
 
-    int letter = getoutput(N,output);
+    char letter = getoutput(N,output);
+    save_output(letter);
     printf("letter : %i %c\n\n",letter, letter);
 
     //SaveData(N,weights_ih,weights_oh,bias_i,bias_o);
