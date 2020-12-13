@@ -4,6 +4,8 @@
 #include "sdl.h"
 #include "pixel_operations.h"
 #include "paragraph.h"
+#include "rotation.h"
+
 void print_image(SDL_Surface *image)
 {
     int w = image->w;
@@ -39,11 +41,18 @@ int main(int argc,char **argv)
     SDL_Surface* image = load_image(argv[1]);
     //double angle = 12;
     //image = rotate(image,angle);
-    image = grayscale(image);
-    image = blackwhite(image);
-    image = lines_reco(image);
-    lines_and_char_storage(image);
-    image = resize(image);
+    //image = grayscale(image);
+    //image = blackwhite(image);
+    //image = lines_reco(image);
+    //lines_and_char_storage(image);
+    //image = resize(image);
+    display_image(image);
+    //double angle = find_angle(image);
+    //printf("angle : %lf\n",angle);
+    SDL_RotateImage(image,50);
+    display_image(image);
+    //angle = find_angle(image);
+    //printf("angle : %lf\n",angle);
     display_image(image);
     return 0;
 }

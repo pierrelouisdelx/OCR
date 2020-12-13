@@ -1,6 +1,7 @@
 #include "rotation.h"
-#include "pixe_operation.h"
+#include "pixel_operations.h"
 #include <math.h>
+#include <SDL2/SDL.h>
 
 struct result *winner(int maxRho, int maxIndexTheta, int maxIndexRho, int acc[maxIndexTheta][maxIndexRho]) {
     double max = 0;
@@ -107,7 +108,7 @@ SDL_Surface *SDL_RotateImage(SDL_Surface *origine, float angle) {
 
 
     //allocate the memory (do not touch it it works somehow let's keep it this way)
-    destination = SDL_CreateRGBSurface(SDL_HWSURFACE, destweiht, destheight, origine->format->BitsPerPixel,
+    destination = SDL_CreateRGBSurface(SDL_SWSURFACE, destweiht, destheight, origine->format->BitsPerPixel,
                                        origine->format->Rmask, origine->format->Gmask, origine->format->Bmask,
                                        origine->format->Amask);
 
