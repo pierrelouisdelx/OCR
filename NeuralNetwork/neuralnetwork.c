@@ -144,10 +144,10 @@ void train(struct Neurones N,
     struct dirent *de;
     DIR *d;
 
-    for(int i=0; i<1; i++)  //epochs
+    for(int i=0; i<50; i++)  //epochs
     {
-        shuffle(3,1,dirs);  //Shuffle letters order
-        for(int j=0; j<1; j++)  //dirs
+        //shuffle(3,1,dirs);  //Shuffle letters order
+        for(int j=0; j<4; j++)  //dirs
         {
             dir_p[9] = dirs[j]; //Get each directory in training/ directories
             
@@ -205,7 +205,7 @@ void test(struct Neurones N,
     double inputs[N.inputs];
     memset(inputs, 0, N.inputs*sizeof(double));
 
-    image_to_matrix("training/a/1", inputs); //Matrix from image
+    image_to_matrix("training/c/line_1:6", inputs); //Matrix from image
     feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
 
     int letter = getoutput(N,output);
