@@ -1,20 +1,48 @@
-/*button 
+#Window, #dlg_file_choose, #dlg_box
 {
-    background-color: blue;
-}*/
-
-#quit
-{
-    font-weight: bold;
-    background-color: red;
-    /*border: 3px solid #255784;
-    border-radius: 20px;*/
+    background-color: #080932;
+    border: 1px solid #4DFEFD;
 }
 
+#menubar
+{
+    background-color: #4DFEFD;
+    color: #255784;
+}
 
-/*#quit:hover
+#file_item, #help_menu
+{
+    background-color: #4DFEFD;
+}
+
+#file_item_open, #file_item_save, #file_item_saveas, #about_item
+{
+    color: #255784;
+}
+
+button 
+{
+    color: #4DFEFD;
+    background-color: #080932;
+    border: 1px solid #4DFEFD;
+}
+
+button:hover
 {
     color: #255784;
     background-color: #03e9f4;
     box-shadow: 0 0 10px #2196f3, 0 0 40px #2196f3, 0 0 80px #2196f3;
-}*/
+}
+
+#quit
+{
+    font-weight: bold;
+    background-color: #052524;
+}
+
+#quit:hover
+{
+    color: #255784;
+    background-color: #03e9f4;
+    box-shadow: 0 0 10px #2196f3, 0 0 40px #2196f3, 0 0 80px #2196f3;
+}

@@ -14,6 +14,12 @@
 #include "../NeuralNetwork/row_matrix.c"
 #include "../NeuralNetwork/main.c"
 
+typedef struct {
+    GtkWidget *w_dlg_file_choose;       // Pointer to file chooser dialog box
+    GtkImage *w_img_main;              // Pointer to image widget
+    char *image;
+} app_widgets;
+
 void css(void)
 {
     GtkCssProvider *provider;
@@ -33,11 +39,54 @@ void css(void)
     g_object_unref (provider);
 }
 
-void gtk_grayscale(GtkWindow *window, char *file)
+void gtk_image_new_from_sdl_surface(SDL_Surface *surface, app_widgets *widgets)
 {
-    SDL_Surface *image = load_image(file);
+    Uint32 src_format;
+    Uint32 dst_format;
+
+    GdkPixbuf *pixbuf;
+    gboolean has_alpha;
+    int rowstride;
+    guchar *pixels;
+
+    // select format                                                            
+    src_format = surface->format->format;
+    has_alpha = SDL_ISPIXELFORMAT_ALPHA(src_format);
+    if (has_alpha) {
+        dst_format = SDL_PIXELFORMAT_RGBA32;
+    }
+    else {
+        dst_format = SDL_PIXELFORMAT_RGB24;
+    }
+
+    // create pixbuf                                                            
+    pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, has_alpha, 8,
+                             surface->w, surface->h);
+    rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+    pixels = gdk_pixbuf_get_pixels (pixbuf);
+
+    // copy pixels                                                              
+    SDL_LockSurface(surface);
+    SDL_ConvertPixels (surface->w, surface->h, src_format,
+               surface->pixels, surface->pitch,
+               dst_format, pixels, rowstride);
+    SDL_UnlockSurface(surface);
+
+    // create GtkImage from pixbuf                                              
+    gtk_image_set_from_pixbuf(GTK_IMAGE(widgets->w_img_main),pixbuf);
+
+    // release our reference to the pixbuf                                      
+    g_object_unref (pixbuf);
+}
+
+void gtk_grayscale(GtkWindow *window, app_widgets *widgets)
+{
+    char *file = widgets->image;
+    SDL_Surface *image = load_image("image.bmp");
     image = grayscale(image);
-    display_image(image);
+    gtk_image_new_from_sdl_surface(image, widgets);
+    //widgets->w_img_main = img;
+    //display_image(image);
 }
 
 void gtk_blackwhite(GtkWindow *window, char *file)
@@ -56,11 +105,6 @@ void gtk_segmentation(GtkWindow *window, gpointer data)
     display_image(image);
 }
 
-typedef struct {
-    GtkWidget *w_dlg_file_choose;       // Pointer to file chooser dialog box
-    GtkImage *w_img_main;              // Pointer to image widget
-} app_widgets;
-
 // File --> Open
 void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 {
@@ -73,8 +117,13 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
     if (gtk_dialog_run(GTK_DIALOG (app_wdgts->w_dlg_file_choose)) == GTK_RESPONSE_OK) {
         // Get the file name from the dialog box
         file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app_wdgts->w_dlg_file_choose));
-        if (file_name != NULL) {
-            gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), file_name);
+        if (file_name != NULL) 
+        {
+            GtkImage *img = GTK_IMAGE(gtk_image_new());
+            gtk_image_set_from_file(img, file_name);
+            GdkPixbuf *pixbuf = gtk_image_get_pixbuf(img);
+            pixbuf = gdk_pixbuf_scale_simple(pixbuf, 680, 450, GDK_INTERP_BILINEAR);
+            gtk_image_set_from_pixbuf(GTK_IMAGE(app_wdgts->w_img_main),pixbuf);
         }
         g_free(file_name);
     }
@@ -122,7 +171,6 @@ int main (int argc, char *argv[])
     widgets->w_dlg_file_choose = GTK_WIDGET(gtk_builder_get_object(builder, "dlg_file_choose"));
     widgets->w_img_main = GTK_IMAGE(gtk_builder_get_object(builder, "img_main"));
 
-    GtkFileChooserButton* openfile = GTK_FILE_CHOOSER_BUTTON(gtk_builder_get_object(builder, "openfile"));
     GtkButton* grayscale = GTK_BUTTON(gtk_builder_get_object(builder, "grayscale"));
     GtkButton* blackandwhite = GTK_BUTTON(gtk_builder_get_object(builder, "blackandwhite"));
     GtkButton* segmentation = GTK_BUTTON(gtk_builder_get_object(builder, "segmentation"));
@@ -130,16 +178,16 @@ int main (int argc, char *argv[])
     GtkButton* text = GTK_BUTTON(gtk_builder_get_object(builder, "text"));
     GtkButton* save = GTK_BUTTON(gtk_builder_get_object(builder, "save"));
     GtkButton* quit = GTK_BUTTON(gtk_builder_get_object(builder, "quit"));
-    //GtkImage* image = GTK_IMAGE(gtk_builder_get_object(builder, "image"));
 
     gtk_builder_connect_signals(builder, widgets);
     g_object_unref(builder);
 
-    GtkImage* img = "OCRtext3.bmp";
+    widgets->image = "image.bmp";
+    char *img = "image.bmp";
 
     //CONNECT SIGNAL
     g_signal_connect(window, "destroy",G_CALLBACK(gtk_main_quit), NULL);
-    g_signal_connect(grayscale, "clicked", G_CALLBACK(gtk_grayscale), img);
+    g_signal_connect(grayscale, "clicked", G_CALLBACK(gtk_grayscale), widgets);
     g_signal_connect(blackandwhite, "clicked", G_CALLBACK(gtk_blackwhite), img);
     g_signal_connect(segmentation, "clicked", G_CALLBACK(gtk_segmentation), img);
     g_signal_connect(ocr, "clicked", G_CALLBACK(ocr), NULL);
