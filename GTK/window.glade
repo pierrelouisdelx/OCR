@@ -110,13 +110,12 @@
                 <property name="orientation">vertical</property>
                 <property name="homogeneous">True</property>
                 <child>
-                  <object class="GtkButton" id="on_menuitm">
-                    <property name="label" translatable="yes">Open File</property>
+                  <object class="GtkButton" id="rotate">
+                    <property name="label" translatable="yes">Rotate</property>
+                    <property name="name">rotate</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="activate" handler="on_menuitm_open_activate" swapped="no"/>
-                    <signal name="clicked" handler="on_menuitm_open_activate" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
