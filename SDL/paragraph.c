@@ -414,4 +414,5 @@ int lines_and_char_storage(SDL_Surface* image)
             lines_counter = 0;
         }
     }
+    return char_counter;
 }
