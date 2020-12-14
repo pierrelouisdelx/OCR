@@ -149,9 +149,8 @@ SDL_Surface* char_reco(SDL_Surface* image)
     return image;
 }
 
-void char_storage(SDL_Surface* image, int line)
+int char_storage(SDL_Surface* image, int line)
 {
-
     char* path = "SDL/bmp/chars/";
     int length;
     if (line < 10)
@@ -167,6 +166,7 @@ void char_storage(SDL_Surface* image, int line)
     int nb_of_red = 0;
     int nb_char = 0;
     int old_white_space = 0;
+    int return_nb = 0;
     for (int j = 0; j < h; j++)
     {
         put_pixel(image,w-1,j,(SDL_MapRGB(image->format,255,0,0)));
@@ -347,6 +347,7 @@ void char_storage(SDL_Surface* image, int line)
             char_counter = 0;
             old_white_space = nb_of_red;
             nb_of_red = 0;
+            return_nb += 1;
         }
         if (g == r && char_counter == 0)
         {
@@ -358,9 +359,10 @@ void char_storage(SDL_Surface* image, int line)
             nb_of_red +=1;
         }
     }
+    return return_nb;
 }
 
-void lines_and_char_storage(SDL_Surface* image)
+int lines_and_char_storage(SDL_Surface* image)
 {
     int h = image->h;
     int w = image->w;
@@ -368,6 +370,7 @@ void lines_and_char_storage(SDL_Surface* image)
     Uint8 r,g,b;
     int lines_counter = 0;
     int nb_bmp = 0;
+    int char_counter = 0;
     for (int j = 0; j < h; j++)
     {
 
@@ -398,7 +401,7 @@ void lines_and_char_storage(SDL_Surface* image)
                 }
             }
             SDL_Surface* new_new_image = char_reco(new_image);
-            char_storage(new_new_image,nb_bmp);
+            char_counter += char_storage(new_new_image,nb_bmp);
             nb_bmp += 1;
             lines_counter = 0;
         }
