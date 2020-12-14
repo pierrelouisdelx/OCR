@@ -25,6 +25,13 @@ typedef struct button
     GtkButton* save;
 } button;
 
+/*typedef struct Save
+{
+    GtkWidget *dlg_file_save;
+    GtkWidget *name;
+    GtkTextBuffer *buffer;
+} Save;*/
+
 typedef struct app_widgets 
 {
     GtkWidget *w_dlg_file_choose; // Pointer to file chooser dialog box
@@ -35,6 +42,7 @@ typedef struct app_widgets
     GtkWidget *text;
     GtkTextBuffer *buffer;
     button *btn;
+    //Save *save;
 } app_widgets;
 
 void css() //Load css in gtk
@@ -216,16 +224,19 @@ int main (int argc, char *argv[])
 
     app_widgets *widgets = g_slice_new(app_widgets);
     button *btn = widgets->btn;
+    //Save *save = widgets->save;
 
     css();
     
     // Gets the widgets.
     GtkWidget* window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
     widgets->w_dlg_file_choose = GTK_WIDGET(gtk_builder_get_object(builder, "dlg_file_choose"));
+    //save->dlg_file_save = GTK_WIDGET(gtk_builder_get_object(builder, "dlg_file_save"));
     widgets->about = GTK_WIDGET(gtk_builder_get_object(builder, "dlg_about"));
     widgets->w_img_main = GTK_IMAGE(gtk_builder_get_object(builder, "img_main"));
 
     widgets->text = GTK_WIDGET(gtk_builder_get_object(builder, "text_window"));
+    //save->name = GTK_WIDGET(gtk_builder_get_object(builder, "save_text"));
 
     btn->rotate = GTK_BUTTON(gtk_builder_get_object(builder, "rotate"));
     btn->grayscale = GTK_BUTTON(gtk_builder_get_object(builder, "grayscale"));

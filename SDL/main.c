@@ -47,12 +47,13 @@ int main(int argc,char **argv)
     //lines_and_char_storage(image);
     //image = resize(image);
     display_image(image);
+    noisecancel(image);
     //double angle = find_angle(image);
     //printf("angle : %lf\n",angle);
-    SDL_RotateImage(image,50);
+    //SDL_RotateImage(image,50);
     display_image(image);
     //angle = find_angle(image);
     //printf("angle : %lf\n",angle);
-    display_image(image);
+    //display_image(image);
     return 0;
 }

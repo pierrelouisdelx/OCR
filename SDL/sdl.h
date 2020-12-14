@@ -6,7 +6,7 @@
 void init_sdl();
 void on_keypress();
 SDL_Surface* load_image(char *file);
-void image_to_matrix(char *path, double matrix[]);
+void image_to_matrix(SDL_Surface *image, double matrix[]);
 SDL_Surface* display_image(SDL_Surface *image);
 SDL_Surface* blackwhite(SDL_Surface* image);
 SDL_Surface* grayscale(SDL_Surface* image);

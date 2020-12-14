@@ -11,12 +11,11 @@ void init_sdl() {
 }
 
 SDL_Surface* load_image(char *file) {
-    return SDL_LoadBMP(file);
+    return IMG_Load(file);
 }
 
-void image_to_matrix(char *path, double matrix[])
+void image_to_matrix(SDL_Surface *image, double matrix[])
 {
-    SDL_Surface *image = SDL_LoadBMP(path);
     int h = image->h;
     int w = image->w;
     for(int i=0; i < h; i++) 

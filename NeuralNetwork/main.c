@@ -4,8 +4,8 @@
 #include <time.h>
 #include "neuralnetwork.h"
 #include "row_matrix.h"
-#include <string.h>
 #include "../SDL/sdl.h"
+#include "../SDL/paragraph.h"
 
 void train_ocr()
 {
@@ -37,7 +37,7 @@ void train_ocr()
     SaveData(N,weights_ih,weights_oh,bias_i,bias_o);
 }
 
-void ocr()
+void ocr(char *file)
 {
     printf("OCR");
     struct Neurones N;
@@ -60,19 +60,25 @@ void ocr()
 
     LoadData(N,weights_ih,weights_oh,bias_i,bias_o);
 
-    image_to_matrix("training/c/line_1:6", inputs); //Matrix from image
+    SDL_Surface *image = load_image(file);
+    image = grayscale(image);
+    image = noisecancel(image);
+    image = blackwhite(image);
+    image = lines_reco(image);
+    lines_and_char_storage(image);
+
+    image_to_matrix(image, inputs); //Matrix from image
 
     feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
 
-    char letter = getoutput(N,output);
-    char text[5] = "hello";
-    save_output(text); 
+    //char letter[] = getoutput(N,output);
+    //save_output(letter); 
 }
 
 int main()
 {
     train_ocr();
-    ocr();
+    ocr("training/c/line_1:6");
     return 0;
 }
 
