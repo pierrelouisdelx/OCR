@@ -9,6 +9,7 @@ struct Neurones {
 
 double sigmoid(double x);
 double dsigmoid(double x);
+void get_folders(char *dirs);
 
 void feedForward(struct Neurones N, 
         double inputs[N.inputs * 1], 
@@ -28,6 +29,8 @@ void backPropagation(struct Neurones N,
         double output[N.output * 1],
         double target[N.output * 1]);
 
+void set_target(struct Neurones N,double target[], char dir);
+
 void train(struct Neurones N, 
         double output[N.output * 1], 
         double weights_ih[N.hidden * N.inputs], 
@@ -35,6 +38,9 @@ void train(struct Neurones N,
         double bias_i[N.hidden * 1], 
         double bias_o[N.output * 1], 
         int epochs);
+
+int getoutput(struct Neurones N, double output[N.output]);
+void save_output(char c[]);
 
 void test(struct Neurones N,
         double output[N.output * 1], 

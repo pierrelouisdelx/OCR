@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <string.h>
 #include "../SDL/sdl.h"
+#include <time.h>
 
 double sigmoid(double x)
 {
@@ -161,7 +162,7 @@ void train(struct Neurones N,
                     strcpy(img, dir_p);
                     strcat(img,de->d_name);
 
-                    printf("dir : %c image : %s\n",dirs[j],img);
+                    //printf("dir : %c image : %s\n",dirs[j],img);
                     image_to_matrix(img, input);//Matrix from image
 
                     double target[N.output];
@@ -173,7 +174,7 @@ void train(struct Neurones N,
         }
     }
     //print_matrix(28,28,input);
-    test(N, output, weights_ih, weights_oh, bias_i, bias_o);
+    //test(N, output, weights_ih, weights_oh, bias_i, bias_o);
 }
 
 int getoutput(struct Neurones N, double output[N.output])
@@ -194,13 +195,34 @@ int getoutput(struct Neurones N, double output[N.output])
     return pos;
 }
 
-void save_output(char c)
+void save_output(char c[])
 {
     FILE *fp;
     fp = fopen("text.txt","w");
-    fprintf(fp,"%c\n",c);
+    fprintf(fp,"%s\n",c);
     fclose(fp);
 }
+
+/*void get_chars(char data[1][])
+{
+    struct dirent *de;
+    DIR *d = opendir("../SDL/bmp/chars/");
+    if(d == NULL)
+        printf("Could not open current directory");
+    else
+    {
+        int i=0;
+        while ((de = readdir(d)) != NULL)
+        {
+            if(strcmp(de->d_name,".") && strcmp(de->d_name,".."))
+            {
+                data[i] = *(de->d_name);
+                i++;
+            }
+        }
+        closedir(d);
+    }
+}*/
 
 void test(struct Neurones N,
         double output[N.output],
@@ -217,7 +239,8 @@ void test(struct Neurones N,
     feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
 
     char letter = getoutput(N,output);
-    save_output(letter);
+    char text[5] = "hello";
+    save_output(text);
     printf("letter : %i %c\n\n",letter, letter);
 
     //SaveData(N,weights_ih,weights_oh,bias_i,bias_o);

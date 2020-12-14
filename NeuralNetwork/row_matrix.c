@@ -150,7 +150,7 @@ int SaveData(struct Neurones N,
     {
         for (int j = 0; j < N.inputs; ++j)
         {
-            fprintf(fp, "%f\n", weights_ih[i*N.inputs + j]);
+            fprintf(fp, "%f\n", weights_ih[i * N.inputs + j]);
         }
     }
 
@@ -164,12 +164,12 @@ int SaveData(struct Neurones N,
 
     for (int i = 0; i < N.hidden; ++i)
     {
-        fprintf(fp, "%f\n", bias_h[i * N.hidden]);
+        fprintf(fp, "%f\n", bias_h[i]);
     }
 
     for (int i = 0; i < N.output; ++i)
     {
-        fprintf(fp, "%f\n", bias_o[i * N.hidden]);
+        fprintf(fp, "%f\n", bias_o[i]);
     }
 
 
@@ -179,20 +179,20 @@ int SaveData(struct Neurones N,
 
 int LoadData(struct Neurones N,
     double weights_ih [N.hidden * N.inputs],
-    double weights_ho [N.output * N.hidden],
-    double bias_h [N.hidden * 1],
-    double bias_o [N.output * 1])
+    double weights_oh [N.output * N.hidden],
+    double bias_h [N.hidden],
+    double bias_o [N.output])
 {
     FILE * fp;
     fp = fopen ("data.txt","r");
 
-    char str[1000];
+    char str[100];
 
     for (int i = 0; i < N.hidden; ++i)
     {
         for (int j = 0; j < N.inputs; ++j)
         {
-            fgets(str, 1000, fp);
+            fgets(str, 100, fp);
             weights_ih[i * N.inputs + j] = (double) atof(str);
         }
     }
@@ -201,21 +201,21 @@ int LoadData(struct Neurones N,
     {
         for (int j = 0; j < N.hidden; ++j)
         {
-            fgets(str, 1000, fp);
-            weights_ho[i * N.hidden + j] = (double) atof(str);
+            fgets(str, 100, fp);
+            weights_oh[i * N.hidden + j] = (double) atof(str);
         }
     }
 
     for (int i = 0; i < N.hidden; ++i)
     {
-        fgets(str, 1000, fp);
-        bias_h[i * N.hidden] = (double) atof(str);
+        fgets(str, 100, fp);
+        bias_h[i] = (double) atof(str);
     }
 
     for (int i = 0; i < N.output; ++i)
     {
-        fgets(str, 1000, fp);
-        bias_o[i * N.output] = (double) atof(str);
+        fgets(str, 100, fp);
+        bias_o[i] = (double) atof(str);
     }
 
     fclose(fp);
