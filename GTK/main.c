@@ -14,13 +14,14 @@
 #include "../NeuralNetwork/row_matrix.c"
 #include "../NeuralNetwork/main.c"
 
-typedef struct {
-    GtkWidget *w_dlg_file_choose;       // Pointer to file chooser dialog box
-    GtkImage *w_img_main;              // Pointer to image widget
-    char *image;
+typedef struct 
+{
+    GtkWidget *w_dlg_file_choose; // Pointer to file chooser dialog box
+    GtkImage *w_img_main; // Pointer to image widget
+    char *image; //Image filename
 } app_widgets;
 
-void css(void)
+void css() //Load css in gtk
 {
     GtkCssProvider *provider;
     GdkDisplay *display;
@@ -39,7 +40,7 @@ void css(void)
     g_object_unref (provider);
 }
 
-void gtk_image_new_from_sdl_surface(SDL_Surface *surface, app_widgets *widgets)
+void surface_to_image(SDL_Surface *surface, app_widgets *widgets)
 {
     Uint32 src_format;
     Uint32 dst_format;
@@ -49,7 +50,8 @@ void gtk_image_new_from_sdl_surface(SDL_Surface *surface, app_widgets *widgets)
     int rowstride;
     guchar *pixels;
 
-    SDL_PixelFormat *format = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA32);
+    //Convert image from surface to a pixbuf friendly format
+    SDL_PixelFormat *format = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA32); 
     SDL_Surface *output = SDL_ConvertSurface(surface, format, 0);
     SDL_FreeFormat(format);
 
@@ -77,31 +79,30 @@ void gtk_image_new_from_sdl_surface(SDL_Surface *surface, app_widgets *widgets)
     // create GtkImage from pixbuf                                              
     gtk_image_set_from_pixbuf(GTK_IMAGE(widgets->w_img_main),pixbuf);
 
-    // release our reference to the pixbuf                                      
-    g_object_unref (pixbuf);
+    // release reference pixbuf                                      
+    g_object_unref(pixbuf);
 }
 
 void gtk_grayscale(GtkWindow *window, app_widgets *widgets)
 {
     SDL_Surface *image = load_image(widgets->image);
     image = grayscale(image);
-    gtk_image_new_from_sdl_surface(image, widgets);
+    surface_to_image(image, widgets);
 }
 
 void gtk_blackwhite(GtkWindow *window, app_widgets *widgets)
 {
     SDL_Surface *image = load_image(widgets->image);
     image = blackwhite(image);
-    gtk_image_new_from_sdl_surface(image, widgets);
+    surface_to_image(image, widgets);
 }
 
-void gtk_segmentation(GtkWindow *window, gpointer data)
+void gtk_segmentation(GtkWindow *window, app_widgets *widgets)
 {
-    char *file = data;
-    SDL_Surface *image = load_image(file);
+    SDL_Surface *image = load_image(widgets->image);
     image = lines_reco(image);
-    //lines_and_char_storage(image);
-    display_image(image);
+    image = char_reco(image);
+    surface_to_image(image, widgets);
 }
 
 // File --> Open
@@ -134,7 +135,6 @@ void on_menuitm_close_activate(GtkMenuItem *menuitem, app_widgets *widgets)
     gtk_main_quit();
 }
 
-// called when window is closed
 void on_window_main_destroy()
 {
     gtk_main_quit();
@@ -178,16 +178,14 @@ int main (int argc, char *argv[])
     gtk_builder_connect_signals(builder, widgets);
     g_object_unref(builder);
 
-    char *img = "image.bmp";
-
     //CONNECT SIGNAL
     g_signal_connect(window, "destroy",G_CALLBACK(gtk_main_quit), NULL);
     g_signal_connect(grayscale, "clicked", G_CALLBACK(gtk_grayscale), widgets);
     g_signal_connect(blackandwhite, "clicked", G_CALLBACK(gtk_blackwhite), widgets);
-    g_signal_connect(segmentation, "clicked", G_CALLBACK(gtk_segmentation), img);
+    g_signal_connect(segmentation, "clicked", G_CALLBACK(gtk_segmentation), widgets);
     g_signal_connect(ocr, "clicked", G_CALLBACK(ocr), NULL);
-    //g_signal_connect(text, "clicked", G_CALLBACK(open_file), image);
-    //g_signal_connect(save, "clicked", G_CALLBACK(open_file), image);
+    //g_signal_connect(text, "clicked", G_CALLBACK(open_file), widgets);
+    //g_signal_connect(save, "clicked", G_CALLBACK(open_file), widgets);
     g_signal_connect(quit, "clicked",G_CALLBACK(gtk_main_quit), G_OBJECT(window));
 
     gtk_main();
