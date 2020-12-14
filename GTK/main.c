@@ -17,6 +17,7 @@
 typedef struct 
 {
     GtkWidget *w_dlg_file_choose; // Pointer to file chooser dialog box
+    GtkWidget *about; // Pointer to image widget
     GtkImage *w_img_main; // Pointer to image widget
     char *image; //Image filename
 } app_widgets;
@@ -83,6 +84,13 @@ void surface_to_image(SDL_Surface *surface, app_widgets *widgets)
     g_object_unref(pixbuf);
 }
 
+void gtk_rotate(GtkWindow *window, app_widgets *widgets)
+{
+    SDL_Surface *image = load_image(widgets->image);
+    image = rotate(image,5);
+    surface_to_image(image, widgets);
+}
+
 void gtk_grayscale(GtkWindow *window, app_widgets *widgets)
 {
     SDL_Surface *image = load_image(widgets->image);
@@ -135,6 +143,16 @@ void on_menuitm_close_activate(GtkMenuItem *menuitem, app_widgets *widgets)
     gtk_main_quit();
 }
 
+void on_about_item_activate(GtkMenuItem *menuitem, app_widgets *widgets)
+{ 
+    gtk_widget_show(widgets->about);
+}
+
+void on_dlg_about_response(GtkMenuItem *menuitem, gint response_id, app_widgets *widgets)
+{ 
+    gtk_widget_hide(widgets->about);
+}
+
 void on_window_main_destroy()
 {
     gtk_main_quit();
@@ -165,8 +183,10 @@ int main (int argc, char *argv[])
     // Gets the widgets.
     GtkWidget* window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
     widgets->w_dlg_file_choose = GTK_WIDGET(gtk_builder_get_object(builder, "dlg_file_choose"));
+    widgets->about = GTK_WIDGET(gtk_builder_get_object(builder, "dlg_about"));
     widgets->w_img_main = GTK_IMAGE(gtk_builder_get_object(builder, "img_main"));
 
+    GtkButton* rotate = GTK_BUTTON(gtk_builder_get_object(builder, "rotate"));
     GtkButton* grayscale = GTK_BUTTON(gtk_builder_get_object(builder, "grayscale"));
     GtkButton* blackandwhite = GTK_BUTTON(gtk_builder_get_object(builder, "blackandwhite"));
     GtkButton* segmentation = GTK_BUTTON(gtk_builder_get_object(builder, "segmentation"));
@@ -180,6 +200,7 @@ int main (int argc, char *argv[])
 
     //CONNECT SIGNAL
     g_signal_connect(window, "destroy",G_CALLBACK(gtk_main_quit), NULL);
+    g_signal_connect(rotate, "clicked", G_CALLBACK(gtk_rotate), widgets);
     g_signal_connect(grayscale, "clicked", G_CALLBACK(gtk_grayscale), widgets);
     g_signal_connect(blackandwhite, "clicked", G_CALLBACK(gtk_blackwhite), widgets);
     g_signal_connect(segmentation, "clicked", G_CALLBACK(gtk_segmentation), widgets);

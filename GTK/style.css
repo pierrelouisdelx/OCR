@@ -1,10 +1,10 @@
-#Window, #dlg_file_choose, #dlg_box
+#Window, #dlg_file_choose, #dlg_box, #dlg_about
 {
     background-color: #080932;
     border: 1px solid #4DFEFD;
 }
 
-#menubar
+#menubar, #about_main
 {
     background-color: #4DFEFD;
     color: #255784;
