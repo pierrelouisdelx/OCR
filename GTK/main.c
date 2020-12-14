@@ -14,12 +14,27 @@
 #include "../NeuralNetwork/row_matrix.c"
 #include "../NeuralNetwork/main.c"
 
-typedef struct 
+typedef struct button
+{
+    GtkButton* rotate;
+    GtkButton* grayscale;
+    GtkButton* blackandwhite;
+    GtkButton* segmentation;
+    GtkButton* ocr;
+    GtkButton* text;
+    GtkButton* save;
+} button;
+
+typedef struct app_widgets 
 {
     GtkWidget *w_dlg_file_choose; // Pointer to file chooser dialog box
     GtkWidget *about; // Pointer to image widget
     GtkImage *w_img_main; // Pointer to image widget
     char *image; //Image filename
+
+    GtkWidget *text;
+    GtkTextBuffer *buffer;
+    button *btn;
 } app_widgets;
 
 void css() //Load css in gtk
@@ -39,6 +54,17 @@ void css() //Load css in gtk
 
     gtk_css_provider_load_from_file(provider, g_file_new_for_path(myCssFile), &error);
     g_object_unref (provider);
+}
+
+void activate_buttons(app_widgets *widgets)
+{
+    gtk_widget_set_sensitive(GTK_WIDGET(widgets->btn->rotate), TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(widgets->btn->grayscale), TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(widgets->btn->blackandwhite), TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(widgets->btn->segmentation), TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(widgets->btn->ocr), TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(widgets->btn->text), TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(widgets->btn->save), TRUE);
 }
 
 void surface_to_image(SDL_Surface *surface, app_widgets *widgets)
@@ -130,6 +156,7 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *widgets)
             GdkPixbuf *pixbuf = gtk_image_get_pixbuf(img);
             pixbuf = gdk_pixbuf_scale_simple(pixbuf, 680, 450, GDK_INTERP_BILINEAR);//Scale image
             gtk_image_set_from_pixbuf(GTK_IMAGE(widgets->w_img_main),pixbuf);
+            activate_buttons(widgets);
         }
     }
 
@@ -158,6 +185,17 @@ void on_window_main_destroy()
     gtk_main_quit();
 }
 
+void on_text_clicked(GtkMenuItem *menuitem, app_widgets *widgets)
+{
+    gtk_widget_show(widgets->text);
+    //gtk_text_buffer_set_text(widgets->buffer, ocrtext, -1); //ocrtext
+}
+
+void on_app_close(GtkMenuItem *menuitem, app_widgets *widgets)
+{
+    gtk_widget_hide(widgets->text);
+}
+
 int main (int argc, char *argv[])
 {
     // Initializes GTK.
@@ -177,6 +215,7 @@ int main (int argc, char *argv[])
     }
 
     app_widgets *widgets = g_slice_new(app_widgets);
+    button *btn = widgets->btn;
 
     css();
     
@@ -186,13 +225,15 @@ int main (int argc, char *argv[])
     widgets->about = GTK_WIDGET(gtk_builder_get_object(builder, "dlg_about"));
     widgets->w_img_main = GTK_IMAGE(gtk_builder_get_object(builder, "img_main"));
 
-    GtkButton* rotate = GTK_BUTTON(gtk_builder_get_object(builder, "rotate"));
-    GtkButton* grayscale = GTK_BUTTON(gtk_builder_get_object(builder, "grayscale"));
-    GtkButton* blackandwhite = GTK_BUTTON(gtk_builder_get_object(builder, "blackandwhite"));
-    GtkButton* segmentation = GTK_BUTTON(gtk_builder_get_object(builder, "segmentation"));
-    GtkButton* ocr = GTK_BUTTON(gtk_builder_get_object(builder, "ocr"));
-    GtkButton* text = GTK_BUTTON(gtk_builder_get_object(builder, "text"));
-    GtkButton* save = GTK_BUTTON(gtk_builder_get_object(builder, "save"));
+    widgets->text = GTK_WIDGET(gtk_builder_get_object(builder, "text_window"));
+
+    btn->rotate = GTK_BUTTON(gtk_builder_get_object(builder, "rotate"));
+    btn->grayscale = GTK_BUTTON(gtk_builder_get_object(builder, "grayscale"));
+    btn->blackandwhite = GTK_BUTTON(gtk_builder_get_object(builder, "blackandwhite"));
+    btn->segmentation = GTK_BUTTON(gtk_builder_get_object(builder, "segmentation"));
+    btn->ocr = GTK_BUTTON(gtk_builder_get_object(builder, "ocr"));
+    btn->text = GTK_BUTTON(gtk_builder_get_object(builder, "text"));
+    btn->save = GTK_BUTTON(gtk_builder_get_object(builder, "save"));
     GtkButton* quit = GTK_BUTTON(gtk_builder_get_object(builder, "quit"));
 
     gtk_builder_connect_signals(builder, widgets);
@@ -200,11 +241,11 @@ int main (int argc, char *argv[])
 
     //CONNECT SIGNAL
     g_signal_connect(window, "destroy",G_CALLBACK(gtk_main_quit), NULL);
-    g_signal_connect(rotate, "clicked", G_CALLBACK(gtk_rotate), widgets);
-    g_signal_connect(grayscale, "clicked", G_CALLBACK(gtk_grayscale), widgets);
-    g_signal_connect(blackandwhite, "clicked", G_CALLBACK(gtk_blackwhite), widgets);
-    g_signal_connect(segmentation, "clicked", G_CALLBACK(gtk_segmentation), widgets);
-    g_signal_connect(ocr, "clicked", G_CALLBACK(ocr), NULL);
+    g_signal_connect(btn->rotate, "clicked", G_CALLBACK(gtk_rotate), widgets);
+    g_signal_connect(btn->grayscale, "clicked", G_CALLBACK(gtk_grayscale), widgets);
+    g_signal_connect(btn->blackandwhite, "clicked", G_CALLBACK(gtk_blackwhite), widgets);
+    g_signal_connect(btn->segmentation, "clicked", G_CALLBACK(gtk_segmentation), widgets);
+    g_signal_connect(btn->ocr, "clicked", G_CALLBACK(ocr), NULL);
     //g_signal_connect(text, "clicked", G_CALLBACK(open_file), widgets);
     //g_signal_connect(save, "clicked", G_CALLBACK(open_file), widgets);
     g_signal_connect(quit, "clicked",G_CALLBACK(gtk_main_quit), G_OBJECT(window));
