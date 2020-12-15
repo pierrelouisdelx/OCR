@@ -241,6 +241,7 @@ SDL_Surface* rotate(SDL_Surface* image, double angle) //Fonction de eloi mais el
 
 SDL_Surface* resize(SDL_Surface* image)
 {
+    /*
     int h = image->h;
     int w = image->w;
     int x;
@@ -292,5 +293,11 @@ SDL_Surface* resize(SDL_Surface* image)
                 put_pixel(new_image, i, j, (SDL_MapRGB(image->format,255,255,255)));
         } 
     }
+    return new_image;*/
+
+    SDL_Surface* new_image;
+    new_image = SDL_CreateRGBSurface(0, 28, 28, 32, 0, 0, 0, 0);
+    SDL_SoftStretch(image, NULL, new_image, NULL);
+    SDL_FreeSurface(image);
     return new_image;
 }
