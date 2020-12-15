@@ -8,6 +8,7 @@ CFLAGS = `pkg-config --cflags gtk+-3.0`
 LDLIBS = `pkg-config --libs gtk+-3.0` 
 
 all:
-	gcc $(CFLAGS) $(LDLIBS) $(flags) $(sdl) $(gtk) $(N) -o ocr 
+	gcc $(sdl) $(gtk) $(N) $(CFLAGS) $(LDLIBS) $(flags) -o ocr 
+	
 clean:
 	rm ocr
