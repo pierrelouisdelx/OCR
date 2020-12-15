@@ -12,12 +12,13 @@ void print_image(SDL_Surface *image)
     int h = image->h;
     printf("width : %i\n",w);
     printf("height : %i\n",h);
-    printf("format :  %s\n",image->format);
+    //printf("format :  %s\n",image->format);
     for(int i=0; i<h; i++)
     {
         for(int j=0; j<w; j++)
         {
             Uint32 pixel = get_pixel(image,j,i);
+            printf("%zu\n",pixel);
             Uint8 r,g,b;
             SDL_GetRGB(pixel, image->format, &r, &g, &b);
             if(r == 0 && g == 0 && b == 0)
@@ -28,7 +29,6 @@ void print_image(SDL_Surface *image)
         printf("\n");
     }
 }
-
 
 int main(int argc,char **argv)
 {
@@ -46,14 +46,13 @@ int main(int argc,char **argv)
     //image = lines_reco(image);
     //lines_and_char_storage(image);
     //image = resize(image);
-    display_image(image);
-    noisecancel(image);
+    //noisecancel(image);
     //double angle = find_angle(image);
-    //printf("angle : %lf\n",angle);
-    //SDL_RotateImage(image,50);
-    display_image(image);
-    //angle = find_angle(image);
-    //printf("angle : %lf\n",angle);
-    //display_image(image);
+    //surface_to_matrix(image, inputs);
+    double m[784];
+    memset(m,0,784*sizeof(double));
+    image_to_matrix("bmp/chars/line_0:2",m);
+    image = load_image("bmp/chars/line_0:2");
+    print_image(image);
     return 0;
 }

@@ -190,8 +190,8 @@ int getoutput(struct Neurones N, double output[N.output])
             pos = i;
         }
     }
-    printf("pos : %i\n",pos);
-    printf("char : %c\n",(char)pos);
+    //printf("pos : %i\n",pos);
+    //printf("char : %c\n",(char)pos);
     return pos;
 }
 

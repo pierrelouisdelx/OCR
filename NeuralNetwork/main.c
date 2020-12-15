@@ -6,6 +6,7 @@
 #include "row_matrix.h"
 #include "../SDL/sdl.h"
 #include "../SDL/paragraph.h"
+#include <dirent.h>
 
 void train_ocr()
 {
@@ -39,7 +40,7 @@ void train_ocr()
 
 void ocr(char *file)
 {
-    printf("OCR");
+    printf("OCR\n");
     struct Neurones N;
     N.inputs = 784;
     N.hidden = 400;
@@ -62,23 +63,47 @@ void ocr(char *file)
 
     SDL_Surface *image = load_image(file);
     image = grayscale(image);
-    image = noisecancel(image);
+    //image = noisecancel(image);
     image = blackwhite(image);
     image = lines_reco(image);
-    lines_and_char_storage(image);
+    int nchars = lines_and_char_storage(image);
 
-    image_to_matrix(image, inputs); //Matrix from image
+    char text[nchars];
 
-    feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
+    char dir[18] = "../SDL/bmp/chars/";
+    struct dirent *de;
+    DIR *d = opendir(dir);
+    if(d == NULL)
+        printf("Could not open current directory");
+    else
+    {
+        int i=0;
+        while ((de = readdir(d)) != NULL)
+        {
+            if(de->d_type == DT_REG)
+            {
+                char *img_p = malloc(strlen(dir) + strlen(de->d_name));
+                strcpy(img_p, dir);
+                strcat(img_p, de->d_name);
+                SDL_Surface *img = load_image(img_p);
+                surface_to_matrix(img, inputs);            
+                feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
+                text[i] =  (char)getoutput(N,output);
+                i++;
+                printf("%s\n",img_p);
+            }
+        }
+        closedir(d);
+    }
 
-    //char letter[] = getoutput(N,output);
-    //save_output(letter); 
+    save_output(text); 
 }
 
 int main()
 {
-    train_ocr();
-    ocr("training/c/line_1:6");
+    //train_ocr();
+    char *file = "OCRtext3.bmp";
+    ocr(file);
     return 0;
 }
 

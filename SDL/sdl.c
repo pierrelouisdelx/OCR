@@ -10,11 +10,40 @@ void init_sdl() {
     }
 }
 
-SDL_Surface* load_image(char *file) {
-    return IMG_Load(file);
+SDL_Surface* load_image(char *file) 
+{
+    if(IMG_Load(file) != NULL)
+        return IMG_Load(file);
+    else
+    {
+        printf("error while loading image");
+        return NULL;
+    }
 }
 
-void image_to_matrix(SDL_Surface *image, double matrix[])
+void image_to_matrix(char *path, double matrix[])
+{
+    SDL_Surface *image = load_image(path);
+    if(image == NULL)
+        printf("error while loading image\n");
+    int h = image->h;
+    int w = image->w;
+    for(int i=0; i < h; i++) 
+    {
+        for(int j=0; j < w; j++) 
+        {
+            Uint32 pixel = get_pixel(image,j,i);
+            Uint8 r, g, b;
+            SDL_GetRGB(pixel, image->format, &r, &g, &b);
+            if(r == 0 && g == 0 && b == 0)
+                matrix[i * 28 + j] = 1;
+            else
+                matrix[i * 28 + j] = 0;
+        }
+    }
+}
+
+void surface_to_matrix(SDL_Surface *image, double matrix[])
 {
     int h = image->h;
     int w = image->w;
@@ -260,10 +289,3 @@ SDL_Surface* resize(SDL_Surface* image)
     }
     return new_image;
 }
-
-/*
-int houghtransform() {
-    //Detect image rotation angle
-    return 0;
-}*/
-

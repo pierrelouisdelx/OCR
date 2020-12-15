@@ -401,7 +401,7 @@ int lines_and_char_storage(SDL_Surface* image)
                 }
             }
             SDL_Surface* new_new_image = char_reco(new_image);
-            char_counter += char_storage(new_new_image,nb_bmp);
+            char_counter += char_storage(new_new_image,nb_bmp) + 1;
             nb_bmp += 1;
             lines_counter = 0;
         }
