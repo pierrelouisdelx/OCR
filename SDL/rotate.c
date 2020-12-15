@@ -135,3 +135,97 @@ SDL_Surface *image_deskew(SDL_Surface *image)
     printf("%f", skew_angle);
     return image;
 }
+
+//tranforms an image into a square dimension (it is still the same image)
+SDL_Surface* resizeSquare(SDL_Surface* image)
+{
+    Uint32 rmask, gmask, bmask, amask;
+    int newDim = 0;
+    if(image->h > image->w)
+    {
+        newDim = image->h;
+    }
+    else
+    {
+        newDim = image->w;
+    }
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+    rmask = 0xff000000;
+    gmask = 0x00ff0000;
+    bmask = 0x0000ff00;
+    amask = 0x000000ff;
+#else
+    rmask = 0x000000ff;
+    gmask = 0x0000ff00;
+    bmask = 0x00ff0000;
+    amask = 0xff000000;
+#endif
+
+    int h = image->h;
+    int w = image->w;
+    int x;
+    int y;
+    Uint32 pixel;
+    SDL_Surface* new_image = SDL_CreateRGBSurface(0, newDim, newDim, 32, rmask, gmask, bmask, amask);
+    int array [newDim][newDim];
+    int nb_per_cell [newDim][newDim];
+    SDL_FillRect(new_image, 0, (SDL_MapRGB(new_image->format, 255, 255, 255)));
+    for(int i = 0; i < w ; i++)
+    {
+        for(int j = 0; j < h ; j++)
+        {
+            Uint32 pixelValue = get_pixel(image, i, j);
+            put_pixel(new_image, i, j, pixelValue);
+        }
+        for(int j = h; j < newDim; j++)
+        {
+            put_pixel(new_image, i, j, (SDL_MapRGB(new_image->format, 255, 255, 255)));
+        }
+    }
+    for(int i = w; i < newDim; i++)
+    {
+        for(int j = 0; j < newDim; j++)
+        {
+            put_pixel(new_image, i, j, (SDL_MapRGB(new_image->format, 255, 255, 255)));
+        }
+    }
+   /* for (int i = 0; i < w; i++)
+    {
+        for (int j = 0; j < h; j++)
+        {
+            x = i * (newDim / w);
+            y = j * (newDim / h);
+            pixel = get_pixel(image, i, j);
+            Uint8 r, g, b;
+            SDL_GetRGB(pixel, image -> format, &r, &g, &b);
+            if (r != 255)
+            {
+                array[x][y] += 1;
+            }            nb_per_cell[x][y] += 1;
+        }
+    }
+       for (int i = 0; i < newDim; i++)
+    {
+        for (int j = 0; j < newDim; j++)
+        {
+            int average;
+            if (nb_per_cell[i][j] > 0)
+            {
+                average = array[i][j]/nb_per_cell[i][j];
+            }
+            else
+            {   average = 0;
+            }
+            if (average == 1)
+            { put_pixel(new_image, i, j, (SDL_MapRGB(image->format,0,0,0)));
+            }
+            else
+            {
+                put_pixel(new_image, i, j, (SDL_MapRGB(image->format,255,255,255)));
+            }
+        }
+    }*/
+    SDL_FreeSurface(image);
+    return new_image;
+}
+

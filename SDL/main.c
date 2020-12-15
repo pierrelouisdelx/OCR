@@ -4,7 +4,7 @@
 #include "sdl.h"
 #include "pixel_operations.h"
 #include "paragraph.h"
-#include "rotation.h"
+#include "rotate.h"
 
 void print_image(SDL_Surface *image)
 {
@@ -46,12 +46,17 @@ int main(int argc,char **argv)
     //lines_and_char_storage(image);
     //image = resize(image);
     //noisecancel(image);
+    //SDL_Surface *ah = grayscale(image);
+    SDL_Surface *oui = resizeSquare(image);
+    //SDL_Surface *output = Rotate(image, 20);
     //double angle = find_angle(image);
     //surface_to_matrix(image, inputs);
-    double m[784];
-    memset(m,0,784*sizeof(double));
-    image_to_matrix("bmp/chars/line_0:2",m);
-    image = load_image("bmp/chars/line_0:2");
-    print_image(image);
+    //SDL_Surface *non = noisecancel(oui);
+    display_image(oui);
+    //double m[784];
+    //memset(m,0,784*sizeof(double));
+    //image_to_matrix("bmp/chars/line_0:2",m);
+    //image = load_image("bmp/chars/line_0:2");
+    //print_image(image);
     return 0;
 }

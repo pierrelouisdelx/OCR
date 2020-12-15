@@ -9,4 +9,5 @@
  double compute_variance(SDL_Surface *image, double angle);
  double find_skew_angle(SDL_Surface *image,double lower_bound, double upper_bound, double precision);
  SDL_Surface *image_deskew(SDL_Surface *image);
+ SDL_Surface *resizeSquare(SDL_Surface *image);
 #endif
