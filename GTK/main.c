@@ -227,9 +227,17 @@ void gtk_ocr(GtkWindow *window, app_widgets *widgets)
 {
     UNUSED(window);
     ocr(widgets->image);
+    
+    gchar *file_name = "text.txt";
+    gchar *file_content = NULL;
+    gboolean file_success = FALSE;
 
-    //gtk_widget_show(widgets->text);
-    //gtk_text_buffer_set_text(widgets->buffer, text, -1); //ocrtext
+    file_success = g_file_get_contents(file_name, &file_content, NULL, NULL);
+    if (file_success) 
+        gtk_text_buffer_set_text(widgets->buffer, file_content, -1);
+    g_free(file_content);
+
+    gtk_widget_show(widgets->text);
 }
 
 int main ()
@@ -264,6 +272,7 @@ int main ()
 
     widgets->text = GTK_WIDGET(gtk_builder_get_object(builder, "text_window"));
     //save->name = GTK_WIDGET(gtk_builder_get_object(builder, "save_text"));
+    widgets->buffer = GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "textbuffer1"));
 
     widgets->btn.rotate = GTK_BUTTON(gtk_builder_get_object(builder, "rotate"));
     widgets->btn.grayscale = GTK_BUTTON(gtk_builder_get_object(builder, "grayscale"));
@@ -284,7 +293,6 @@ int main ()
     g_signal_connect(widgets->btn.blackandwhite, "clicked", G_CALLBACK(gtk_blackwhite), widgets);
     g_signal_connect(widgets->btn.segmentation, "clicked", G_CALLBACK(gtk_segmentation), widgets);
     g_signal_connect(widgets->btn.ocr, "clicked", G_CALLBACK(gtk_ocr), widgets);
-    //g_signal_connect(save, "clicked", G_CALLBACK(open_file), widgets);
     g_signal_connect(quit, "clicked",G_CALLBACK(gtk_main_quit), G_OBJECT(window));
 
     gtk_main();
