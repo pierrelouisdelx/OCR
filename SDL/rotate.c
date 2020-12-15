@@ -6,14 +6,15 @@
 #include <string.h>
 #include "pixel_operations.h"
 #include "sdl.h"
+
+#define M_PI 3.14159265358979323846
+
 double convert_to_rad(double angle_in_deg)
 {
     double angle_in_rad;
     angle_in_rad = (angle_in_deg * M_PI) / 180;
     return angle_in_rad;
 }
-
-
 
 SDL_Surface *Rotate(SDL_Surface *image, double angle)
 {

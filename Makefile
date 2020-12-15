@@ -1,4 +1,4 @@
-sdl = SDL/sdl.c SDL/pixel_operations.c SDL/paragraph.c
+sdl = SDL/sdl.c SDL/pixel_operations.c SDL/paragraph.c SDL/rotate.c
 gtk = GTK/main.c 
 N = NeuralNetwork/ocr.c NeuralNetwork/neuralnetwork.c NeuralNetwork/row_matrix.c
 

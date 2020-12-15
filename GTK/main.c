@@ -9,6 +9,7 @@
 #include "../SDL/sdl.h"
 #include "../SDL/pixel_operations.h"
 #include "../SDL/paragraph.h"
+#include "../SDL/rotate.h"
 
 #include "../NeuralNetwork/neuralnetwork.h"
 #include "../NeuralNetwork/row_matrix.h"
@@ -124,7 +125,8 @@ void gtk_rotate(GtkWindow *window, app_widgets *widgets)
 {
     UNUSED(window);
     SDL_Surface *image = load_image(widgets->image);
-    image = rotate(image,5);
+    image = resizeSquare(image);
+    image = Rotate(image,10);
     surface_to_image(image, widgets);
 }
 
