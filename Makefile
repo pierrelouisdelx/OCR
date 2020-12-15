@@ -1,20 +1,14 @@
-files = SDL/main.c SDL/sdl.c SDL/pixel_operations.c SDL/paragraph.c
-flags = -Wall -Wextra -std=c99
+sdl = SDL/sdl.c SDL/pixel_operations.c SDL/paragraph.c
+gtk = GTK/main.c 
+N = NeuralNetwork/main.c NeuralNetwork/neuralnetwork.c NeuralNetwork/row_matrix.c
+
+flags = -Wall -Wextra -std=c99 -lm -lSDL2 -lSDL2_image
 
 CFLAGS = `pkg-config --cflags gtk+-3.0` -Wall -O3
 LDLIBS = `pkg-config --libs gtk+-3.0` 
 
-all: $(files)
-	gcc $(files) -o ocr $(flags) -lm
-
-sdl: $(files)
-	gcc $(files) -o sdl -lSDL2 $(flags) -lm
-
-xor: 
-	gcc $(flags)  NeuralNetwork/*.c -o xor -lm
-
-gtk:
-	gcc $(CFLAGS) $(LDLIBS) GTK/main.c
+all:
+	gcc $(sdl) $(gtk) $(N)  -o ocr $(flags) $(CFLAGS) $(LDLIBS)
 
 clean:
-	rm ocr sdl xor data.txt
+	rm ocr data.txt
