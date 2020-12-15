@@ -47,26 +47,6 @@
                         <signal name="activate" handler="on_menuitm_open_activate" swapped="no"/>
                       </object>
                     </child>
-                    <child>
-                      <object class="GtkImageMenuItem" id="file_item_save">
-                        <property name="label">gtk-save</property>
-                        <property name="name">file_item_save</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImageMenuItem" id="file_item_saveas">
-                        <property name="label">gtk-save-as</property>
-                        <property name="name">file_item_saveas</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
-                      </object>
-                    </child>
                   </object>
                 </child>
               </object>
@@ -114,10 +94,10 @@
                 <property name="orientation">vertical</property>
                 <property name="homogeneous">True</property>
                 <child>
-                  <object class="GtkButton" id="rotate">
-                    <property name="label" translatable="yes">Rotate</property>
+                  <object class="GtkButton" id="grayscale">
+                    <property name="label" translatable="yes">Grayscale</property>
                     <property name="related-action">disable_btn</property>
-                    <property name="name">rotate</property>
+                    <property name="name">grayscale</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
@@ -129,10 +109,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="grayscale">
-                    <property name="label" translatable="yes">Grayscale</property>
+                  <object class="GtkButton" id="denoise">
+                    <property name="label" translatable="yes">Noise Cancelling</property>
                     <property name="related-action">disable_btn</property>
-                    <property name="name">grayscale</property>
+                    <property name="name">denoise</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
@@ -159,6 +139,21 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkButton" id="rotate">
+                    <property name="label" translatable="yes">Rotate</property>
+                    <property name="related-action">disable_btn</property>
+                    <property name="name">rotate</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkButton" id="segmentation">
                     <property name="label" translatable="yes">Segmentation</property>
                     <property name="related-action">disable_btn</property>
@@ -170,7 +165,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
                 <child>
@@ -185,22 +180,6 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="text">
-                    <property name="label" translatable="yes">Text</property>
-                    <property name="related-action">disable_btn</property>
-                    <property name="name">text</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <signal name="clicked" handler="on_text_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
@@ -211,7 +190,6 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="always-show-image">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -226,10 +204,9 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="has-tooltip">True</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">7</property>
                   </packing>
@@ -448,64 +425,6 @@ Pierre-Louis Delcroix</property>
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">_Edit</property>
-                <property name="use-underline">True</property>
-                <child type="submenu">
-                  <object class="GtkMenu">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkImageMenuItem">
-                        <property name="label">gtk-cut</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImageMenuItem">
-                        <property name="label">gtk-copy</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImageMenuItem">
-                        <property name="label">gtk-paste</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImageMenuItem">
-                        <property name="label">gtk-delete</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">_View</property>
-                <property name="use-underline">True</property>
               </object>
             </child>
             <child>

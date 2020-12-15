@@ -176,21 +176,15 @@ int LoadData(struct Neurones N,
     double bias_o [N.output])
 {
     FILE * fp;
-    fp = fopen ("data.txt","r");
+    fp = fopen("NeuralNetwork/data.txt","r");
 
     char str[100];
-    fgets(str, 100, fp);
-    double d = (double) atof(str);
-    printf("%f\n",d);
 
     for (int i = 0; i < N.hidden; ++i)
     {
         for (int j = 0; j < N.inputs; ++j)
         {
             fgets(str, 100, fp);
-            //printf("%s\n",str);
-            //double d = str;
-            //printf("d: %f\n",d);
             weights_ih[i * N.inputs + j] = (double) atof(str);
         }
     }

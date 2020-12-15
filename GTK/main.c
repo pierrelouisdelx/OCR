@@ -19,12 +19,12 @@
 
 typedef struct button
 {
-    GtkButton* rotate;
     GtkButton* grayscale;
+    GtkButton* denoise;
     GtkButton* blackandwhite;
+    GtkButton* rotate;
     GtkButton* segmentation;
     GtkButton* ocr;
-    GtkButton* text;
     GtkButton* train;
 } button;
 
@@ -74,7 +74,7 @@ void activate_buttons(app_widgets *widgets)
     gtk_widget_set_sensitive(GTK_WIDGET(widgets->btn.blackandwhite), TRUE);
     gtk_widget_set_sensitive(GTK_WIDGET(widgets->btn.segmentation), TRUE);
     gtk_widget_set_sensitive(GTK_WIDGET(widgets->btn.ocr), TRUE);
-    gtk_widget_set_sensitive(GTK_WIDGET(widgets->btn.text), TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(widgets->btn.denoise), TRUE);
     gtk_widget_set_sensitive(GTK_WIDGET(widgets->btn.train), TRUE);
 }
 
@@ -279,10 +279,10 @@ int main ()
 
     widgets->btn.rotate = GTK_BUTTON(gtk_builder_get_object(builder, "rotate"));
     widgets->btn.grayscale = GTK_BUTTON(gtk_builder_get_object(builder, "grayscale"));
+    widgets->btn.denoise = GTK_BUTTON(gtk_builder_get_object(builder, "denoise"));
     widgets->btn.blackandwhite = GTK_BUTTON(gtk_builder_get_object(builder, "blackandwhite"));
     widgets->btn.segmentation = GTK_BUTTON(gtk_builder_get_object(builder, "segmentation"));
     widgets->btn.ocr = GTK_BUTTON(gtk_builder_get_object(builder, "ocr"));
-    widgets->btn.text = GTK_BUTTON(gtk_builder_get_object(builder, "text"));
     widgets->btn.train = GTK_BUTTON(gtk_builder_get_object(builder, "train"));
     GtkButton* quit = GTK_BUTTON(gtk_builder_get_object(builder, "quit"));
 

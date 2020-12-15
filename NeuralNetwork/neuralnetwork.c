@@ -124,11 +124,10 @@ void train(struct Neurones N,
     for(int e=0; e<epochs; e++)
     {
         printf("Epochs %i on %i\n", e, epochs);
-        for(int j=0; j<1; j++)
+        for(int j=0; j<409; j++)
         {
             shuffle(dir, 93);
-            printf("%ls\n",dir);
-            for(int i=0; i<3; i++) //going through all folders
+            for(int i=0; i<93; i++) //going through all folders
             {
                 char tmp[100];
                 char n[15];

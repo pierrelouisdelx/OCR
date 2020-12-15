@@ -23,7 +23,7 @@ void train_ocr()
     double weights_ih[N.hidden * N.inputs];
     double bias_i[N.hidden];
     double bias_o[N.output];
-    int epochs = 1;
+    int epochs = 100;
 
     init(N.hidden, N.inputs, weights_ih);
     init(N.output, N.hidden, weights_oh);
@@ -37,6 +37,7 @@ void train_ocr()
 
 void ocr(char *file)
 {
+    printf("OCR");
     struct Neurones N;
     N.inputs = 784;
     N.hidden = 400;
@@ -65,7 +66,6 @@ void ocr(char *file)
     int nchars = lines_and_char_storage(image);
 
     char text[nchars];
-
     char img_f[50] = "SDL/bmp/chars/line_";
 
     int i=0; 
