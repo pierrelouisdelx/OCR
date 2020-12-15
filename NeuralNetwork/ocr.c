@@ -35,8 +35,9 @@ void train_ocr()
     SaveData(N,weights_ih,weights_oh,bias_i,bias_o);
 }
 
-void ocr(char *file, char *t)
+void ocr(char *file)
 {
+    printf("OCR\n\n");
     struct Neurones N;
     N.inputs = 784;
     N.hidden = 400;
@@ -59,7 +60,7 @@ void ocr(char *file, char *t)
 
     SDL_Surface *image = load_image(file);
     image = grayscale(image);
-    //image = noisecancel(image);
+    image = noisecancel(image);
     image = blackwhite(image);
     image = lines_reco(image);
     int nchars = lines_and_char_storage(image);

@@ -136,7 +136,7 @@ int SaveData(struct Neurones N,
     double bias_o [N.output * 1])
 {
     FILE *fp;
-    fp = fopen ("data.txt","w");
+    fp = fopen ("NeuralNetwork/data.txt","w");
 
     for (int i = 0; i < N.hidden; ++i)
     {
@@ -176,7 +176,7 @@ int LoadData(struct Neurones N,
     double bias_o [N.output])
 {
     FILE * fp;
-    fp = fopen ("data.txt","r");
+    fp = fopen ("NeuralNetwork/data.txt","r");
 
     char str[100];
 
