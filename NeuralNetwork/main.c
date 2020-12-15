@@ -40,7 +40,6 @@ void train_ocr()
 
 void ocr(char *file)
 {
-    printf("OCR\n");
     struct Neurones N;
     N.inputs = 784;
     N.hidden = 400;
@@ -70,32 +69,49 @@ void ocr(char *file)
 
     char text[nchars];
 
-    char dir[18] = "../SDL/bmp/chars/";
-    struct dirent *de;
-    DIR *d = opendir(dir);
-    if(d == NULL)
-        printf("Could not open current directory");
-    else
-    {
-        int i=0;
-        while ((de = readdir(d)) != NULL)
-        {
-            if(de->d_type == DT_REG)
-            {
-                char *img_p = malloc(strlen(dir) + strlen(de->d_name));
-                strcpy(img_p, dir);
-                strcat(img_p, de->d_name);
-                SDL_Surface *img = load_image(img_p);
-                surface_to_matrix(img, inputs);            
-                feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
-                text[i] =  (char)getoutput(N,output);
-                i++;
-                printf("%s\n",img_p);
-            }
-        }
-        closedir(d);
-    }
+    char img_f[50] = "../SDL/bmp/chars/line_";
 
+    int i=0; 
+    while(i < 50)
+    {   
+        char tmp[50];
+        char n[13];
+        strcpy(tmp,img_f);
+        sprintf(n,"%i",i);
+        strcat(tmp,n);
+        strcat(tmp,":");
+
+        char tm[50];
+        strcpy(tm, tmp);
+        strcat(tm,"0");
+
+        if(load_image(tm) != NULL)
+        { 
+            int j=0;
+            while(j < 250)
+            {
+                char tmp2[50];
+                strcpy(tmp2,tmp);
+                sprintf(n,"%i",j);
+                strcat(tmp2,n);
+                if(load_image(tmp2) != NULL)
+                {
+                    image_to_matrix(tmp2, inputs);
+                    feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
+                    char t[10];
+                    sprintf(t,"%c",getoutput(N,output));
+                    strcat(text,t);
+                }
+                else
+                    break;
+                j++;
+            }
+            strcat(text,"\n");
+            i++;
+        }
+        else
+            break;
+    }
     save_output(text); 
 }
 

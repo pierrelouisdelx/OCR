@@ -16,7 +16,7 @@ SDL_Surface* load_image(char *file)
         return IMG_Load(file);
     else
     {
-        printf("error while loading image");
+        //printf("Load Image : error while loading image");
         return NULL;
     }
 }
