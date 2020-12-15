@@ -293,6 +293,7 @@ int main ()
     g_signal_connect(widgets->btn.blackandwhite, "clicked", G_CALLBACK(gtk_blackwhite), widgets);
     g_signal_connect(widgets->btn.segmentation, "clicked", G_CALLBACK(gtk_segmentation), widgets);
     g_signal_connect(widgets->btn.ocr, "clicked", G_CALLBACK(gtk_ocr), widgets);
+    g_signal_connect(widgets->btn.train, "clicked", G_CALLBACK(gtk_train),NULL);
     g_signal_connect(quit, "clicked",G_CALLBACK(gtk_main_quit), G_OBJECT(window));
 
     gtk_main();
