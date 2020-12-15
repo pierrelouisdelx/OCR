@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <math.h>
 #include "row_matrix.h"
-#include <string.h>
 #include "../SDL/sdl.h"
 #include <time.h>
 
@@ -94,7 +93,7 @@ void backPropagation(struct Neurones N,
 
 void set_target(struct Neurones N,double target[], char dir)
 {
-    int c = dir;
+    int c = dir + 33;
     for(int i=0; i<N.output; i++)
     {
         if(i == c)
@@ -112,7 +111,7 @@ void train(struct Neurones N,
         double bias_o[N.output], 
         int epochs)
 { 
-    char training[10] = "training/"; //training/letter
+    char training[50] = "NeuralNetwork/training/"; //training/letter
 
     double input[N.inputs]; //28x28 pixels/bmp
 
@@ -125,11 +124,11 @@ void train(struct Neurones N,
     for(int e=0; e<epochs; e++)
     {
         shuffle(dir, 93);
-        for(int i=0; i<93; i++) //going through all folders
+        for(int i=0; i<92; i++) //going through all folders
         {
             for(int j=0; j<409; j++)
             {
-                char tmp[50];
+                char tmp[100];
                 char n[15];
                 strcpy(tmp,training);
                 sprintf(n,"%i",dir[i]);
@@ -142,7 +141,7 @@ void train(struct Neurones N,
                 image_to_matrix(tmp, input);//Matrix from image
                 
                 double target[N.output];
-                set_target(N,target, dir[i+33]);
+                set_target(N,target, dir[i]);
                 backPropagation(N, input, weights_oh, weights_ih, bias_i, bias_o, output, target);
             }
         }

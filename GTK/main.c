@@ -14,6 +14,8 @@
 #include "../NeuralNetwork/row_matrix.c"
 #include "../NeuralNetwork/main.c"
 
+#define UNUSED(x) (void) (x)
+
 typedef struct button
 {
     GtkButton* rotate;
@@ -57,7 +59,7 @@ void css() //Load css in gtk
     gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider), 
             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-    const gchar *myCssFile = "style.css";
+    const gchar *myCssFile = "GTK/style.css";
     GError *error = 0;
 
     gtk_css_provider_load_from_file(provider, g_file_new_for_path(myCssFile), &error);
@@ -120,6 +122,7 @@ void surface_to_image(SDL_Surface *surface, app_widgets *widgets)
 
 void gtk_rotate(GtkWindow *window, app_widgets *widgets)
 {
+    UNUSED(window);
     SDL_Surface *image = load_image(widgets->image);
     image = rotate(image,5);
     surface_to_image(image, widgets);
@@ -127,6 +130,7 @@ void gtk_rotate(GtkWindow *window, app_widgets *widgets)
 
 void gtk_grayscale(GtkWindow *window, app_widgets *widgets)
 {
+    UNUSED(window);
     SDL_Surface *image = load_image(widgets->image);
     image = grayscale(image);
     surface_to_image(image, widgets);
@@ -134,6 +138,7 @@ void gtk_grayscale(GtkWindow *window, app_widgets *widgets)
 
 void gtk_blackwhite(GtkWindow *window, app_widgets *widgets)
 {
+    UNUSED(window);
     SDL_Surface *image = load_image(widgets->image);
     image = blackwhite(image);
     surface_to_image(image, widgets);
@@ -141,6 +146,7 @@ void gtk_blackwhite(GtkWindow *window, app_widgets *widgets)
 
 void gtk_segmentation(GtkWindow *window, app_widgets *widgets)
 {
+    UNUSED(window);
     SDL_Surface *image = load_image(widgets->image);
     image = lines_reco(image);
     image = char_reco(image);
@@ -149,7 +155,8 @@ void gtk_segmentation(GtkWindow *window, app_widgets *widgets)
 
 // File --> Open
 void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *widgets)
-{ 
+{
+    UNUSED(menuitem);
     // Show the "Open Image" dialog box
     gtk_widget_show(widgets->w_dlg_file_choose);
     
@@ -173,18 +180,22 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *widgets)
 }
 
 // File --> Quit
-void on_menuitm_close_activate(GtkMenuItem *menuitem, app_widgets *widgets)
+void on_menuitm_close_activate(GtkMenuItem *menuitem)
 {
+    UNUSED(menuitem);
     gtk_main_quit();
 }
 
 void on_about_item_activate(GtkMenuItem *menuitem, app_widgets *widgets)
 { 
+    UNUSED(menuitem);
     gtk_widget_show(widgets->about);
 }
 
 void on_dlg_about_response(GtkMenuItem *menuitem, gint response_id, app_widgets *widgets)
-{ 
+{
+    UNUSED(response_id);
+    UNUSED(menuitem);
     gtk_widget_hide(widgets->about);
 }
 
@@ -195,22 +206,26 @@ void on_window_main_destroy()
 
 void on_text_clicked(GtkMenuItem *menuitem, app_widgets *widgets)
 {
+    UNUSED(menuitem);
     gtk_widget_show(widgets->text);
     //gtk_text_buffer_set_text(widgets->buffer, ocrtext, -1); //ocrtext
 }
 
 void on_app_close(GtkMenuItem *menuitem, app_widgets *widgets)
 {
+    UNUSED(menuitem);
     gtk_widget_hide(widgets->text);
 }
 
-void gtk_train(GtkWindow *window, app_widgets *widgets)
+void gtk_train(GtkWindow *window)
 {
+    UNUSED(window);
     train_ocr();
 }
 
 void gtk_ocr(GtkWindow *window, app_widgets *widgets)
 {
+    UNUSED(window);
     char text[5000];
     ocr(widgets->image, text);
 
@@ -218,7 +233,7 @@ void gtk_ocr(GtkWindow *window, app_widgets *widgets)
     gtk_text_buffer_set_text(widgets->buffer, text, -1); //ocrtext
 }
 
-int main (int argc, char *argv[])
+int main ()
 {
     // Initializes GTK.
     gtk_init(NULL, NULL);
@@ -229,7 +244,7 @@ int main (int argc, char *argv[])
     // Loads the UI description.
     // (Exits if an error occurs.)
     GError* error = NULL;
-    if (gtk_builder_add_from_file(builder, "window.glade", &error) == 0)
+    if (gtk_builder_add_from_file(builder, "GTK/window.glade", &error) == 0)
     {
         g_printerr("Error loading file: %s\n", error->message);
         g_clear_error(&error);

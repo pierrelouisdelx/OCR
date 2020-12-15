@@ -18,7 +18,6 @@ void print_image(SDL_Surface *image)
         for(int j=0; j<w; j++)
         {
             Uint32 pixel = get_pixel(image,j,i);
-            printf("%zu\n",pixel);
             Uint8 r,g,b;
             SDL_GetRGB(pixel, image->format, &r, &g, &b);
             if(r == 0 && g == 0 && b == 0)

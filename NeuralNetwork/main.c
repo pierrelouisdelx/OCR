@@ -35,7 +35,7 @@ void train_ocr()
     SaveData(N,weights_ih,weights_oh,bias_i,bias_o);
 }
 
-void ocr(char *file)
+void ocr(char *file, char *t)
 {
     struct Neurones N;
     N.inputs = 784;
@@ -66,7 +66,7 @@ void ocr(char *file)
 
     char text[nchars];
 
-    char img_f[50] = "../SDL/bmp/chars/line_";
+    char img_f[50] = "SDL/bmp/chars/line_";
 
     int i=0; 
     while(i < 50)
@@ -109,14 +109,6 @@ void ocr(char *file)
         else
             break;
     }
-    save_output(text); 
-}
-
-int main()
-{
-    train_ocr();
-    //char *file = "OCRtext3.bmp";
-    //ocr(file);
-    return 0;
+    save_output(text);
 }
 

@@ -1,7 +1,8 @@
-#ifndef XOR_H
-#define XOR_H
+#ifndef NEURALNETWORK_H
+#define NEURALNETWORK_H
 
-struct Neurones {
+struct Neurones 
+{
     int inputs;
     int hidden;
     int output;
@@ -48,4 +49,17 @@ void test(struct Neurones N,
         double weights_oh[N.output * N.hidden],
         double bias_i[N.hidden * 1], 
         double bias_o[N.output * 1]);
+
+int SaveData(struct Neurones N,
+    double weights_ih [N.hidden * N.inputs],
+    double weights_ho [N.output * N.hidden],
+    double bias_h [N.hidden * 1],
+    double bias_o [N.output * 1]);
+
+int LoadData(struct Neurones N,
+    double weights_ih [N.hidden * N.inputs],
+    double weights_ho [N.output * N.hidden],
+    double bias_h [N.hidden * 1],
+    double bias_o [N.output * 1]);
+
 #endif

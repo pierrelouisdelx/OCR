@@ -1,5 +1,5 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#ifndef ROW_MATRIX_H
+#define ROW_MATRIX_H
 #include "neuralnetwork.h"
 
 double Random();

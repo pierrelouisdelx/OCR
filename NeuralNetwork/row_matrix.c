@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "neuralnetwork.h"
 #include <time.h>
+#include "neuralnetwork.h"
 
 double Random()
 {
@@ -76,7 +76,6 @@ void mult(int r1, int c1, int r2, int c2, double m1[], double m2[], double r[])
                 for(int k=0; k<c1; k++)
                 {
                     val += m1[i*c1+k] * m2[k*c2+j];
-                    //printf("Val : %f x %f = %f\n",m1[i * c1 + k],m2[k * c2 + j],val);
                 }
                 r[i*c2+j] = val;
             }
