@@ -207,7 +207,6 @@
                 <child>
                   <object class="GtkButton" id="train">
                     <property name="label" translatable="yes">Train</property>
-                    <property name="related-action">disable_btn</property>
                     <property name="name">train</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
