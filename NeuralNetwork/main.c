@@ -10,7 +10,6 @@
 
 void train_ocr()
 {
-    printf("TRAINING OCR");
     struct Neurones N;
     N.inputs = 784;
     N.hidden = 400;
@@ -25,7 +24,7 @@ void train_ocr()
     double weights_ih[N.hidden * N.inputs];
     double bias_i[N.hidden];
     double bias_o[N.output];
-    int epochs = 10000;
+    int epochs = 1;
 
     init(N.hidden, N.inputs, weights_ih);
     init(N.output, N.hidden, weights_oh);
@@ -34,7 +33,6 @@ void train_ocr()
 
     train(N, output, weights_ih, weights_oh, bias_i, bias_o, epochs);
  
-    //print_matrix(N.hidden,1,bias_i);
     SaveData(N,weights_ih,weights_oh,bias_i,bias_o);
 }
 
@@ -117,9 +115,9 @@ void ocr(char *file)
 
 int main()
 {
-    //train_ocr();
-    char *file = "OCRtext3.bmp";
-    ocr(file);
+    train_ocr();
+    //char *file = "OCRtext3.bmp";
+    //ocr(file);
     return 0;
 }
 

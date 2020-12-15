@@ -13,7 +13,7 @@ void transpose(int rows, int cols, double m[], double r[]);
 void factor(int rows, int cols, double m[], double factor, double r[]);
 void function(int rows, int cols, double (*f)(double), double m[]);
 
-void shuffle(int rows, int cols, char m[]);
+void shuffle(int arr[], int n);
 
 int SaveData(struct Neurones N,
     double weights_ih [N.hidden * N.inputs],

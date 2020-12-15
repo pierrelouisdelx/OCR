@@ -119,23 +119,16 @@ void function(int rows, int cols, double (*f)(double), double m[])
     }
 }
 
-void shuffle(int rows, int cols, char m[])
+void shuffle(int arr[], int n ) 
 {
-    if (rows > 1) 
-    {
-        int i;
-        for (i = 0; i < rows - 1; i++) 
-        {
-          int j = i + rand() / (RAND_MAX / (rows - i) + 1);
-          int t1 = m[j * cols];
-          int t2 = m[j * cols + 1];
-          m[j * cols] = m[i * cols];
-          m[j * cols + 1] = m[i * cols + 1];
-          m[i * cols] = t1;
-          m[i * cols + 1] = t2;
-        }
-    }
-}
+    for (int i = n-1; i > 0; i--) 
+    { 
+        int j = rand() % (i+1);
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    } 
+} 
 
 int SaveData(struct Neurones N,
     double weights_ih [N.hidden * N.inputs],

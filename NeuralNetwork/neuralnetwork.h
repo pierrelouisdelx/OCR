@@ -9,7 +9,7 @@ struct Neurones {
 
 double sigmoid(double x);
 double dsigmoid(double x);
-void get_folders(char *dirs);
+void get_folders(int *dirs);
 
 void feedForward(struct Neurones N, 
         double inputs[N.inputs * 1], 

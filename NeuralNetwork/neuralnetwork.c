@@ -16,27 +16,6 @@ double dsigmoid(double x)
     return x*(1-x);
 }
 
-void get_folders(char *dirs)
-{
-    struct dirent *de;
-    DIR *d = opendir("training/");
-    if(d == NULL)
-        printf("Could not open current directory");
-    else
-    {
-        int i=0;
-        while ((de = readdir(d)) != NULL)
-        {
-            if(strcmp(de->d_name,".") && strcmp(de->d_name,".."))
-            {
-                dirs[i] = *(de->d_name);
-                i++;
-            }
-        }
-        closedir(d);
-    }
-}
-
 void feedForward(struct Neurones N, 
         double inputs[N.inputs], 
         double weights_ih[N.hidden * N.inputs], 
@@ -134,47 +113,41 @@ void train(struct Neurones N,
         double bias_o[N.output], 
         int epochs)
 { 
-    char dir_p[12] = "training/ /"; //training/letter
-
-    char *dirs = malloc(4 * sizeof(char)); //For testing only with a b c d
-    get_folders(dirs);
-    printf("dirs : %s\n",dirs);
+    char training[10] = "training/"; //training/letter
 
     double input[N.inputs]; //28x28 pixels/bmp
 
-    struct dirent *de;
-    DIR *d;
-
-    for(int i=0; i<50; i++)  //epochs
+    int dir[93];
+    for(int tmp=33; tmp<=125; tmp++)
     {
-        //shuffle(3,1,dirs);  //Shuffle letters order
-        for(int j=0; j<4; j++)  //dirs
+        dir[tmp-33] = tmp;
+    }
+
+    for(int e=0; e<epochs; e++)
+    {
+        shuffle(dir, 93);
+        for(int i=0; i<93; i++) //going through all folders
         {
-            dir_p[9] = dirs[j]; //Get each directory in training/ directories
-            
-            d = opendir(dir_p);
-            while((de = readdir(d)) != NULL)
+            for(int j=0; j<409; j++)
             {
-
-                if(de->d_type == DT_REG)
-                {
-                    char *img = malloc(strlen(dir_p) + strlen(de->d_name));
-                    strcpy(img, dir_p);
-                    strcat(img,de->d_name);
-
-                    //printf("dir : %c image : %s\n",dirs[j],img);
-                    image_to_matrix(img, input);//Matrix from image
-
-                    double target[N.output];
-                    set_target(N,target, dirs[j]); //Set 1 on letter
-                    backPropagation(N, input, weights_oh, weights_ih, bias_i, bias_o, output, target);
-                }
+                char tmp[50];
+                char n[15];
+                strcpy(tmp,training);
+                sprintf(n,"%i",dir[i]);
+                strcat(tmp,n);
+                strcat(tmp,"/");
+                sprintf(n,"%i",j);
+                strcat(tmp,n);
+                strcat(tmp,".jpg");
+                printf("%s\n",tmp);
+                image_to_matrix(tmp, input);//Matrix from image
+                
+                double target[N.output];
+                set_target(N,target, dir[i+33]);
+                backPropagation(N, input, weights_oh, weights_ih, bias_i, bias_o, output, target);
             }
-            closedir(d);
         }
     }
-    //print_matrix(28,28,input);
-    //test(N, output, weights_ih, weights_oh, bias_i, bias_o);
 }
 
 int getoutput(struct Neurones N, double output[N.output])
@@ -202,27 +175,6 @@ void save_output(char c[])
     fprintf(fp,"%s\n",c);
     fclose(fp);
 }
-
-/*void get_chars(char data[1][])
-{
-    struct dirent *de;
-    DIR *d = opendir("../SDL/bmp/chars/");
-    if(d == NULL)
-        printf("Could not open current directory");
-    else
-    {
-        int i=0;
-        while ((de = readdir(d)) != NULL)
-        {
-            if(strcmp(de->d_name,".") && strcmp(de->d_name,".."))
-            {
-                data[i] = *(de->d_name);
-                i++;
-            }
-        }
-        closedir(d);
-    }
-}*/
 
 void test(struct Neurones N,
         double output[N.output],

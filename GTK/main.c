@@ -116,6 +116,8 @@ void surface_to_image(SDL_Surface *surface, app_widgets *widgets)
 
     // release reference pixbuf                                      
     g_object_unref(pixbuf);
+    free(pixels);
+    free(pixbuf);
 }
 
 void gtk_rotate(GtkWindow *window, app_widgets *widgets)
@@ -256,7 +258,7 @@ int main (int argc, char *argv[])
     g_signal_connect(btn->grayscale, "clicked", G_CALLBACK(gtk_grayscale), widgets);
     g_signal_connect(btn->blackandwhite, "clicked", G_CALLBACK(gtk_blackwhite), widgets);
     g_signal_connect(btn->segmentation, "clicked", G_CALLBACK(gtk_segmentation), widgets);
-    g_signal_connect(btn->ocr, "clicked", G_CALLBACK(ocr), NULL);
+    //g_signal_connect(btn->ocr, "clicked", G_CALLBACK(ocr), NULL);
     //g_signal_connect(text, "clicked", G_CALLBACK(open_file), widgets);
     //g_signal_connect(save, "clicked", G_CALLBACK(open_file), widgets);
     g_signal_connect(quit, "clicked",G_CALLBACK(gtk_main_quit), G_OBJECT(window));
