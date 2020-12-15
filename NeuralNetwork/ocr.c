@@ -35,8 +35,9 @@ void train_ocr()
     SaveData(N,weights_ih,weights_oh,bias_i,bias_o);
 }
 
-void ocr(char *file, char *t)
+void ocr(char *file)
 {
+    printf("OCR");
     struct Neurones N;
     N.inputs = 784;
     N.hidden = 400;

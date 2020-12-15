@@ -10,9 +10,9 @@
 #include "../SDL/pixel_operations.h"
 #include "../SDL/paragraph.h"
 
-#include "../NeuralNetwork/neuralnetwork.c"
-#include "../NeuralNetwork/row_matrix.c"
-#include "../NeuralNetwork/main.c"
+#include "../NeuralNetwork/neuralnetwork.h"
+#include "../NeuralNetwork/row_matrix.h"
+#include "../NeuralNetwork/ocr.h"
 
 #define UNUSED(x) (void) (x)
 
@@ -226,11 +226,10 @@ void gtk_train(GtkWindow *window)
 void gtk_ocr(GtkWindow *window, app_widgets *widgets)
 {
     UNUSED(window);
-    char text[5000];
-    ocr(widgets->image, text);
+    ocr(widgets->image);
 
-    gtk_widget_show(widgets->text);
-    gtk_text_buffer_set_text(widgets->buffer, text, -1); //ocrtext
+    //gtk_widget_show(widgets->text);
+    //gtk_text_buffer_set_text(widgets->buffer, text, -1); //ocrtext
 }
 
 int main ()
@@ -284,6 +283,7 @@ int main ()
     g_signal_connect(widgets->btn.grayscale, "clicked", G_CALLBACK(gtk_grayscale), widgets);
     g_signal_connect(widgets->btn.blackandwhite, "clicked", G_CALLBACK(gtk_blackwhite), widgets);
     g_signal_connect(widgets->btn.segmentation, "clicked", G_CALLBACK(gtk_segmentation), widgets);
+    g_signal_connect(widgets->btn.ocr, "clicked", G_CALLBACK(gtk_ocr), widgets);
     //g_signal_connect(save, "clicked", G_CALLBACK(open_file), widgets);
     g_signal_connect(quit, "clicked",G_CALLBACK(gtk_main_quit), G_OBJECT(window));
 
