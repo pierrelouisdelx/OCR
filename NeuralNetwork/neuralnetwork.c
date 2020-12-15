@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <math.h>
 #include "row_matrix.h"
-#include <dirent.h>
 #include <string.h>
 #include "../SDL/sdl.h"
 #include <time.h>

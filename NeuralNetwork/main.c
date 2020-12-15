@@ -6,7 +6,6 @@
 #include "row_matrix.h"
 #include "../SDL/sdl.h"
 #include "../SDL/paragraph.h"
-#include <dirent.h>
 
 void train_ocr()
 {
