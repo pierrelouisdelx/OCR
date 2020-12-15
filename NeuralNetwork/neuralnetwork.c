@@ -93,7 +93,7 @@ void backPropagation(struct Neurones N,
 
 void set_target(struct Neurones N,double target[], char dir)
 {
-    int c = dir + 33;
+    int c = dir;
     for(int i=0; i<N.output; i++)
     {
         if(i == c)
@@ -123,10 +123,12 @@ void train(struct Neurones N,
 
     for(int e=0; e<epochs; e++)
     {
-        shuffle(dir, 93);
-        for(int i=0; i<92; i++) //going through all folders
+        printf("Epochs %i on %i\n", e, epochs);
+        for(int j=0; j<1; j++)
         {
-            for(int j=0; j<409; j++)
+            shuffle(dir, 93);
+            //printf("%ls\n",dir);
+            for(int i=0; i<3; i++) //going through all folders
             {
                 char tmp[100];
                 char n[15];
@@ -137,11 +139,11 @@ void train(struct Neurones N,
                 sprintf(n,"%i",j);
                 strcat(tmp,n);
                 strcat(tmp,".jpg");
-                printf("%s\n",tmp);
                 image_to_matrix(tmp, input);//Matrix from image
                 
                 double target[N.output];
                 set_target(N,target, dir[i]);
+
                 backPropagation(N, input, weights_oh, weights_ih, bias_i, bias_o, output, target);
             }
         }
@@ -154,15 +156,12 @@ int getoutput(struct Neurones N, double output[N.output])
     int pos = 0;
     for(int i=0; i<N.output; i++)
     {
-        //printf("%i %f\n",i,output[i]);
         if(max < output[i])
         {
             max = output[i];
             pos = i;
         }
     }
-    //printf("pos : %i\n",pos);
-    //printf("char : %c\n",(char)pos);
     return pos;
 }
 
@@ -174,7 +173,7 @@ void save_output(char c[])
     fclose(fp);
 }
 
-void test(struct Neurones N,
+void statistics(struct Neurones N,
         double output[N.output],
         double weights_ih[N.hidden * N.inputs],
         double weights_oh[N.output * N.hidden],

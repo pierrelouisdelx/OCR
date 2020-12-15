@@ -21,8 +21,9 @@ SDL_Surface* load_image(char *file)
     }
 }
 
-void image_to_matrix(char *path, double matrix[])
+int image_to_matrix(char *path, double matrix[])
 {
+    int space = 1;
     SDL_Surface *image = load_image(path);
     if(image == NULL)
         printf("error while loading image\n");
@@ -36,11 +37,15 @@ void image_to_matrix(char *path, double matrix[])
             Uint8 r, g, b;
             SDL_GetRGB(pixel, image->format, &r, &g, &b);
             if(r == 0 && g == 0 && b == 0)
+            {
                 matrix[i * 28 + j] = 1;
+                space = 0;
+            }
             else
                 matrix[i * 28 + j] = 0;
         }
     }
+    return space;
 }
 
 void surface_to_matrix(SDL_Surface *image, double matrix[])

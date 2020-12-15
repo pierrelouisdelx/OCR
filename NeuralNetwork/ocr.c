@@ -37,7 +37,6 @@ void train_ocr()
 
 void ocr(char *file)
 {
-    printf("OCR\n\n");
     struct Neurones N;
     N.inputs = 784;
     N.hidden = 400;
@@ -94,11 +93,19 @@ void ocr(char *file)
                 strcat(tmp2,n);
                 if(load_image(tmp2) != NULL)
                 {
-                    image_to_matrix(tmp2, inputs);
-                    feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
-                    char t[10];
-                    sprintf(t,"%c",getoutput(N,output));
-                    strcat(text,t);
+                    int space = image_to_matrix(tmp2, inputs);
+                    if(space == 1)
+                    {
+                        strcat(text, " ");
+                        space = 0;
+                    }
+                    else
+                    {
+                        feedForward(N, inputs, weights_ih, weights_oh, bias_i, bias_o, hidden, output);
+                        char t[10];
+                        sprintf(t,"%c",getoutput(N,output));
+                        strcat(text,t);
+                    }
                 }
                 else
                     break;
@@ -112,4 +119,3 @@ void ocr(char *file)
     }
     save_output(text);
 }
-
