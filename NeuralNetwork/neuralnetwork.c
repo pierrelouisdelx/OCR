@@ -91,7 +91,7 @@ void backPropagation(struct Neurones N,
 	add(N.hidden, 1, bias_i, gradient_hidden, bias_i);
 }
 
-void set_target(struct Neurones N,double target[], char dir)
+void set_target(struct Neurones N, double target[], char dir)
 {
     int c = dir;
     for(int i=0; i<N.output; i++)
@@ -127,7 +127,7 @@ void train(struct Neurones N,
         for(int j=0; j<1; j++)
         {
             shuffle(dir, 93);
-            //printf("%ls\n",dir);
+            printf("%ls\n",dir);
             for(int i=0; i<3; i++) //going through all folders
             {
                 char tmp[100];

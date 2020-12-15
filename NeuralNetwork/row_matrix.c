@@ -14,7 +14,7 @@ void print_matrix(int rows, int cols, double m[])
     {
         for(int j=0; j<cols; j++)
         {
-            printf("%d", (int)m[i*cols+j]);
+            printf("%f", m[i*cols+j]);
         }
         printf("\n");
     }
@@ -176,15 +176,21 @@ int LoadData(struct Neurones N,
     double bias_o [N.output])
 {
     FILE * fp;
-    fp = fopen ("NeuralNetwork/data.txt","r");
+    fp = fopen ("data.txt","r");
 
     char str[100];
+    fgets(str, 100, fp);
+    double d = (double) atof(str);
+    printf("%f\n",d);
 
     for (int i = 0; i < N.hidden; ++i)
     {
         for (int j = 0; j < N.inputs; ++j)
         {
             fgets(str, 100, fp);
+            //printf("%s\n",str);
+            //double d = str;
+            //printf("d: %f\n",d);
             weights_ih[i * N.inputs + j] = (double) atof(str);
         }
     }

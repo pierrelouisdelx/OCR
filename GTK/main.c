@@ -152,6 +152,7 @@ void gtk_segmentation(GtkWindow *window, app_widgets *widgets)
     SDL_Surface *image = load_image(widgets->image);
     image = lines_reco(image);
     image = char_reco(image);
+    lines_and_char_storage(image);
     surface_to_image(image, widgets);
 }
 
