@@ -164,12 +164,7 @@ SDL_Surface* resizeSquare(SDL_Surface* image)
 
     int h = image->h;
     int w = image->w;
-    int x;
-    int y;
-    Uint32 pixel;
     SDL_Surface* new_image = SDL_CreateRGBSurface(0, newDim, newDim, 32, rmask, gmask, bmask, amask);
-    int array [newDim][newDim];
-    int nb_per_cell [newDim][newDim];
     SDL_FillRect(new_image, 0, (SDL_MapRGB(new_image->format, 255, 255, 255)));
     for(int i = 0; i < w ; i++)
     {
